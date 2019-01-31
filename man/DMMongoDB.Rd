@@ -1,5 +1,5 @@
 \name{DMMongoDB}
-\alias{hello}
+\alias{DM}
 \title{DMMongoDB}
 \usage{
 propsearch()
