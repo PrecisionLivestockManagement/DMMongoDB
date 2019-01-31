@@ -3,7 +3,10 @@
 # This is an example function named propsearch that provides a list of RFID numbers
 # for a property from MongoDB. It asks for a username and password that are used to
 # access the DataMuster MongoDB Atlas server
-
+#' @param property the name of the property to search the DataMuster MongoDB Atlas server
+#' @param username this is the unername to be able to access the MongDB and is enetered via a prompt
+#' @param password this is the password to be able to acces the MongoDB
+#' @return a dataframe that with a list of the RFID numbers
 
 
 propsearch <- function(property){
