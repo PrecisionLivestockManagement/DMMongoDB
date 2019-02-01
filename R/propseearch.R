@@ -15,7 +15,7 @@
 #' @export
 
 
-propsearch <- function(property){
+propsearch <- function(property, x, y){
   username = rstudioapi::showPrompt(title = "Username", message = "Username", default="")
   password =  rstudioapi::askForPassword("Enter Password")
   pass <- sprintf("mongodb://%s:%s@datamuster-shard-00-00-8mplm.mongodb.net:27017,datamuster-shard-00-01-8mplm.mongodb.net:27017,datamuster-shard-00-02-8mplm.mongodb.net:27017/test?ssl=true&replicaSet=DataMuster-shard-0&authSource=admin", username, password)
@@ -25,7 +25,8 @@ propsearch <- function(property){
 
 
   filterstation <- sprintf('{"stationname":"%s"}', property)
-  cattle$find(query = filterstation, fields='{"RFID":true, "_id":false}')
+  lookfor <- sprintf('{"%s":true, "properties.%s":true, "_id":false}', x, y)
+  cattle$find(query = filterstation, fields=lookfor)
 
 
 }
