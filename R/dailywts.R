@@ -1,4 +1,6 @@
 
+#' @import dplyr
+#' @export
 
 
 dailywts <- function(RFID, start, end){
