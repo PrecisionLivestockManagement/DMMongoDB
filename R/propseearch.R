@@ -20,7 +20,7 @@ propsearch <- function(property, paddock=NULL){
 
 
   username = keyring::key_list("DMMongoDB")[1,2]
-  password =  keyring::key_get("DMMongoDB")
+  password =  keyring::key_get("DMMongoDB", username)
 
   #username = rstudioapi::showPrompt(title = "Username", message = "Username", default="")
   #password =  rstudioapi::askForPassword("Enter Password")
