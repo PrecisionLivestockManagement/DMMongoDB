@@ -11,7 +11,8 @@
 #' @param password this is the password to be able to acces the MongoDB
 #' @return a dataframe that with a list of the RFID numbers
 #' @import mongolite
-#' @import rstudioapi
+#' @import keyring
+#' @import dplyr
 #' @export
 
 

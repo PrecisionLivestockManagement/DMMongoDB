@@ -1,4 +1,6 @@
 
+#' @import mongolite
+#' @import keyring
 #' @import dplyr
 #' @export
 
