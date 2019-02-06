@@ -3,6 +3,7 @@
 export(dailywts)
 export(dmaccess)
 export(propsearch)
+export(weeklywts)
 import(dplyr)
 import(keyring)
 import(mongolite)
