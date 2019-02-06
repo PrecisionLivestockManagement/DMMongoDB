@@ -32,7 +32,7 @@ propsearch <- function(property, paddock=NULL){
 
   property <- paste(unlist(property), collapse = '", "' )
   filterstation <- sprintf('{"stationname":{"$in":["%s"]}}', property)
-  lookfor <- sprintf('{"RFID":true, "properties.Management":true, "_id":false}')
+  lookfor <- sprintf('{"RFID":true, "properties.Management":true, "properties.Paddock":true, "_id":false}')
   propertyinfo <- cattle$find(query = filterstation, fields=lookfor)
 
   return(propertyinfo)
