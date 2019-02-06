@@ -11,9 +11,9 @@
 dmaccess <- function(user){
 
   if (nrow(keyring::key_list("DMMongoDB"))!=0){
-
+    username = keyring::key_list("DMMongoDB")[1,2]
     for(i in 1 :nrow(keyring::key_list("DMMongoDB")))
-      keyring::key_delete("DMMongoDB")
+      keyring::key_delete("DMMongoDB", username)
 
   }
 
