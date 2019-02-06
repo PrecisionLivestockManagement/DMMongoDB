@@ -15,7 +15,7 @@
 #' @export
 
 
-propsearch <- function(property, x, y){
+propsearch <- function(property, paddock=NULL){
 
 
   username = keyring::key_list("DMMongoDB")[1,2]
@@ -30,10 +30,11 @@ propsearch <- function(property, x, y){
     url = pass,
     verbose = T)
 
+  property <- paste(unlist(property), collapse = '", "' )
+  filterstation <- sprintf('{"stationname":{"$in":["%s"]}}', property)
+  lookfor <- sprintf('{"RFID":true, "properties.Management":true, "_id":false}')
+  propertyinfo <- cattle$find(query = filterstation, fields=lookfor)
 
-  filterstation <- sprintf('{"stationname":"%s"}', property)
-  lookfor <- sprintf('{"%s":true, "properties.%s":true, "_id":false}', x, y)
-  cattle$find(query = filterstation, fields=lookfor)
-
+  return(propertyinfo)
 
 }

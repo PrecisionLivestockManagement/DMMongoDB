@@ -5,7 +5,7 @@
 \alias{propsearch}
 \title{DataMuster MongoDB Atlas Access}
 \usage{
-propsearch(property, x, y)
+propsearch(property, paddock = NULL)
 }
 \arguments{
 \item{property}{the name of the property to search the DataMuster MongoDB Atlas server}
