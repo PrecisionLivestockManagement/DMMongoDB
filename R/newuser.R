@@ -2,11 +2,11 @@
 #'
 #' This function adds a new user to the MongoDB you can only access this function if you have read and write permission
 #' @name newuser
-#' @param user this is
-#' @param email provide a
-#' @param access provide a
-#' @param property name of the property
-#' @return message to say the user has been successfull added
+#' @param user the name of the user to be added to the DataMuster MongoDB Altas server, preferably without a space between the first and last name
+#' @param email the email address of the user
+#' @param access the MongoDB user access level, either "user" or "admin"
+#' @param property a list of the properties the user will be able to access in MongoDB
+#' @return This function writes directly to the database. A message will appear to indicate the number of documents that have been successfully added to the Mongo DB database
 #' @author Lauren O'Connor \email{lauren.oconnor@@datamuster.net.au}
 #' @import mongolite
 #' @import keyring
