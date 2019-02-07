@@ -2,6 +2,7 @@
 
 export(dailywts)
 export(dmaccess)
+export(newuser)
 export(propsearch)
 export(weeklywts)
 import(dplyr)
