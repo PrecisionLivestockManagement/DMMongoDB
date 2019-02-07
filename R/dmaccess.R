@@ -1,10 +1,14 @@
-# This function establishes the credentials and stores them on the local machine to provide ongoing access to the DMMongoDB
-# Please check with Lauren to get login details and make sure you run this function before any others as it will be essential
-# to providing detailed access.
-
+#' Set up access credential for DataMuster
+#'
+#' The function needs to be run first of all. It stores the credentials on the local machine to provide ongoing access to the DMMongoDB.
+#' Please check with Lauren O'Connor \email{lauren.oconnor@@datamuster.net.au} to get login details and make sure you run this function before any others as it will be essential
+#' to providing detailed access.
+#'
+#' @name dmaccess
 #' @param user this is the username as a text string that you have been allocated to all access to the DataMuster MongoDB Atlas server
-#' @param password this is the password to be able to acces the MongoDB
-#' @return this establishes username and password credentials on the local machine and avoids this being
+#' @param password you will be prompted to provide your password to be able to acces the MongoDB
+#' @return this establishes username and password credentials on the local machine and avoids having to enter them everytime you use the DMMongoDB functions
+#' @author Dave Swain \email{dave.swain@@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@@datamuster.net.au}
 #' @import keyring
 #' @export
 
@@ -17,12 +21,7 @@ dmaccess <- function(user){
 
   }
 
-
   keyring::key_set(service="DMMongoDB",username = user)
-
-
-
-
 
 }
 

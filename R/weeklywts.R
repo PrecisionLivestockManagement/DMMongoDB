@@ -1,4 +1,12 @@
-
+#' This function pulls in weekly weights for predefined cattle and predefined periods
+#'
+#' If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements
+#' @name weeklywts
+#' @param RFID this is a list of cattle RFID numbers
+#' @param start provide a start date to be returned, this has to be in date format.
+#' @param end provide a end date to be returned, this has to be in date format.
+#' @return is a list that includes a list of the RFID numbers that have been searched, the list of cattle stations that are associated with these RFID numbers and then a dataframe for each RFID number #' that provides date and weekly average weight for each animal
+#'@author Dave Swain \email{dave.swain@@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@@datamuster.net.au}
 #' @import mongolite
 #' @import keyring
 #' @import dplyr
