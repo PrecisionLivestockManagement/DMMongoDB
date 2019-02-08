@@ -1,11 +1,13 @@
-#' This function pulls in weekly weights for predefined cattle and predefined periods
+#' Cattle weekly weights
 #'
-#' If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements
+#' This function pulls in weekly weights for individual or groups of cattle for specified periods. It searches based on a list of RFID values. It is recommended that you use the propsearch function to find a list of cattle RFID numbers for a particular property. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
 #' @name weeklywts
 #' @param RFID this is a list of cattle RFID numbers
 #' @param start provide a start date to be returned, this has to be in date format.
 #' @param end provide a end date to be returned, this has to be in date format.
-#' @return is a list that includes a list of the RFID numbers that have been searched, the list of cattle stations that are associated with these RFID numbers and then a dataframe for each RFID number #' that provides date and weekly average weight for each animal
+#' @param values this is the minimum number of weight values that need to be recorded to be uploaded. The default is to load all
+#' animals that have at least one value.
+#' @return A list that includes a list of the RFID numbers that have been returned, the list of cattle stations that are associated with these RFID numbers and a dataframe for each RFID number that provides date and weekly average weights for each animal. The weekly average is based on the daily records and only writes a weekly average when there are at least four daily weight for a given week that have a variance of +- 15kg.
 #'@author Dave Swain \email{dave.swain@@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@@datamuster.net.au}
 #' @import mongolite
 #' @import keyring
@@ -13,7 +15,9 @@
 #' @export
 
 
-weeklywts <- function(RFID, start=NULL, end=NULL){
+weeklywts <- function(RFID, start=NULL, end=NULL, values=NULL){
+
+  if(is.null(values)||values < 1 ){values <- 1}
 
   username = keyring::key_list("DMMongoDB")[1,2]
   password =  keyring::key_get("DMMongoDB", username)
@@ -26,21 +30,26 @@ weeklywts <- function(RFID, start=NULL, end=NULL){
   filterstation <- sprintf('{"RFID":{"$in":["%s"]}}', RFID)
   jan2 <- cattle$find(query = filterstation, fields='{"RFID":true, "stationname":true, "wkwthist.date":true, "wkwthist.avweight":true, "_id":false}')
 
-  cattleinfo <- list(RFID=jan2$RFID, Station=jan2$stationname)
+  cattleinfo <- list()
 
   for(i in 1:length(jan2$RFID)){
+
     weeklywts <- setNames(data.frame(matrix(ncol = 2, nrow = length(jan2$wkwthist$date[[i]]))), c("Date", "Weight"))
     weeklywts$Date <- jan2$wkwthist$date[[i]]
     weeklywts$Weight <- jan2$wkwthist$avweight[[i]]
 
-    if(is.null(start)) {cattleinfo[[jan2$RFID[i]]] <- weeklywts}
+    if(is.null(start)) {}
     else{if(is.null(end)){weeklywts <- weeklywts %>% filter(between(as.Date(Date),start,Sys.Date()))}
       else{weeklywts <- weeklywts %>% filter(between(as.Date(Date),start,end))}}
 
-    cattleinfo[[jan2$RFID[i]]] <- weeklywts
+    #This is the section where we can apply further filters based on breed, class, etc.
 
-
+    if(nrow(weeklywts)<values){jan2$RFID[[i]] <- "xxxx"}
+    else{cattleinfo[[jan2$RFID[i]]] <- as.data.frame(weeklywts)}
   }
+
+  RFID <- jan2[which(jan2$RFID!="xxxx"),]
+  cattleinfo <- list(RFID=RFID$RFID, Property=RFID$stationname, WeeklyWeights=cattleinfo)
 
   return(cattleinfo)
 

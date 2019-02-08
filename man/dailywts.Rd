@@ -4,7 +4,7 @@
 \alias{dailywts}
 \title{Cattle daily weights}
 \usage{
-dailywts(RFID, start = NULL, end = NULL)
+dailywts(RFID, start = NULL, end = NULL, values = NULL)
 }
 \arguments{
 \item{RFID}{this is a list of cattle RFID numbers}
@@ -12,13 +12,15 @@ dailywts(RFID, start = NULL, end = NULL)
 \item{start}{provide a start date to be returned, this has to be in date format.}
 
 \item{end}{provide a end date to be returned, this has to be in date format.}
+
+\item{values}{this is the minimum number of weight values that need to be recorded to be uploaded. The default is to load all
+animals that have at least one value.}
 }
 \value{
-is a list that includes a list of the RFID numbers that have been searched, the list of cattle stations that are associated with these RFID numbers and
-a dataframe for each RFID number that provides date and weekly average weight for each animal
+A list that includes a list of the RFID numbers that have been returned, the list of cattle stations that are associated with these RFID numbers and a dataframe for each RFID number that provides date and daily weights for each animal. Please note daily ALMS records are not reliable indicators of cattle weights, the weekly average data is much more reliable. However, the daily values can be useful to identify fine scale changes in weight associated with calving events. The daily data is also available for researchers to identify improved weekly averaging algorithms based on the daily data.
 }
 \description{
-This function pulls in daily weights for individual or groups of cattle for specified periods. If you need assistance please email info@datamuster.net.au to seek help or suggest improvements.
+This function pulls in daily weights for individual or groups of cattle for specified periods. It searches based on a list of RFID values. It is recommended that you use the propsearch function to find a list of cattle RFID numbers for a particular property. If you need assistance please email \email{info@datamuster.net.au} to seek help or suggest improvements.
 }
 \author{
 Dave Swain \email{dave.swain@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@datamuster.net.au}
