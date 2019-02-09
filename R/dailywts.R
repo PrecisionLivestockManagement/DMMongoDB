@@ -57,25 +57,6 @@ dailywts <- function(RFID, start=NULL, end=NULL, values=NULL){
 
 
 
-  # cattleinfo <- list(RFID=jan$RFID, Station=jan$stationname)
-  #
-  # for(i in 1:length(jan$RFID)){
-  #   dailywts <- setNames(data.frame(matrix(ncol = 2, nrow = length(jan$wthist$date[[i]]))), c("Date", "Weight"))
-  #   dailywts$Date <- jan$wthist$date[[i]]
-  #   dailywts$Weight <- jan$wthist$weight[[i]]
-  #
-  #   if(is.null(start)) {cattleinfo[[jan$RFID[i]]] <- dailywts}
-  #   else{if(is.null(end)){dailywts <- dailywts %>% filter(between(as.Date(Date),start,Sys.Date()))}
-  #     else{dailywts <- dailywts %>% filter(between(as.Date(Date),start,end))}}
-  #
-  #   cattleinfo[[jan$RFID[i]]] <- dailywts
-  #
-  #
-  # }
-  #
-  # return(cattleinfo)
-
-
 }
 
 
