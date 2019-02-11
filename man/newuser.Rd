@@ -7,13 +7,13 @@
 newuser(user, email, access, property)
 }
 \arguments{
-\item{user}{this is}
+\item{user}{this is the user name}
 
-\item{email}{provide a}
+\item{email}{provide a user email address}
 
-\item{access}{provide a}
+\item{access}{provide list of properties that they can access}
 
-\item{property}{name of the property}
+\item{property}{name of the property that the user is associated with}
 }
 \value{
 message to say the user has been successfull added

@@ -2,10 +2,10 @@
 #'
 #' This function adds a new user to the MongoDB you can only access this function if you have read and write permission
 #' @name newuser
-#' @param user this is
-#' @param email provide a
-#' @param access provide a
-#' @param property name of the property
+#' @param user this is the user name
+#' @param email provide a user email address
+#' @param access provide list of properties that they can access
+#' @param property name of the property that the user is associated with
 #' @return message to say the user has been successfull added
 #' @author Lauren O'Connor \email{lauren.oconnor@@datamuster.net.au}
 #' @import mongolite

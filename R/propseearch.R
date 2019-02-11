@@ -4,9 +4,7 @@
 #' for a property from MongoDB. Inputs need to be a list of one or more property names and if only one property a paddock name can be included
 #' @name propsearch
 #' @param property the name of the property to search the DataMuster MongoDB Atlas server
-#' @param username this is the unername to be able to access the MongDB and is enetered via a prompt
-#' @param password this is the password to be able to acces the MongoDB
-#' @return a dataframe that with a list of the RFID numbers
+#' @return a dataframe with a list of the RFID numbers, associated management tags and current paddocks the cattle are in
 #' @author Dave Swain \email{dave.swain@@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@@datamuster.net.au}
 #' @import mongolite
 #' @import keyring
@@ -14,7 +12,7 @@
 #' @export
 
 
-propsearch <- function(property, paddock=NULL){
+propsearch <- function(property){
 
 
   username = keyring::key_list("DMMongoDB")[1,2]
