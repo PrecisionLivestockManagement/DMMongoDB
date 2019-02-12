@@ -21,7 +21,7 @@ if(is.null(days)){
 
 checkanimals <- dailywts(RFID)
 checkanimals <- bind_rows(checkanimals$DailyWeights, .id = "RFID")%>%
-  filter(as.Date(Date)>=lump)%>%
+  filter(as.Date(as.POSIXct(Date, tz = "Australia/Brisbane"),tz = "Australia/Brisbane") >= lump)%>%
   arrange(desc(Date))%>%
   mutate(TimeSinceLastVisit = Sys.time()-Date)
 

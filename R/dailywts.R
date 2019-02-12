@@ -42,7 +42,7 @@ dailywts <- function(RFID, start=NULL, end=NULL, values=NULL){
 
     if(is.null(start)) {}
     else{if(is.null(end)){dailywts <- dailywts %>% filter(between(as.Date(Date),start,Sys.Date()))}
-      else{dailywts <- dailywts %>% filter(between(as.Date(Date),start,end))}}
+      else{dailywts <- dailywts %>% filter(between(as.Date(as.POSIXct(Date, tz = "Australia/Brisbane"),tz = "Australia/Brisbane"),start,end))}}
 
     #This is the section where we can apply further filters based on breed, class, etc.
 
