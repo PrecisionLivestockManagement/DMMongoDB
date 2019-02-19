@@ -4,6 +4,7 @@
 #' for a property from MongoDB. Inputs need to be a list of one or more property names and if only one property a paddock name can be included
 #' @name propsearch
 #' @param property the name of the property to search the DataMuster MongoDB Atlas server
+#' @paddock this is the name of a paddock or list of paddocks as character entries, if no value is entered then all paddocks are loaded
 #' @return a dataframe with a list of the RFID numbers, associated management tags and current paddocks the cattle are in
 #' @author Dave Swain \email{dave.swain@@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@@datamuster.net.au}
 #' @import mongolite
@@ -12,8 +13,7 @@
 #' @export
 
 
-propsearch <- function(property){
-
+propsearch <- function(property, paddock=NULL){
 
   username = keyring::key_list("DMMongoDB")[1,2]
   password =  keyring::key_get("DMMongoDB", username)
@@ -28,6 +28,13 @@ propsearch <- function(property){
   filterstation <- sprintf('{"stationname":{"$in":["%s"]}}', property)
   lookfor <- sprintf('{"RFID":true, "properties.Management":true, "properties.Paddock":true, "_id":false}')
   propertyinfo <- cattle$find(query = filterstation, fields=lookfor)
+
+  propertyinfo$properties["RFID"] <- propertyinfo$RFID
+
+  propertyinfo <- propertyinfo$properties
+
+  if(is.null(paddock)){}else{
+    propertyinfo <- propertyinfo %>% filter(Paddock==paddock)}
 
   return(propertyinfo)
 
