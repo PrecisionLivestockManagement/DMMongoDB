@@ -7,6 +7,7 @@
 newuser(user, email, access, property)
 }
 \arguments{
+<<<<<<< HEAD
 \item{user}{the name of the user to be added to the DataMuster MongoDB Altas server, preferably without a space between the first and last name}
 
 \item{email}{the email address of the user}
@@ -14,6 +15,15 @@ newuser(user, email, access, property)
 \item{access}{the MongoDB user access level, either "user" or "admin"}
 
 \item{property}{a list of the properties the user will be able to access in MongoDB}
+=======
+\item{user}{this is the user name}
+
+\item{email}{provide a user email address}
+
+\item{access}{provide list of properties that they can access}
+
+\item{property}{name of the property that the user is associated with}
+>>>>>>> d2e0bb61963201508d9f6b5791c8ce0deda1b371
 }
 \value{
 This function writes directly to the database. A message will appear to indicate the number of documents that have been successfully added to the Mongo DB database

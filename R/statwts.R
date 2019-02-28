@@ -1,7 +1,7 @@
-#' Cattle daily weights
+#' Cattle static weights
 #'
 #' This function pulls in daily weights for individual or groups of cattle for specified periods. It searches based on a list of RFID values. It is recommended that you use the propsearch function to find a list of cattle RFID numbers for a particular property. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
-#' @name dailywts
+#' @name statwts
 #' @param RFID this is a list of cattle RFID numbers
 #' @param start provide a start date to be returned, this has to be in date format.
 #' @param end provide a end date to be returned, this has to be in date format.
@@ -14,8 +14,7 @@
 #' @import dplyr
 #' @export
 
-
-dailywts <- function(RFID, start=NULL, end=NULL, values=NULL){
+statwts <- function(RFID, start=NULL, end=NULL, values=NULL){
 
   if(is.null(values)||values < 1 ){values <- 1}
 
@@ -29,16 +28,16 @@ dailywts <- function(RFID, start=NULL, end=NULL, values=NULL){
 
   RFID <- paste(unlist(RFID), collapse = '", "' )
   filterstation <- sprintf('{"RFID":{"$in":["%s"]}}', RFID)
-  jan2 <- cattle$find(query = filterstation, fields='{"RFID":true, "stationname":true, "wthist.date":true, "wthist.weight":true, "_id":false}')
+  jan2 <- cattle$find(query = filterstation, fields='{"RFID":true, "stationname":true, "stwthist.date":true, "stwthist.weight":true, "_id":false}')
 
 
   cattleinfo <- list()
 
   for(i in 1:length(jan2$RFID)){
 
-    dailywts <- setNames(data.frame(matrix(ncol = 2, nrow = length(jan2$wthist$date[[i]]))), c("Date", "Weight"))
-    dailywts$Date <- jan2$wthist$date[[i]]
-    dailywts$Weight <- jan2$wthist$weight[[i]]
+    dailywts <- setNames(data.frame(matrix(ncol = 2, nrow = length(jan2$stwthist$date[[i]]))), c("Date", "Weight"))
+    dailywts$Date <- jan2$stwthist$date[[i]]
+    dailywts$Weight <- jan2$stwthist$weight[[i]]
 
     if(is.null(start)) {}
     else{if(is.null(end)){dailywts <- dailywts %>% filter(between(as.Date(Date),start,Sys.Date()))}
@@ -58,7 +57,3 @@ dailywts <- function(RFID, start=NULL, end=NULL, values=NULL){
 
 
 }
-
-
-
-

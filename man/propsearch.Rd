@@ -8,13 +8,9 @@ propsearch(property, paddock = NULL)
 }
 \arguments{
 \item{property}{the name of the property to search the DataMuster MongoDB Atlas server}
-
-\item{username}{this is the unername to be able to access the MongDB and is enetered via a prompt}
-
-\item{password}{this is the password to be able to acces the MongoDB}
 }
 \value{
-a dataframe that with a list of the RFID numbers
+a dataframe with a list of the RFID numbers, associated management tags and current paddocks the cattle are in
 }
 \description{
 This function provides a list of cattle
