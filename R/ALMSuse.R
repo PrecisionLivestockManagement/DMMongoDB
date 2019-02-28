@@ -47,9 +47,9 @@ ALMSuse <- function(property, paddock=NULL, start=NULL, end=NULL){
 
     dailywts <- setNames(data.frame(matrix(ncol = 4, nrow = length(jan2$usehist$date[[i]]))), c("Date", "GroupCount", "BreedingCount", "GrowingCount"))
     dailywts$Date <- jan2$usehist$date[[i]]
-    dailywts$GroupUse <- jan2$usehist$num[[i]]
-    dailywts$BreedingUse <- jan2$usehist$numbreed[[i]]
-    dailywts$GrowingUse <- jan2$usehist$numgrow[[i]]
+    dailywts$GroupCount <- jan2$usehist$num[[i]]
+    dailywts$BreedingCount <- jan2$usehist$numbreed[[i]]
+    dailywts$GrowingCount <- jan2$usehist$numgrow[[i]]
 
     dailywts1 <- setNames(data.frame(matrix(ncol = 4, nrow = length(jan2$cattlehist$date[[i]]))), c("Date", "Group", "Breeding", "Growing"))
     dailywts1$Date <- jan2$cattlehist$date[[i]]
