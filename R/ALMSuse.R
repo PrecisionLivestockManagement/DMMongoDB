@@ -1,7 +1,7 @@
 #' Package with functions to enable easier code to access to DataMuster MongoDB Atlas servers
 #'
 #' This function provides a list of cattle
-#' for a property from MongoDB. Inputs need to be a list of one or more property names and if only one property a paddock name can be included
+#' usage of an ALMS unit for a property from MongoDB. Inputs need to be a list of one or more property names and if only one property a paddock name can be included
 #' @name ALMSuse
 #' @param property the name of the property to search the DataMuster MongoDB Atlas server
 #' @param paddock this is the name of a paddock or list of paddocks as character entries, if no value is entered then all paddocks are loaded
