@@ -4,7 +4,8 @@
 \alias{statwts}
 \title{Cattle static weights}
 \usage{
-statwts(RFID, start = NULL, end = NULL, values = NULL)
+statwts(RFID, start = NULL, end = NULL, values = NULL,
+  username = NULL, password = NULL)
 }
 \arguments{
 \item{RFID}{this is a list of cattle RFID numbers}
@@ -13,8 +14,11 @@ statwts(RFID, start = NULL, end = NULL, values = NULL)
 
 \item{end}{provide a end date to be returned, this has to be in date format.}
 
-\item{values}{this is the minimum number of weight values that need to be recorded to be uploaded. The default is to load all
-animals that have at least one value.}
+\item{values}{this is the minimum number of weight values that need to be recorded to be uploaded. The default is to load all animals that have at least one value.}
+
+\item{username}{if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring}
+
+\item{password}{if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access}
 }
 \value{
 A list that includes a list of the RFID numbers that have been returned, the list of cattle stations that are associated with these RFID numbers and a dataframe for each RFID number that provides date and daily weights for each animal. Please note daily ALMS records are not reliable indicators of cattle weights, the weekly average data is much more reliable. However, the daily values can be useful to identify fine scale changes in weight associated with calving events. The daily data is also available for researchers to identify improved weekly averaging algorithms based on the daily data.

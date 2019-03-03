@@ -4,13 +4,15 @@
 #' @name RFIDcattlecheck
 #' @param RFID this is a list of cattle RFID numbers
 #' @param days the number of days to search over, if no days entered then it only searches for cattle that have crossed the ALMS today
+#' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
+#' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
 #' @return a dataframe that provides a list including the RFID number, datetime and weights of cattle
 #' @author Dave Swain \email{dave.swain@@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@@datamuster.net.au}
 #' @import dplyr
 #' @export
 
 
-RFIDcattlecheck <- function(RFID, days=NULL){
+RFIDcattlecheck <- function(RFID, days=NULL, username=NULL, password=NULL){
 
 if(is.null(days)){
   lump <- Sys.Date()
@@ -18,8 +20,11 @@ if(is.null(days)){
   else {
   lump <- Sys.Date() - days
   }
+if(is.null(username)||is.null(password)){checkanimals <- dailywts(RFID)}else{
 
-checkanimals <- dailywts(RFID)
+  checkanimals <- dailywts(RFID, username=username, password=password)
+}
+
 checkanimals <- bind_rows(checkanimals$DailyWeights, .id = "RFID")%>%
   filter(as.Date(as.POSIXct(Date, tz = "Australia/Brisbane"),tz = "Australia/Brisbane") >= lump)%>%
   arrange(desc(Date))%>%

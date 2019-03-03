@@ -5,8 +5,9 @@
 #' @param RFID this is a list of cattle RFID numbers
 #' @param start provide a start date to be returned, this has to be in date format.
 #' @param end provide a end date to be returned, this has to be in date format.
-#' @param values this is the minimum number of weight values that need to be recorded to be uploaded. The default is to load all
-#' animals that have at least one value.
+#' @param values this is the minimum number of weight values that need to be recorded to be uploaded. The default is to load all animals that have at least one value.
+#' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
+#' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
 #' @return A list that includes a list of the RFID numbers that have been returned, the list of cattle stations that are associated with these RFID numbers and a dataframe for each RFID number that provides date and daily weights for each animal. Please note daily ALMS records are not reliable indicators of cattle weights, the weekly average data is much more reliable. However, the daily values can be useful to identify fine scale changes in weight associated with calving events. The daily data is also available for researchers to identify improved weekly averaging algorithms based on the daily data.
 #' @author Dave Swain \email{dave.swain@@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@@datamuster.net.au}
 #' @import mongolite
@@ -14,13 +15,13 @@
 #' @import dplyr
 #' @export
 
-statwts <- function(RFID, start=NULL, end=NULL, values=NULL){
+statwts <- function(RFID, start=NULL, end=NULL, values=NULL, username = NULL, password = NULL){
 
   if(is.null(values)||values < 1 ){values <- 1}
-
+  if(is.null(username)||is.null(password)){
   username = keyring::key_list("DMMongoDB")[1,2]
   password =  keyring::key_get("DMMongoDB", username)
-
+  }
   pass <- sprintf("mongodb://%s:%s@datamuster-shard-00-00-8mplm.mongodb.net:27017,datamuster-shard-00-01-8mplm.mongodb.net:27017,datamuster-shard-00-02-8mplm.mongodb.net:27017/test?ssl=true&replicaSet=DataMuster-shard-0&authSource=admin", username, password)
 
   cattle <- mongo(collection = "Cattle", db = "DataMuster", url = pass, verbose = T)

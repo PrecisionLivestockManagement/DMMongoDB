@@ -4,12 +4,17 @@
 \alias{propsearch}
 \title{Package with functions to enable easier code to access to DataMuster MongoDB Atlas servers}
 \usage{
-propsearch(property, paddock = NULL)
+propsearch(property, paddock = NULL, username = NULL,
+  password = NULL)
 }
 \arguments{
 \item{property}{the name of the property to search the DataMuster MongoDB Atlas server}
 
 \item{paddock}{this is the name of a paddock or list of paddocks as character entries, if no value is entered then all paddocks are loaded}
+
+\item{username}{if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring}
+
+\item{password}{if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access}
 }
 \value{
 a dataframe with a list of the RFID numbers, associated management tags and current paddocks the cattle are in

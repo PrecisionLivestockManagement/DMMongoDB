@@ -4,7 +4,8 @@
 \alias{newuser}
 \title{Add new user}
 \usage{
-newuser(user, email, access, property)
+newuser(user, email, access, property, username = NULL,
+  password = NULL)
 }
 \arguments{
 \item{user}{the name of the user to be added to the DataMuster MongoDB Altas server, preferably without a space between the first and last name}
@@ -14,6 +15,10 @@ newuser(user, email, access, property)
 \item{access}{the MongoDB user access level, either "user" or "admin"}
 
 \item{property}{a list of the properties the user will be able to access in MongoDB. If access is "admin", the user will be provided access to all existing properties in the database}
+
+\item{username}{if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring}
+
+\item{password}{if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access}
 
 \item{user}{this is the user name}
 
@@ -26,7 +31,7 @@ newuser(user, email, access, property)
 \value{
 This function writes directly to the database. A message will appear to indicate the number of documents that have been successfully added to the MongoDB database
 
-message to say the user has been successfull added
+message to say the user has been successfully added
 }
 \description{
 This function adds a new user to the MongoDB database. You can only access this function if you have read and write permission

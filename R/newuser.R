@@ -11,18 +11,21 @@
 #' @param email provide a user email address
 #' @param access provide list of properties that they can access
 #' @param property name of the property that the user is associated with
-#' @return message to say the user has been successfull added
+#' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
+#' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
+#' @return message to say the user has been successfully added
 #' @author Lauren O'Connor \email{lauren.oconnor@@datamuster.net.au}
 #' @import mongolite
 #' @import keyring
 #' @export
 
 
-newuser <- function(user, email, access, property){
+newuser <- function(user, email, access, property, username=NULL, password=NULL){
 
-
+  if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]
     password =  keyring::key_get("DMMongoDB", username)
+  }
 
     pass <- sprintf("mongodb://%s:%s@datamuster-shard-00-00-8mplm.mongodb.net:27017,datamuster-shard-00-01-8mplm.mongodb.net:27017,datamuster-shard-00-02-8mplm.mongodb.net:27017/test?ssl=true&replicaSet=DataMuster-shard-0&authSource=admin", username, password)
     users <- mongo(collection = "Users", db = "DataMuster", url = pass, verbose = T)

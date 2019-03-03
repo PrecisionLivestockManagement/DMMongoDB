@@ -7,6 +7,8 @@
 #' @param paddock this is the name of a paddock or list of paddocks as character entries, if no value is entered then all paddocks are loaded
 #' @param start provide a start date to be returned, this has to be in date format.
 #' @param end provide a end date to be returned, this has to be in date format.
+#' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
+#' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
 #' @return a dataframe with a list of the cattle numbers associated with the ALMS and the number of cattle recorded
 #' @author Dave Swain \email{dave.swain@@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@@datamuster.net.au}
 #' @import mongolite
@@ -15,11 +17,12 @@
 #' @export
 
 
-ALMSuse <- function(property, paddock=NULL, start=NULL, end=NULL){
+ALMSuse <- function(property, paddock=NULL, start=NULL, end=NULL, username = NULL, password = NULL){
 
+  if(is.null(username)||is.null(password)){
   username = keyring::key_list("DMMongoDB")[1,2]
   password =  keyring::key_get("DMMongoDB", username)
-
+}
 
   pass <- sprintf("mongodb://%s:%s@datamuster-shard-00-00-8mplm.mongodb.net:27017,datamuster-shard-00-01-8mplm.mongodb.net:27017,datamuster-shard-00-02-8mplm.mongodb.net:27017/test?ssl=true&replicaSet=DataMuster-shard-0&authSource=admin", username, password)
   cattle <- mongo(collection = "Cattle", db = "DataMuster", url = pass, verbose = T)

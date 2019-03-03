@@ -4,12 +4,16 @@
 \alias{RFIDcattlecheck}
 \title{Check cattle access to ALMS using RFID number}
 \usage{
-RFIDcattlecheck(RFID, days = NULL)
+RFIDcattlecheck(RFID, days = NULL, username = NULL, password = NULL)
 }
 \arguments{
 \item{RFID}{this is a list of cattle RFID numbers}
 
 \item{days}{the number of days to search over, if no days entered then it only searches for cattle that have crossed the ALMS today}
+
+\item{username}{if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring}
+
+\item{password}{if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access}
 }
 \value{
 a dataframe that provides a list including the RFID number, datetime and weights of cattle
