@@ -2,6 +2,7 @@
 
 export(ALMSuse)
 export(RFIDcattlecheck)
+export(apppaddocks)
 export(dailywts)
 export(dmaccess)
 export(newuser)
