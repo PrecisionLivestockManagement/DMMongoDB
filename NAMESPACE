@@ -2,6 +2,7 @@
 
 export(ALMSuse)
 export(RFIDcattlecheck)
+export(appinfs)
 export(apppaddocks)
 export(dailywts)
 export(dmaccess)
@@ -13,3 +14,4 @@ export(weeklywts)
 import(dplyr)
 import(keyring)
 import(mongolite)
+import(xts)
