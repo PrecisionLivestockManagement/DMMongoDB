@@ -4,7 +4,6 @@
 #' for a property from MongoDB. Inputs need to be a list of one or more property names and if only one property a paddock name can be included
 #' @name propsearch
 #' @param property the name of the property to search the DataMuster MongoDB Atlas server
-#' @param paddock this is the name of a paddock or list of paddocks as character entries, if no value is entered then all paddocks are loaded
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
 #' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
 #' @return a dataframe with a list of the RFID numbers, associated management tags and current paddocks the cattle are in
@@ -12,6 +11,7 @@
 #' @import mongolite
 #' @import keyring
 #' @import dplyr
+#' @import rgdal
 #' @export
 
 
@@ -30,12 +30,12 @@ appcattle <- function(property, username=NULL, password=NULL){
   property <- paste(unlist(property), collapse = '", "' )
   filterstation <- sprintf('{"stationname":{"$in":["%s"]}}', property)
   lookfor <- sprintf('{"RFID":true, "properties.Management":true, "geometry":true, "properties.Paddock":true, "properties.sex":true, "properties.category":true, "properties.stweight":true, "properties.stwtdate":true, "properties.weight":true, "properties.recordedtime":true, "properties.wkweight":true, "properties.wkwtdate":true, "_id":false}')
-  propertyinfo <- cattle$find(query = filterstation, fields=lookfor)
+  cattleinfo <- cattle$find(query = filterstation, fields=lookfor)
 
+  cattleinfospatial <- SpatialPointsDataFrame(data.frame(matrix(unlist(cattleinfo$geometry$coordinates), nrow=length(cattleinfo$geometry$coordinates), byrow=T)), cattleinfo$properties)
 
+  cattleinfospatial@data["RFID"] <- cattleinfo$RFID
 
-
-
-  return(propertyinfo)
+  return(cattleinfospatial)
 
 }

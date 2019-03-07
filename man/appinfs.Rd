@@ -4,7 +4,8 @@
 \alias{appinfs}
 \title{Package with functions to enable easier code to access to DataMuster MongoDB Atlas servers}
 \usage{
-appinfs(property, username = NULL, password = NULL)
+appinfs(property, start = NULL, end = NULL, username = NULL,
+  password = NULL)
 }
 \arguments{
 \item{property}{the name of the property to search the DataMuster MongoDB Atlas server}
@@ -14,7 +15,7 @@ appinfs(property, username = NULL, password = NULL)
 \item{password}{if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access}
 }
 \value{
-a dataframe with a list of the RFID numbers, associated management tags and current paddocks the cattle are in
+a dataframe with a list of the data numbers, associated management tags and current paddocks the cattle are in
 }
 \description{
 This function provides a list of ALMS units with use history for a property from MongoDB. Inputs need to be a list of one or more property names

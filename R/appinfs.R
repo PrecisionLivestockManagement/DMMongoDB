@@ -46,7 +46,7 @@ appinfs <- function(property, start=NULL, end=NULL, username=NULL, password=NULL
     }
 
   data <- jan2
-  info <- list(data=data$properties$asset_id, UseHist=info)
+  info <- list(assetlistname=data$properties$asset_id, UseHist=info)
 
   return(info)
 
