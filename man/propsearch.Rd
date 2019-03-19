@@ -26,13 +26,13 @@ propsearch(property, paddock = NULL, username = NULL,
 \item{password}{if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access}
 }
 \value{
-a dataframe with a list of the RFID numbers, associated management tags and current paddocks the cattle are in
+a spatialpointsdataframe with a list of the RFID numbers and a number of other data points, associated management tags and current paddocks the cattle are in
 
 a dataframe with a list of the RFID numbers, associated management tags and current paddocks the cattle are in
 }
 \description{
 This function provides a list of cattle
-for a property from MongoDB. Inputs need to be a list of one or more property names and if only one property a paddock name can be included
+for a property from MongoDB. Inputs need to be a list of one or more property names
 
 This function provides a list of cattle
 for a property from MongoDB. Inputs need to be a list of one or more property names and if only one property a paddock name can be included

@@ -30,8 +30,8 @@ appinfs <- function(property, start=NULL, end=NULL, username=NULL, password=NULL
 
   info <- list()
 
-  jan2 <- infrastructure$find(query = filterstation, fields='{"properties.asset_id":true, "usehist.date":true, "usehist.num":true, "_id":false}')
-
+  jan2 <- infrastructure$find(query = filterstation, fields='{"stationname":true, "properties.asset_id":true, "usehist.date":true, "usehist.num":true, "_id":false}')
+ if(length(jan2$properties$asset_id)<1) {info <- NULL} else {
   for(i in 1:length(jan2$properties$asset_id)){
 
     asset <- setNames(data.frame(matrix(ncol = 2, nrow = length(jan2$usehist$date[[i]]))), c("Date", "Num"))
@@ -46,7 +46,8 @@ appinfs <- function(property, start=NULL, end=NULL, username=NULL, password=NULL
     }
 
   data <- jan2
-  info <- list(assetlistname=data$properties$asset_id, UseHist=info)
+  info <- list(property=jan2$stationname, assetlistname=data$properties$asset_id, UseHist=info)
+ }
 
   return(info)
 
