@@ -14,4 +14,5 @@ Imports:
   dplyr,
   mongolite,
   keyring,
-  rgdal
+  rgdal,
+  geojsonio
