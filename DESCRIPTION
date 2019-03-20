@@ -16,4 +16,5 @@ Imports:
   keyring,
   rgdal,
   geojsonio,
-  cleangeo
+  cleangeo,
+  sf

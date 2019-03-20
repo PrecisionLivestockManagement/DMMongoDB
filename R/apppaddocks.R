@@ -13,6 +13,7 @@
 #' @import rgdal
 #' @import geojsonio
 #' @import cleangeo
+#' @import sf
 #' @export
 
 
@@ -45,7 +46,8 @@ apppaddocks <- function(property, username=NULL, password=NULL){
   temp$export(file(pads))
   pado <- sprintf('{"type" : "FeatureCollection", "features": [%s]}', paste(readLines(pads), collapse=","))
   write(pado, pads)
-  PropPadds <- clgeo_Clean(geojson_read(pads, what = "sp"))
+  PropPadds <- as(st_read(pads, quiet = TRUE), "Spatial")
+  #PropPadds <- clgeo_Clean(geojson_read(pads, what = "sp"))
   temp$drop()
   PropPadds$id <- tempadds$paddname
   PropPadds@data$id <- tempadds$paddname
