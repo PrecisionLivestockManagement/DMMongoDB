@@ -15,4 +15,5 @@ Imports:
   mongolite,
   keyring,
   rgdal,
-  geojsonio
+  geojsonio,
+  cleangeo
