@@ -12,7 +12,7 @@
 #' @import dplyr
 #' @import rgdal
 #' @import geojsonio
-#' @import cleangeo
+#' @import sp
 #' @import sf
 #' @export
 
@@ -31,29 +31,19 @@ apppaddocks <- function(property, username=NULL, password=NULL){
     url = pass,
     verbose = T)
 
-  temp <- mongo(collection = "Temp", db = "DataMuster",
-    url = "mongodb://DavoSwain:8Ll7waS0z9ARtkX6@datamuster-shard-00-00-8mplm.mongodb.net:27017,datamuster-shard-00-01-8mplm.mongodb.net:27017,datamuster-shard-00-02-8mplm.mongodb.net:27017/test?ssl=true&replicaSet=DataMuster-shard-0&authSource=admin",
-    verbose = T)
-
-  temp$drop()
 
   property <- paste(unlist(property), collapse = '", "' )
   filterstation <- sprintf('{"stationname":{"$in":["%s"]}}', property)
 
   tempadds <- paddocks$find(query = filterstation, fields='{"stationname":true, "geometry":true, "properties.hectares":true, "paddname":true, "_id":false}')
-  temp$insert(tempadds)
-  pads = tempfile(fileext=".json")
-  temp$export(file(pads))
-  pado <- sprintf('{"type" : "FeatureCollection", "features": [%s]}', paste(readLines(pads), collapse=","))
-  write(pado, pads)
-  PropPadds <- as(st_read(pads, quiet = TRUE), "Spatial")
-  #PropPadds <- clgeo_Clean(geojson_read(pads, what = "sp"))
-  temp$drop()
-  PropPadds$id <- tempadds$paddname
-  PropPadds@data$id <- tempadds$paddname
-  ifelse(PropPadds$id=="xxxxxx",PropPadds$id <- row_number(PropPadds$id),PropPadds$id<-PropPadds$id)
 
-  PropPadds$property <- tempadds$stationname
+  cattle = SpatialPolygons(lapply(1:nrow(tempadds), function(x) Polygons(list(Polygon(matrix(tempadds$geometry$coordinates[[x]], ncol = 2))), paste0("ID",x))), proj4string = CRS("+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"))
+
+  cattleadd <- tempadds%>%select(stationname,paddname)
+  cattleadd["hectares"] <- tempadds$properties$hectares
+
+  PropPadds <- SpatialPolygonsDataFrame(cattle, cattleadd, match.ID=FALSE)
+
 
   return(PropPadds)
 
