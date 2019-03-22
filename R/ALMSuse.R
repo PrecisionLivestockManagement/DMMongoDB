@@ -38,8 +38,8 @@ ALMSuse <- function(property, paddock=NULL, start=NULL, end=NULL, username = NUL
     filterstation <- sprintf('{"properties.Paddock":{"$in":["%s"]}, "stationname":"%s", "properties.type":"%s"}', paddock, property, type)}
 
   lookfor <- sprintf('{"_id":false, "stationname":true, "properties.asset_id":true, "properties.Paddock":true,
-                     "usehist.date":true, "usehist.num":true, "usehist.numbreed":true, "usehist.numgrow":true,
-                     "cattlehist.date":true, "cattlehist.num":true, "cattlehist.numbreed":true, "cattlehist.numgrow":true}')
+                     "usehist.date":true, "usehist.num":true, "usehist.numbreed":true, "usehist.numgrow_w":true, "usehist.numgrow_uw":true,
+                     "cattlehist.date":true, "cattlehist.num":true, "cattlehist.numbreed":true, "cattlehist.numgrow_w":true, "cattlehist.numgrow_uw":true}')
 
   jan2<- inf$find(query = filterstation, fields=lookfor)
 
@@ -48,17 +48,18 @@ ALMSuse <- function(property, paddock=NULL, start=NULL, end=NULL, username = NUL
 
   for(i in 1:length(jan2$properties$asset_id)){
 
-    dailywts <- setNames(data.frame(matrix(ncol = 4, nrow = length(jan2$usehist$date[[i]]))), c("Date", "GroupCount", "BreedingCount", "GrowingCount"))
+    dailywts <- setNames(data.frame(matrix(ncol = 5, nrow = length(jan2$usehist$date[[i]]))), c("Date", "GroupCount", "BreedingCount", "Growing_WeanedCount", "Growing_UnweanedCount"))
     dailywts$Date <- jan2$usehist$date[[i]]
     dailywts$GroupCount <- jan2$usehist$num[[i]]
     dailywts$BreedingCount <- jan2$usehist$numbreed[[i]]
-    dailywts$GrowingCount <- jan2$usehist$numgrow[[i]]
+    dailywts$GrowingWCount <- jan2$usehist$numgrow_w[[i]]
+    dailywts$GrowingUWCount <- jan2$usehist$numgrow_uw[[i]]
 
-    dailywts1 <- setNames(data.frame(matrix(ncol = 4, nrow = length(jan2$cattlehist$date[[i]]))), c("Date", "Group", "Breeding", "Growing"))
+    dailywts1 <- setNames(data.frame(matrix(ncol = 5, nrow = length(jan2$cattlehist$date[[i]]))), c("Date", "Group", "Breeding",  "Growing_Weaned", "Growing_Unweaned"))
     dailywts1$Date <- jan2$cattlehist$date[[i]]
     dailywts1$Group <- jan2$cattlehist$num[[i]]
-    dailywts1$Breeding <- jan2$cattlehist$numbreed[[i]]
-    dailywts1$Growing <- jan2$cattlehist$numgrow[[i]]
+    dailywts$GrowingWCount <- jan2$cattlehist$numgrow_w[[i]]
+    dailywts$GrowingUWCount <- jan2$cattlehist$numgrow_uw[[i]]
 
     use <- merge.data.frame(dailywts1, dailywts, by = "Date", all = T)
 
