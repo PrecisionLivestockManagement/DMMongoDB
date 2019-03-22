@@ -31,10 +31,10 @@ ALMSuse <- function(property, paddock=NULL, start=NULL, end=NULL, username = NUL
   type <- "Walk-over-Weighing Unit"
 
   property <- paste(unlist(property), collapse = '", "' )
-  paddock <- paste(unlist(paddock), collapse = '", "' )
 
   if(is.null(paddock)) {
     filterstation <- sprintf('{"stationname":"%s", "properties.type":"%s"}', property, type)} else {
+    paddock <- paste(unlist(paddock), collapse = '", "' )
     filterstation <- sprintf('{"properties.Paddock":{"$in":["%s"]}, "stationname":"%s", "properties.type":"%s"}', paddock, property, type)}
 
   lookfor <- sprintf('{"_id":false, "stationname":true, "properties.asset_id":true, "properties.Paddock":true,
@@ -62,7 +62,13 @@ ALMSuse <- function(property, paddock=NULL, start=NULL, end=NULL, username = NUL
     dailywts1$Growing_Weaned <- jan2$cattlehist$numgrow_w[[i]]
     dailywts1$Growing_Unweaned <- jan2$cattlehist$numgrow_uw[[i]]
 
-    use <- merge.data.frame(dailywts1, dailywts, by = "Date", all = T)
+    if (nrow(dailywts) == 0) {} else {
+
+      if (nrow(dailywts1) == 0) {
+        dailywts1 <- setNames(data.frame(matrix(ncol = 5, nrow = length(jan2$usehist$date[[i]]))), c("Date", "Group", "Breeding",  "Growing_Weaned", "Growing_Unweaned"))
+        dailywts1$Date <- jan2$usehist$date[[i]]}
+
+      use <- merge.data.frame(dailywts1, dailywts, by = "Date", all = T)}
 
     if(is.null(start)) {} else {
       if(is.null(end)){use <- use %>% filter(between(as.Date(Date),start-1,Sys.Date()))} else{
