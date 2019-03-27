@@ -17,4 +17,5 @@ Imports:
   rgdal,
   geojsonio,
   sp,
-  sf
+  sf,
+  splancs
