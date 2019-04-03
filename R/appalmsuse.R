@@ -53,7 +53,7 @@ appalmsuse <- function(property, start=NULL, end=NULL, username = NULL, password
     if(length(jan2$usehist$numgrow_w[[i]])==0){}else{dailywts$Growing_WeanedCount <- jan2$usehist$numgrow_w[[i]]}
     if(length(jan2$usehist$numgrow_uw[[i]])==0){}else{dailywts$Growing_UnweanedCount <- jan2$usehist$numgrow_uw[[i]]}
 
-    dailywts1 <- setNames(data.frame(matrix(NA, ncol = 5, nrow = length(jan2$cattlehist$date[[i]]))), c("Date", "Group", "Breeding",  "Growing_Weaned", "Growing_Unweaned"))
+    dailywts1 <- setNames(data.frame(matrix(NA, ncol = 7, nrow = length(jan2$cattlehist$date[[i]]))), c("Date", "Group", "Breeding",  "Growing_Weaned", "Growing_Unweaned", "CowPercent", "GrowPercent"))
     if(length(jan2$cattlehist$date[[i]])==0){}else{dailywts1$Date <- jan2$cattlehist$date[[i]]}
     if(length(jan2$cattlehist$num[[i]])==0){}else{dailywts1$Group <- jan2$cattlehist$num[[i]]}
     if(length(jan2$cattlehist$numbreed[[i]])==0){}else{dailywts1$Breeding <- jan2$cattlehist$numbreed[[i]]}
@@ -61,6 +61,8 @@ appalmsuse <- function(property, start=NULL, end=NULL, username = NULL, password
     if(length(jan2$cattlehist$numgrow_uw[[i]])==0){}else{dailywts1$Growing_Unweaned <- jan2$cattlehist$numgrow_uw[[i]]}
 
     use <- merge.data.frame(dailywts, dailywts1, by = "Date", all = T)
+    use$CowPercent <- round((use$BreedingCount/use$Breeding)*100, 0)
+    use$GrowPercent <- round(((use$Growing_WeanedCount+use$Growing_UnweanedCount)/(use$Growing_Weaned+use$Growing_Unweaned))*100, 0)
 
     if(is.null(start)) {} else {
       if(is.null(end)){use <- use %>% filter(between(as.Date(Date),start-1,Sys.Date()))} else{
