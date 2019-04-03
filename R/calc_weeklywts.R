@@ -1,6 +1,6 @@
 #' Cattle weekly weights
 #'
-#' This function pulls in weekly weights for individual or groups of cattle for specified periods. It searches based on a list of RFID values. It is recommended that you use the propsearch function to find a list of cattle RFID numbers for a particular property. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
+#' This function calculates weekly weight statistics for individual or groups of cattle for specified periods. It searches based on a list of RFID values. It is recommended that you use the propsearch function to find a list of cattle RFID numbers for a particular property. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
 #' @name calc_weeklywts
 #' @param RFID this is a list of cattle RFID numbers
 #' @param start provide a start date to be returned, this has to be in date format.
