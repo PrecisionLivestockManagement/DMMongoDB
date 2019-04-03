@@ -2,6 +2,7 @@
 
 export(ALMSuse)
 export(RFIDcattlecheck)
+export(appalmsuse)
 export(appcattle)
 export(appinfs)
 export(apppaddocks)
