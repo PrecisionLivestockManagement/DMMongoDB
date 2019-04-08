@@ -13,6 +13,7 @@
 #' @import dplyr
 #' @import rgdal
 #' @import splancs
+#' @import spdplyr
 #' @export
 
 
