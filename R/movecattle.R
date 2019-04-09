@@ -4,6 +4,7 @@
 #' for a property from MongoDB. Inputs need to be a list of one or more property names
 #' @name movecattle
 #' @param property the name of the property to search the DataMuster MongoDB Atlas server
+#' @param paddock the name of the paddocks to search the DataMuster MongoDB Atlas server
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
 #' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
 #' @return a spatialpointsdataframe with a list of the RFID numbers and a number of other data points, associated management tags and current paddocks the cattle are in
@@ -17,7 +18,7 @@
 #' @export
 
 
-movecattle <- function(property, username=NULL, password=NULL){
+movecattle <- function(property, paddock=NULL, username=NULL, password=NULL){
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]
@@ -30,9 +31,16 @@ movecattle <- function(property, username=NULL, password=NULL){
     verbose = T)
 
   property <- paste(unlist(property), collapse = '", "' )
-  filterstation <- sprintf('{"stationname":{"$in":["%s"]}}', property)
+
+  if (is.null(paddock)){
+  filterstation <- sprintf('{"stationname":{"$in":["%s"]}}', property)}else{
+
+  paddock <- paste(unlist(paddock), collapse = '", "' )
+  filterstation <- sprintf('{"stationname":{"$in":["%s"]}, "properties.Paddock":{"$in":["%s"]}}', property, paddock)}
+
   lookfor <- sprintf('{"stationname":true, "RFID":true, "properties.Management":true, "geometry":true, "properties.Paddock":true, "_id":true}')
   cattleinfo <- cattle$find(query = filterstation, fields=lookfor)
+
 
   cattleinfospatial <- SpatialPointsDataFrame(data.frame(matrix(unlist(cattleinfo$geometry$coordinates), nrow=length(cattleinfo$geometry$coordinates), byrow=T)), cattleinfo$properties)
 
