@@ -59,7 +59,7 @@ addcattle <- function(RFID, MTag, category, property, paddock, weaned, date=NULL
   tempcattle <- cattle$find(query = '{"RFID":"xxxxxx"}', fields = '{"_id":false}')
 
 
-mandfields <- c("RFID","MTag","category","property","paddock","weaned","date")
+mandfields <- c("RFID","MTag","category","paddock","weaned","date") #excluding property
 
 optfields <- c("breed", "brand","horn","colour","sex","desexed","origin","DOB","birthWeight","damRFID",
                 "damMTag","sireRFID","sireMTag")
@@ -97,7 +97,6 @@ for (i in 1:length(optfields)){
 
   # Check that any sire or dam RFID numbers are in the correct format ---------------------------------------------------------------------
 
-
     if (!(is.null(damRFID))){
     if("TRUE" %in% (nchar(as.character(damRFID))!= 16)) {
       stop(paste0("One or more of the dam RFID numbers are not in the correct format. Please ensure all RFIDs are in the format 'xxx xxxxxxxxxxxx'"))}}
@@ -109,15 +108,11 @@ for (i in 1:length(optfields)){
 
     # Check that the property is registered in the database ---------------------------------------------------------------------
 
-
-        filterstation <- sprintf('{"name":"%s"}', property)
+    filterstation <- sprintf('{"name":"%s"}', property)
     station <- stations$find(query = filterstation, fields = '{"_id":true}')
 
     if(nrow(station) == 0) {
             stop('Could not find matching property. Please check spelling and ensure the property is registered in the database.')}
-
-    if(nrow(station) > 1) {
-      stop('Multiple matching properties exist in the database.')}
 
 
     # Check that the paddocks are registered in the database ---------------------------------------------------------------------
@@ -160,7 +155,7 @@ for (i in 1:length(optfields)){
 
       # Property information
       template$stationname <- property
-      template$stationID <- station$`_id`
+      template$stationID<- station$`_id`
 
       # Paddock information
       temppad <- pad[which(pad$paddname == paddock[p]),]
@@ -183,7 +178,7 @@ for (i in 1:length(optfields)){
       if (!(is.null(breed))){template$properties$breed <- breed[p]}
       if (!(is.null(brand))){template$properties$brand <- brand[p]}
       if (!(is.null(horn))){template$properties$horn <- tolower(horn[p])}
-      if (!(is.null(colour))){template$properties$colour <- colour[p]}
+      if (!(is.null(colour))){template$properties$colour <- tolower(colour[p])}
       if (!(is.null(sex))){template$properties$sex <- tolower(sex[p])}
       if (!(is.null(desexed))){template$properties$desexed <- desexed[p]}
       if (!(is.null(origin))){template$properties$origin <- origin[p]}
