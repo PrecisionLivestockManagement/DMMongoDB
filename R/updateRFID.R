@@ -17,8 +17,9 @@
 updateRFID <- function(RFID, newRFID, date=NULL, username=NULL, password=NULL){
 
   if(is.null(username)||is.null(password)){
-  username = "LaurenOconnor"
-  password =  "DataMuster"}
+    username = keyring::key_list("DMMongoDB")[1,2]
+    password =  keyring::key_get("DMMongoDB", username)
+  }
 
   pass <- sprintf("mongodb://%s:%s@datamuster-shard-00-00-8mplm.mongodb.net:27017,datamuster-shard-00-01-8mplm.mongodb.net:27017,datamuster-shard-00-02-8mplm.mongodb.net:27017/test?ssl=true&replicaSet=DataMuster-shard-0&authSource=admin", username, password)
   cattle <- mongo(collection = "Cattle", db = "DataMuster", url = pass, verbose = T)
@@ -27,8 +28,8 @@ updateRFID <- function(RFID, newRFID, date=NULL, username=NULL, password=NULL){
 
   if (length(date) == 1){date <- rep(date, length = length(RFID))}
 
-  RFID <- paste(unlist(RFID), collapse = '", "' )
-  newRFID <- paste(unlist(newRFID), collapse = '", "' )
+  checkRFID <- paste(unlist(RFID), collapse = '", "' )
+  checknewRFID <- paste(unlist(newRFID), collapse = '", "' )
 
   # Checks that the RFID numbers are in the correct format for the database
 
@@ -41,7 +42,7 @@ updateRFID <- function(RFID, newRFID, date=NULL, username=NULL, password=NULL){
 
   # Checks that the old RFID numbers exist in the database
 
-  filtercattle <- sprintf('{"RFID":{"$in":["%s"]}}', RFID)
+  filtercattle <- sprintf('{"RFID":{"$in":["%s"]}}', checkRFID)
   check <- cattle$count(query = filtercattle)
 
   if (check != length(RFID)) {
@@ -51,7 +52,7 @@ updateRFID <- function(RFID, newRFID, date=NULL, username=NULL, password=NULL){
 
   # Checks that the new RFID numbers are not already registered in the database
 
-  filtercattle <- sprintf('{"RFID":{"$in":["%s"]}}', newRFID)
+  filtercattle <- sprintf('{"RFID":{"$in":["%s"]}}', checknewRFID)
   check <- cattle$count(query = filtercattle)
 
   if (check != 0) {
