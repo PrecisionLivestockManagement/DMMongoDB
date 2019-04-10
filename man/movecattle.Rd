@@ -4,10 +4,13 @@
 \alias{movecattle}
 \title{Package with functions to enable easier code to access to DataMuster MongoDB Atlas servers}
 \usage{
-movecattle(property, username = NULL, password = NULL)
+movecattle(property, paddock = NULL, username = NULL,
+  password = NULL)
 }
 \arguments{
 \item{property}{the name of the property to search the DataMuster MongoDB Atlas server}
+
+\item{paddock}{the name of the paddocks to search the DataMuster MongoDB Atlas server}
 
 \item{username}{if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring}
 
