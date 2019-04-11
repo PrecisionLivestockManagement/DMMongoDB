@@ -4,11 +4,12 @@
 \alias{updatecattleinfo}
 \title{Update cattle information to DataMuster database}
 \usage{
-updatecattleinfo(RFID, MTag, category, weaned, breed = NULL,
-  brand = NULL, horn = NULL, colour = NULL, sex = NULL,
-  desexed = NULL, origin = NULL, DOB = NULL, birthWeight = NULL,
-  damRFID = NULL, damMTag = NULL, sireRFID = NULL, sireMTag = NULL,
-  username = NULL, password = NULL)
+updatecattleinfo(RFID, MTag = NULL, category = NULL, weaned = NULL,
+  breed = NULL, brand = NULL, horn = NULL, colour = NULL,
+  sex = NULL, desexed = NULL, origin = NULL, DOB = NULL,
+  birthWeight = NULL, damRFID = NULL, damMTag = NULL,
+  sireRFID = NULL, sireMTag = NULL, username = NULL,
+  password = NULL)
 }
 \arguments{
 \item{RFID}{this is a list of the cattle RFID numbers}

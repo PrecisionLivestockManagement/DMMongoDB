@@ -87,7 +87,7 @@ if (check != length(RFID)) {
     p<-1
     for (p in 1:length(RFID)){
 
-      RFIDS <- sprintf('{"RFID":"%s"}', RFID[i])
+      RFIDS <- sprintf('{"RFID":"%s"}', RFID[p])
 
       #MTag
       if (!(is.null(MTag))){
