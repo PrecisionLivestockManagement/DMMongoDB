@@ -52,6 +52,7 @@ updatestweight <- function(RFID, weight, date=NULL, username=NULL, password=NULL
     wt <- weight[i]
 
     wt <- ifelse(wt == "",0,wt)
+    wt <- ifelse(is.na(wt),0,wt)
 
         banger <- cattle$find(query = RFIDS, fields='{"stwthist.date":true, "stwthist.weight":true, "_id":false}')
          matchdate <- which(banger$stwthist$date[[1]] == dat)

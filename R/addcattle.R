@@ -76,10 +76,11 @@ for (i in 1:length(optfields)){
 # Check that the RFID numbers are in the correct format and are not already registered in the database ---------------------------------------------------------------------
 
 
-    checkRFID <- paste(unlist(RFID), collapse = '", "' )
-
     if("TRUE" %in% (nchar(as.character(RFID))!= 16)) {
       stop(paste0("One or more of the RFID numbers are not in the correct format. Please ensure all RFIDs are in the format 'xxx xxxxxxxxxxxx'"))}
+
+    checkRFID <- RFID[which(RFID != "xxx xxxxxxxxxxxx")]
+    checkRFID <- paste(unlist(checkRFID), collapse = '", "' )
 
     filtercattle <- sprintf('{"RFID":{"$in":["%s"]}}', checkRFID)
     check <- cattle$count(query = filtercattle)
@@ -187,6 +188,8 @@ for (i in 1:length(optfields)){
 
       if (!(is.null(damRFID))){
 
+        if (damRFID[p] != ""){
+
         template$properties$damRFID <- damRFID[p]
 
          filterdam <- sprintf('{"RFID":"%s"}', damRFID[p])
@@ -196,9 +199,11 @@ for (i in 1:length(optfields)){
             print(paste0('The dam RFID ', damRFID[p], ' is not registered in the database. The dam RFID has been noted but is not linked in the database'))}else{
 
            template$properties$damID <- dam$`_id`
-            template$properties$damMTag <- dam$properties$Management}}
+            template$properties$damMTag <- dam$properties$Management}}}
 
       if (!(is.null(sireRFID))){
+
+        if (sireRFID[p] != ""){
 
         template$properties$sireRFID <- sireRFID[p]
 
@@ -209,9 +214,10 @@ for (i in 1:length(optfields)){
           print(paste0('The sire RFID ', sireRFID[p], ' is not registered in the database. The sire RFID has been noted but is not linked in the database'))}else{
 
             template$properties$sireID <- sire$`_id`
-            template$properties$sireMTag <- sire$properties$Management}}
+            template$properties$sireMTag <- sire$properties$Management}}}
 
       if (!(is.null(damMTag))){
+        if (damMTag[p] != ""){
 
         if (template$properties$damMTag == "xxxxxx"){
         template$properties$damMTag <- as.character(damMTag[p])
@@ -223,9 +229,10 @@ for (i in 1:length(optfields)){
           print(paste0('The dam MTag ', damMTag[p], ' is not registered in the database. The dam MTag has been noted but is not linked in the database'))}else{
 
           template$properties$damID <- dam$`_id`
-          template$properties$damRFID <- dam$RFID}}}
+          template$properties$damRFID <- dam$RFID}}}}
 
       if (!(is.null(sireMTag))){
+        if (sireMTag[p] != ""){
 
         if (template$properties$sireMTag == "xxxxxx"){
           template$properties$sireMTag <- as.character(sireMTag[p])
@@ -237,7 +244,7 @@ for (i in 1:length(optfields)){
             print(paste0('The sire MTag ', sireMTag[p], ' is not registered in the database. The sire MTag has been noted but is not linked in the database'))}else{
 
               template$properties$sireID <- sire$`_id`
-              template$properties$sireRFID <- sire$RFID}}}
+              template$properties$sireRFID <- sire$RFID}}}}
 
 
     #  Fill any missing fields with default values --------------------------

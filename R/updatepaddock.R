@@ -15,7 +15,7 @@
 #' @export
 
 
-updatepaddock <- function(RFID, property, paddock, addtoherd, date=NULL, username=NULL, password=NULL){
+updatepaddock <- function(RFID, property, paddock, date=NULL, username=NULL, password=NULL){
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]
@@ -73,8 +73,10 @@ updatepaddock <- function(RFID, property, paddock, addtoherd, date=NULL, usernam
           arrpos <- length(banger$pdkhist$dateIN[[1]])
 
           if (banger$properties$Paddock != paddock[i]){
-          RFIDIlast <- sprintf('{"$set":{"properties.Paddock":"%s", "properties.PaddockID":"%s"}}', paddock[i], pad$`_id`)
-          RFIDI <- sprintf('{"$set":{"pdkhist.dateIN.%s":{"$date":"%s"}, "pdkhist.name.%s":"%s", "pdkhist.ID.%s":"%s"}}', arrpos, paste0(substr(date[i],1,10),"T","00:00:00","+1000"), arrpos, paddock[i], arrpos, pad$`_id`)
+            temppad <- pad[which(pad$paddname == paddock[i]),]
+
+          RFIDIlast <- sprintf('{"$set":{"properties.Paddock":"%s", "properties.PaddockID":"%s"}}', paddock[i], temppad$`_id`)
+          RFIDI <- sprintf('{"$set":{"pdkhist.dateIN.%s":{"$date":"%s"}, "pdkhist.name.%s":"%s", "pdkhist.ID.%s":"%s"}}', arrpos, paste0(substr(date[i],1,10),"T","00:00:00","+1000"), arrpos, paddock[i], arrpos, temppad$`_id`)
 
       cattle$update(RFIDS, RFIDI)
       cattle$update(RFIDS, RFIDIlast)
