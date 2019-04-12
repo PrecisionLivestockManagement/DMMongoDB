@@ -91,68 +91,80 @@ if (check != length(RFID)) {
 
       #MTag
       if (!(is.null(MTag))){
+        if (!(is.na(MTag[p]))){
         if (MTag[p] != ""){
           RFIDI <- sprintf('{"$set":{"properties.Management":"%s"}}', MTag[p])
-          cattle$update(RFIDS, RFIDI)}}
+          cattle$update(RFIDS, RFIDI)}}}
       #Category
       if (!(is.null(category))){
+        if (!(is.na(category[p]))){
         if (category[p] != ""){
           RFIDI <- sprintf('{"$set":{"properties.category":"%s"}}', category[p])
-          cattle$update(RFIDS, RFIDI)}}
+          cattle$update(RFIDS, RFIDI)}}}
       #Weaned
       if (!(is.null(weaned))){
+        if (!(is.na(weaned[p]))){
         if (weaned[p] != ""){
           RFIDI <- sprintf('{"$set":{"properties.weaned":"%s"}}', weaned[p])
-          cattle$update(RFIDS, RFIDI)}}
+          cattle$update(RFIDS, RFIDI)}}}
       #Breed
       if (!(is.null(breed))){
+        if (!(is.na(breed[p]))){
         if (breed[p] != ""){
           RFIDI <- sprintf('{"$set":{"properties.breed":"%s"}}', breed[p])
-          cattle$update(RFIDS, RFIDI)}}
+          cattle$update(RFIDS, RFIDI)}}}
       #Brand
       if (!(is.null(brand))){
+        if (!(is.na(brand[p]))){
         if (brand[p] != ""){
           RFIDI <- sprintf('{"$set":{"properties.brand":"%s"}}', brand[p])
-          cattle$update(RFIDS, RFIDI)}}
+          cattle$update(RFIDS, RFIDI)}}}
       #Horn
       if (!(is.null(horn))){
+        if (!(is.na(horn[p]))){
         if (horn[p] != ""){
           RFIDI <- sprintf('{"$set":{"properties.horn":"%s"}}', tolower(horn[p]))
-          cattle$update(RFIDS, RFIDI)}}
+          cattle$update(RFIDS, RFIDI)}}}
       #Colour
       if (!(is.null(colour))){
+        if (!(is.na(colour[p]))){
         if (colour[p] != ""){
           RFIDI <- sprintf('{"$set":{"properties.colour":"%s"}}', tolower(colour[p]))
-          cattle$update(RFIDS, RFIDI)}}
+          cattle$update(RFIDS, RFIDI)}}}
       #Sex
       if (!(is.null(sex))){
+        if (!(is.na(sex[p]))){
         if (sex[p] != ""){
           RFIDI <- sprintf('{"$set":{"properties.sex":"%s"}}', tolower(sex[p]))
-          cattle$update(RFIDS, RFIDI)}}
+          cattle$update(RFIDS, RFIDI)}}}
       #Desexed
       if (!(is.null(desexed))){
+        if (!(is.na(desexed[p]))){
         if (desexed[p] != ""){
           RFIDI <- sprintf('{"$set":{"properties.desexed":"%s"}}', desexed[p])
-          cattle$update(RFIDS, RFIDI)}}
+          cattle$update(RFIDS, RFIDI)}}}
       #Origin
       if (!(is.null(origin))){
+        if (!(is.na(origin[p]))){
         if (origin[p] != ""){
           RFIDI <- sprintf('{"$set":{"properties.origin":"%s"}}', origin[p])
-          cattle$update(RFIDS, RFIDI)}}
+          cattle$update(RFIDS, RFIDI)}}}
       #DOB
       if (!(is.null(DOB))){
-        if (as.character(DOB[p]) != ""){
+        if (!(is.na(DOB[p]))){
+          if (as.character(DOB[p]) != ""){
           RFIDI <- sprintf('{"$set":{"properties.birthDate":{"$date":"%s"}}}', paste0(substr(DOB[p],1,10),"T","00:00:00","+1000"))
-          cattle$update(RFIDS, RFIDI)}}
+          cattle$update(RFIDS, RFIDI)}}}
       #birthWeight
       if (!(is.null(birthWeight))){
+        if (!(is.na(birthWeight[p]))){
         if (birthWeight[p] != ""){
           RFIDI <- sprintf('{"$set":{"properties.birthWeight":"%s"}}', birthWeight[p])
-          cattle$update(RFIDS, RFIDI)}}
+          cattle$update(RFIDS, RFIDI)}}}
 
 #Dam RFID
 if (!(is.null(damRFID))){
-
+  if (!(is.na(damRFID[p]))){
   if (damRFID[p] != ""){
 
     filterdam <- sprintf('{"RFID":"%s"}', damRFID[p])
@@ -164,10 +176,11 @@ if (!(is.null(damRFID))){
 
         RFIDI <- sprintf('{"$set":{"properties.damRFID":"%s", "properties.damID":"%s", "properties.damMTag":"%s"}}', damRFID[p], dam$`_id`, dam$properties$Management)}
 
-    cattle$update(RFIDS, RFIDI)}}
+    cattle$update(RFIDS, RFIDI)}}}
 
 #Dam Management
 if (!(is.null(damMTag))){
+  if (!(is.na(damMTag[p]))){
   if (damMTag[p] != ""){
 
     tempcow <- cattle$find(query = RFIDS, fields = '{"_id":false,"properties.damMTag":true}')
@@ -182,10 +195,11 @@ if (!(is.null(damMTag))){
         print(paste0('The dam MTag ', damMTag[p], ' is not registered in the database. The dam MTag has been noted but is not linked in the database'))}else{
           RFIDI <- sprintf('{"$set":{"properties.damRFID":"%s", "properties.damID":"%s", "properties.damMTag":"%s"}}', dam$RFID, dam$`_id`, damMTag[p])}
 
-      cattle$update(RFIDS, RFIDI)}}}
+      cattle$update(RFIDS, RFIDI)}}}}
 
 #Sire RFID
   if (!(is.null(sireRFID))){
+    if (!(is.na(sireRFID[p]))){
 
     if (sireRFID[p] != ""){
 
@@ -198,10 +212,11 @@ if (!(is.null(damMTag))){
 
           RFIDI <- sprintf('{"$set":{"properties.sireRFID":"%s", "properties.sireID":"%s", "properties.sireMTag":"%s"}}', sireRFID[p], sire$`_id`, sire$properties$Management)}
 
-      cattle$update(RFIDS, RFIDI)}}
+      cattle$update(RFIDS, RFIDI)}}}
 
 #Sire Management
   if (!(is.null(sireMTag))){
+    if (!(is.na(sireMTag[p]))){
     if (sireMTag[p] != ""){
 
       tempcow <- cattle$find(query = RFIDS, fields = '{"_id":false,"properties.sireMTag":true}')
@@ -216,7 +231,7 @@ if (!(is.null(damMTag))){
           print(paste0('The sire MTag ', sireMTag[p], ' is not registered in the database. The sire MTag has been noted but is not linked in the database'))}else{
             RFIDI <- sprintf('{"$set":{"properties.sireRFID":"%s", "properties.sireID":"%s", "properties.sireMTag":"%s"}}', sire$RFID, sire$`_id`, sire$MTag[p])}
 
-        cattle$update(RFIDS, RFIDI)}}}
+        cattle$update(RFIDS, RFIDI)}}}}
 
     }
 }
