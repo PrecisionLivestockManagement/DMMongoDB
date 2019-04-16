@@ -40,7 +40,7 @@ propsearchfull <- function(property, paddock=NULL, username=NULL, password=NULL)
   propertyinfo <- propertyinfo$properties
 
   if(is.null(paddock)){}else{
-    propertyinfo <- propertyinfo %>% filter(Paddock==paddock)}
+    propertyinfo <- propertyinfo %>% filter(Paddock %in% paddock)}
 
   return(propertyinfo)
 

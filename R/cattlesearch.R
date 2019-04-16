@@ -1,10 +1,9 @@
 #' Package with functions to enable easier code to access to DataMuster MongoDB Atlas servers
 #'
-#' This function provides a list of cattle
-#' for a property from MongoDB. Inputs need to be a list of one or more property names and if only one property a paddock name can be included
-#' @name propsearch
-#' @param property the name of the property to search the DataMuster MongoDB Atlas server
-#' @param paddock this is the name of a paddock or list of paddocks as character entries, if no value is entered then all paddocks are loaded
+#' This function provides details for a list of cattle
+#' RFID numbers from MongoDB. Inputs need to be a list of one or more RFID numbers
+#' @name cattlesearch
+#' @param RFID the list of RFID numbers to search the DataMuster MongoDB Atlas server
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
 #' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
 #' @return a dataframe with a list of the RFID numbers, associated management tags and current paddocks the cattle are in
@@ -15,7 +14,7 @@
 #' @export
 
 
-propsearch <- function(property, paddock=NULL, username=NULL, password=NULL){
+cattlesearch <- function(RFID, username=NULL, password=NULL){
 
   if(is.null(username)||is.null(password)){
   username = keyring::key_list("DMMongoDB")[1,2]
@@ -27,17 +26,14 @@ propsearch <- function(property, paddock=NULL, username=NULL, password=NULL){
     url = pass,
     verbose = T)
 
-  property <- paste(unlist(property), collapse = '", "' )
-  filterstation <- sprintf('{"stationname":{"$in":["%s"]}}', property)
+  RFID <- paste(unlist(RFID), collapse = '", "' )
+  filterstation <- sprintf('{"RFID":{"$in":["%s"]}}', RFID)
   lookfor <- sprintf('{"RFID":true, "properties.Management":true, "properties.Paddock":true, "_id":false}')
   propertyinfo <- cattle$find(query = filterstation, fields=lookfor)
 
   propertyinfo$properties["RFID"] <- propertyinfo$RFID
 
   propertyinfo <- propertyinfo$properties
-
-  if(is.null(paddock)){}else{
-    propertyinfo <- propertyinfo %>% filter(Paddock %in% paddock)}
 
   return(propertyinfo)
 
