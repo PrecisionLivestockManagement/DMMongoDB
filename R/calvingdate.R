@@ -36,6 +36,8 @@ calvingdate <- function(RFID, values=NULL, username = NULL, password = NULL){
 
   for(i in 1:length(jan2$RFID)){
 
+    if (length(jan2$calfhist$date[i][[1]]) != 0){
+
     calving <- setNames(data.frame(matrix(ncol = 1, nrow = length(jan2$calfhist$date[[i]]))), c("Date"))
     calving$Date <- jan2$calfhist$date[[i]]
 
@@ -46,7 +48,7 @@ calvingdate <- function(RFID, values=NULL, username = NULL, password = NULL){
     #This is the section where we can apply further filters based on breed, class, etc.
 
     cattleinfo[[jan2$RFID[i]]] <- as.data.frame(calving)
-}
+}}
 
   RFID <- jan2[which(jan2$RFID!="xxxx"),]
   cattleinfo <- list(RFID=RFID$RFID, Property=RFID$stationname, CalvingDates=cattleinfo)
