@@ -56,5 +56,4 @@ calvingdate <- function(RFID, values=NULL, username = NULL, password = NULL){
   return(cattleinfo)
 
 
-
 }
