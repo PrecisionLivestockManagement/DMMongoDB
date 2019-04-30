@@ -30,7 +30,7 @@ dailywts <- function(RFID, start=NULL, end=NULL, values=NULL, username=NULL, pas
 
   RFID <- paste(unlist(RFID), collapse = '", "' )
   filterstation <- sprintf('{"RFID":{"$in":["%s"]}}', RFID)
-  jan2 <- cattle$find(query = filterstation, fields='{"RFID":true, "stationname":true, "wthist.date":true, "wthist.weight":true, "_id":false}')
+  jan2 <- cattle$find(query = filterstation, fields='{"RFID":true, "stationname":true, "properties.Paddock":true,"wthist.date":true, "wthist.weight":true, "_id":false}')
 
 
   cattleinfo <- list()
@@ -52,7 +52,7 @@ dailywts <- function(RFID, start=NULL, end=NULL, values=NULL, username=NULL, pas
   }
 
   RFID <- jan2[which(jan2$RFID!="xxxx"),]
-  cattleinfo <- list(RFID=RFID$RFID, Property=RFID$stationname, DailyWeights=cattleinfo)
+  cattleinfo <- list(RFID=RFID$RFID, Property=RFID$stationname, Paddock=RFID$properties$Paddock, DailyWeights=cattleinfo)
 
   return(cattleinfo)
 
