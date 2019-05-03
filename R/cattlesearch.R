@@ -28,19 +28,19 @@ cattlesearch <- function(RFID, username=NULL, password=NULL){
 
   RFID <- paste(unlist(RFID), collapse = '", "' )
   filterstation <- sprintf('{"RFID":{"$in":["%s"]}}', RFID)
-  lookfor <- sprintf('{"RFID":true, "stationname":true, "properties.Management":true, "properties.breed":true,"properties.sex":true,"properties.category":true,"properties.Paddock":true, "_id":false}')
+  lookfor <- sprintf('{"RFID":true, "stationname":true, "active":true, "properties.Management":true, "properties.breed":true,"properties.sex":true,"properties.category":true,"properties.Paddock":true, "_id":false}')
   #lookfor <- sprintf('{"RFID":true, "stationname":true, "_id":false}')
 
   propertyinfo <- cattle$find(query = filterstation, fields=lookfor)
 
   propertyinfo$properties["RFID"] <- propertyinfo$RFID
   propertyinfo$properties["stationname"] <- propertyinfo$stationname
-
+  propertyinfo$properties["active"] <- propertyinfo$active
 
   propertyinfo <- propertyinfo$properties
 
   propertyinfo <- propertyinfo %>%
-    select(RFID, Management, stationname, Paddock, category, breed, sex)
+    select(RFID, Management, active, stationname, Paddock, category, breed, sex)
 
   return(propertyinfo)
 
