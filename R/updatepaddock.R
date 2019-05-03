@@ -60,16 +60,21 @@ updatepaddock <- function(RFID, property, paddock, date=NULL, username=NULL, pas
 
   # Check for WoW infrastructure in new paddocks
 
-  filterinfs <- sprintf('{"stationname":"%s", "properties.Paddock":{"$in":["%s"]}, "properties.type":"%s"}', property, checkpads, "Walk-over-Weighing Unit")
+  filterinfs1 <- sprintf('{"stationname":"%s", "properties.Paddock":{"$in":["%s"]}, "properties.type":"%s"}', property, checkpads, "Walk-over-Weighing Unit")
 
-  inf <- infs$find(query = filterinfs, fields = '{"_id":true, "properties.Paddock":true, "properties.asset_id":true}')
+  inf1 <- infs$find(query = filterinfs1, fields = '{"_id":true, "properties.Paddock":true, "properties.asset_id":true}')
 
+  filterinfs2 <- sprintf('{"stationname":"%s", "properties.Paddock2":{"$in":["%s"]}, "properties.type":"%s"}', property, checkpads, "Walk-over-Weighing Unit")
+
+  inf2 <- infs$find(query = filterinfs2, fields = '{"_id":true, "properties.Paddock2":true, "properties.asset_id":true}')
+
+  inf <- rbind(inf1, inf2)
 
   for (i in 1:length(RFID)){
 
     RFIDS <- sprintf('{"RFID":"%s"}', RFID[i])
 
-          banger <- cattle$find(query= RFIDS, fields='{"properties.Paddock":true,"properties.ALMS":true,"pdkhist.dateIN":true, "_id":false}')
+          banger <- cattle$find(query= RFIDS, fields='{"properties.Paddock":true,"properties.ALMS":true,"properties.ALMSID":true,"pdkhist.dateIN":true, "_id":false}')
           arrpos <- length(banger$pdkhist$dateIN[[1]])
 
           if (banger$properties$Paddock != paddock[i]){
@@ -96,7 +101,6 @@ updatepaddock <- function(RFID, property, paddock, date=NULL, username=NULL, pas
 
               IDI <- sprintf('{"$set":{"properties.ALMSdateON":{"$date":"%s"}, "properties.ALMSdateOFF":{"$date":"%s"}, "properties.ALMS":"%s", "properties.ALMSID":"%s", "properties.ALMSasset_id":"%s"}}',
                              paste0(substr(date[i],1,10),"T","00:00:00","+1000"), paste0("1970-01-01","T","10:00:00","+1000"), "TRUE", WOW$`_id`, WOW$properties$asset_id)}
-
 
           cattle$update(RFIDS, IDI)
 }}
