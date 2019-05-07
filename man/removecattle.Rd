@@ -4,8 +4,8 @@
 \alias{removecattle}
 \title{Remove cattle from a station}
 \usage{
-removecattle(RFID, date = NULL, reason = NULL, username = NULL,
-  password = NULL)
+removecattle(RFID, date = NULL, reason = NULL, property,
+  username = NULL, password = NULL)
 }
 \arguments{
 \item{RFID}{this is a list of cattle RFID numbers}

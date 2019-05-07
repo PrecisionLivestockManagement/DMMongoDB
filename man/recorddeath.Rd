@@ -4,8 +4,8 @@
 \alias{recorddeath}
 \title{Record a cattle death}
 \usage{
-recorddeath(RFID, date = NULL, cause = NULL, username = NULL,
-  password = NULL)
+recorddeath(RFID, date = NULL, cause = NULL, property,
+  username = NULL, password = NULL)
 }
 \arguments{
 \item{RFID}{this is a list of cattle RFID numbers}
