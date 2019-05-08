@@ -43,7 +43,6 @@ recorddeath <- function(RFID, date=NULL, cause=NULL, property, username=NULL, pa
       stop("One or more of the RFID numbers cannot be found in the database. Please check that the RFID numbers are correct and try again")}
 
 
-
   for (i in 1:length(cows$RFID)){
 
     RFIDS <- sprintf('{"RFID":"%s"}', cows$RFID[i])
