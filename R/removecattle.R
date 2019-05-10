@@ -51,7 +51,7 @@ removecattle <- function(RFID, property, date=NULL, username=NULL, password=NULL
 
     cattle$update(RFIDS, RFIDI)}}
 
-  movecattle(property = property, username = username, password = password)
+  #movecattle(property = property, username = username, password = password)
 
 }
 

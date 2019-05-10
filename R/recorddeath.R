@@ -53,7 +53,7 @@ recorddeath <- function(RFID, date=NULL, cause=NULL, property, username=NULL, pa
 
       cattle$update(RFIDS, RFIDI)}
 
-  movecattle(property = property, username = username, password = password)
+  #movecattle(property = property, username = username, password = password)
 
 }
 
