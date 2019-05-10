@@ -4,15 +4,15 @@
 \alias{removecattle}
 \title{Remove cattle from a station}
 \usage{
-removecattle(RFID, date = NULL, reason = NULL, property,
-  username = NULL, password = NULL)
+removecattle(RFID, property, date = NULL, username = NULL,
+  password = NULL)
 }
 \arguments{
 \item{RFID}{this is a list of cattle RFID numbers}
 
-\item{date}{provide the date that the animal died, this has to be in date format. Default is today's date.}
+\item{property}{this is the name of the property}
 
-\item{reason}{provide the reason for removal}
+\item{date}{provide the date that the animal left the station, this has to be in date format. Default is today's date.}
 
 \item{username}{if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring}
 
