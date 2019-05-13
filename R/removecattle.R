@@ -34,7 +34,7 @@ removecattle <- function(RFID, property, date=NULL, username=NULL, password=NULL
 
   #checkcows <- paste(unlist(RFID), collapse = '", "' )
 
-  cows <- cattlesearch(RFID)
+  cows <- cattlesearch(RFID, username = username, password = password)
 
   if (nrow(cows) != length(RFID)) {
       stop("One or more of the RFID numbers cannot be found in the database. Please check that the RFID numbers are correct and try again")}
