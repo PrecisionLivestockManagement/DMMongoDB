@@ -26,21 +26,23 @@ loadrampremove <- function(RFID, username=NULL, password=NULL){
 
    for (i in 1:length(RFID)){
 
-    RFIDS <- sprintf('{"RFID":"%s"}', RFID[i])
-    RFIDI <- sprintf('{"$set":{"actioned":"%s"}}', "1")
-    loadramps$update(RFIDS, RFIDI)
+     RFIDS <- sprintf('{"RFID":"%s"}', RFID[i])
+     IDS <- sprintf('{"RFID":"%s", "actioned":"%s"}', RFID[i], "0")
 
     banger <- cattle$find(query = RFIDS, fields = '{"_id":false, "active":true, "stationname":true}')
 
     if (nrow(banger) == 1){
       if (banger$active == TRUE){
-      trebble <- loadramps$find(query = RFIDS, fields = '{"_id":false}')
+      trebble <- loadramps$find(query = IDS, fields = '{"_id":false}')
       setdate <- as.Date(trebble$datetime, tz = "Australia/Brisbane")
 
-    IDI <- sprintf('{"$set":{"stationname":"%s", "stationID":"%s", "active":"%s", "exstation":"%s", "geometry.coordinates.0":"%s", "geometry.coordinates.1":"%s", "properties.Paddock":"%s", "properties.PaddockID":"%s", "properties.exitDate":{"$date":"%s"}, "properties.ALMS":"%s", "properties.ALMSID":"%s", "properties.ALMSasset_id":"%s"}}',
+    RFIDI <- sprintf('{"$set":{"stationname":"%s", "stationID":"%s", "active":"%s", "exstation":"%s", "geometry.coordinates.0":"%s", "geometry.coordinates.1":"%s", "properties.Paddock":"%s", "properties.PaddockID":"%s", "properties.exitDate":{"$date":"%s"}, "properties.ALMS":"%s", "properties.ALMSID":"%s", "properties.ALMSasset_id":"%s"}}',
     "xxxxxx", "xxxxxx", "FALSE", banger$stationname, 0.0, 0.0, "xxxxxx", "xxxxxx", paste0(setdate,"T","00:00:00","+1000"), "FALSE", "xxxxxx", "xxxxxx")
 
-    cattle$update(RFIDS, IDI)
+    cattle$update(RFIDS, RFIDI)
+
+    IDI <- sprintf('{"$set":{"actioned":"%s"}}', "1")
+    loadramps$update(IDS, IDI)
     }}}
 }
 
