@@ -25,18 +25,16 @@ loadrampsearch <- function(property, username=NULL, password=NULL){
   loadramps <- mongo(collection = "LoadRamps", db = "DMIoT", url = pass, verbose = T)
 
   property <- paste(unlist(property), collapse = '", "' )
+
   filterstation <- sprintf('{"station":{"$in":["%s"]}, "actioned":"%s"}', property, "0")
   lookfor <- sprintf('{"RFID":true, "datetime":true, "station":true, "_id":false}')
   propertyinfo <- loadramps$find(query = filterstation, fields=lookfor)
 
   indb <- cattlesearch(propertyinfo$RFID, username=username, password=password)
 
-  propertyinfo1 <- merge(propertyinfo, indb, by = "RFID", all = T)
-
-  propertyinfo1 <- propertyinfo1 %>%
+  propertyinfo1 <- full_join(propertyinfo, indb, by = "RFID")%>%
     select("datetime","RFID","Management","station","category","breed","sex")%>%
     arrange(datetime)
 
   return(propertyinfo1)
-
 }
