@@ -30,7 +30,7 @@ loadrampremove <- function(RFID, username=NULL, password=NULL){
     RFIDI <- sprintf('{"$set":{"actioned":"%s"}}', "1")
     loadramps$update(RFIDS, RFIDI)
 
-    banger <- cattle$find(query = RFIDS, fields = '{"_id":false, "active":true}')
+    banger <- cattle$find(query = RFIDS, fields = '{"_id":false, "active":true, "stationname":true}')
 
     if (nrow(banger) == 1){
       if (banger$active == TRUE){
@@ -38,7 +38,7 @@ loadrampremove <- function(RFID, username=NULL, password=NULL){
       setdate <- as.Date(trebble$datetime, tz = "Australia/Brisbane")
 
     IDI <- sprintf('{"$set":{"stationname":"%s", "stationID":"%s", "active":"%s", "exstation":"%s", "geometry.coordinates.0":"%s", "geometry.coordinates.1":"%s", "properties.Paddock":"%s", "properties.PaddockID":"%s", "properties.exitDate":{"$date":"%s"}, "properties.ALMS":"%s", "properties.ALMSID":"%s", "properties.ALMSasset_id":"%s"}}',
-    "xxxxxx", "xxxxxx", "FALSE", cows$stationname[i], 0.0, 0.0, "xxxxxx", "xxxxxx", paste0(setdate,"T","00:00:00","+1000"), "FALSE", "xxxxxx", "xxxxxx")
+    "xxxxxx", "xxxxxx", "FALSE", banger$stationname, 0.0, 0.0, "xxxxxx", "xxxxxx", paste0(setdate,"T","00:00:00","+1000"), "FALSE", "xxxxxx", "xxxxxx")
 
     cattle$update(RFIDS, IDI)
     }}}
