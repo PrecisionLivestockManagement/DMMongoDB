@@ -37,10 +37,12 @@ cattlesearch <- function(RFID, username=NULL, password=NULL){
   propertyinfo$properties["stationname"] <- propertyinfo$stationname
   propertyinfo$properties["active"] <- propertyinfo$active
 
+  if (nrow(propertyinfo) >= 1){
+
   propertyinfo <- propertyinfo$properties
 
   propertyinfo <- propertyinfo %>%
-    select(RFID, Management, active, stationname, Paddock, category, breed, sex)
+    select(RFID, Management, active, stationname, Paddock, category, breed, sex)}
 
   return(propertyinfo)
 

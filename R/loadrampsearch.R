@@ -32,9 +32,20 @@ loadrampsearch <- function(property, username=NULL, password=NULL){
 
   indb <- cattlesearch(propertyinfo$RFID, username=username, password=password)
 
+  if (nrow(propertyinfo) == 0){propertyinfo1 <- propertyinfo}
+
+  if (nrow(propertyinfo) >= 1 && nrow(indb) == 0){
+      propertyinfo1 <- propertyinfo%>%
+        mutate(Management = "", category = "", breed = "", sex = "")%>%
+    select("datetime","RFID","station","Management","category","breed","sex")%>%
+        arrange(datetime)
+    }
+
+  if (nrow(propertyinfo) >= 1 && nrow(indb) >= 1){
+
   propertyinfo1 <- full_join(propertyinfo, indb, by = "RFID")%>%
-    select("datetime","RFID","Management","station","category","breed","sex")%>%
-    arrange(datetime)
+    select("datetime","RFID","station","Management","category","breed","sex")%>%
+    arrange(datetime)}
 
   return(propertyinfo1)
 }
