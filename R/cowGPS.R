@@ -22,7 +22,7 @@ cowGPS <- function(RFID, DateTime, lat, long, username, password){
     url = pass,
     verbose = T)
 
-  GPSdata <- sprintf('{"RFID":"%s", "DateTime":"%s", "lat":%s, "long": %s }', RFID, DateTime, lat, long)
+  GPSdata <- sprintf('{"RFID":"%s", "DateTime":{"$date":"%s"}, "lat":%s, "long": %s }', RFID, paste0(substr(DateTime,1,10),"T",substr(DateTime,12,19),"+1000"), lat, long)
 
   GPSIoT$insert(GPSdata)
 
