@@ -21,17 +21,17 @@
 
 calcweeklywts <- function(RFID, start = NULL, end = NULL, values = NULL, s.d = NULL, remove.duplicates = NULL, username = NULL, password = NULL){
 
-  if(is.null(values)){values <- 4}
-  if(is.null(s.d)){s.d <- 25}
+
   if(is.null(username) || is.null(password)){
   username = keyring::key_list("DMMongoDB")[1,2]
-  password =  keyring::key_get("DMMongoDB", username)}
+  password =  keyring::key_get("DMMongoDB", username)
+  }
 
   pass <- sprintf("mongodb://%s:%s@datamuster-shard-00-00-8mplm.mongodb.net:27017,datamuster-shard-00-01-8mplm.mongodb.net:27017,datamuster-shard-00-02-8mplm.mongodb.net:27017/test?ssl=true&replicaSet=DataMuster-shard-0&authSource=admin", username, password)
 
-
+  if(is.null(values)){values <- 4}
+  if(is.null(s.d)){s.d <- 25}
   if(is.null(remove.duplicates)){remove.duplicates <- "TRUE"}
-
   if(is.null(start)) {start <- as.Date("2015-01-01")}
   if(is.null(end)) {end <- Sys.Date()}
 
@@ -44,7 +44,9 @@ calcweeklywts <- function(RFID, start = NULL, end = NULL, values = NULL, s.d = N
 
   tempwts <- dailywts(RFID, start, end)
 
-  #alldata <- data.frame()
+  filterstation <- sprintf('{"RFID":{"$in":["%s"]}}', RFID)
+  jan <- cattle$find(query = filterstation, fields='{"RFID":true, "stationname":true, "pdkhist.dateIN":true, "pdkhist.name":true, "_id":false}')
+
 
   cattleinfo <- list()
 
@@ -52,7 +54,8 @@ calcweeklywts <- function(RFID, start = NULL, end = NULL, values = NULL, s.d = N
 
       for(k in 1:length(tempwts$RFID)){
 
-      newdata <- setNames(data.frame(matrix(nrow = 0, ncol = 4)), c("Date", "avweight", "sdweights", "numweights"))
+      newdata <- setNames(data.frame(matrix(nrow = 0, ncol = 5)), c("Date", "avweight", "sdweights", "numweights","paddock"))
+      pdhist <- jan$pdkhist[jan$RFID == tempwts$RFID[k],]
 
         for (l in 1:length(getMondays)){
 
@@ -75,6 +78,10 @@ calcweeklywts <- function(RFID, start = NULL, end = NULL, values = NULL, s.d = N
         if(exists("tup1")){
 
           data <- data.frame(Date = as.character(end1), avweight = round(tup2,1), sdweights = round(tup1,1), numweights = tup3)
+
+          n <- tail(which(pdhist$dateIN[[1]] < as.Date(data$Date)),1)
+          data$paddock <- ifelse(length(n) ==1, pdhist$name[[1]][n], NA)
+          #data$paddock <- pdhist$name[[1]][n]
 
           newdata <- rbind(newdata,data)
 
