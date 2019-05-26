@@ -37,6 +37,7 @@ weeklywts <- function(RFID, start=NULL, end=NULL, values=NULL, username = NULL, 
 
     weeklywts <- setNames(data.frame(matrix(ncol = 2, nrow = length(jan2$wkwthist$date[[i]]))), c("Date", "Weight"))
     weeklywts$Date <- jan2$wkwthist$date[[i]]
+    weeklywts$Date <- as.Date(weeklywts$Date, tz = "Australia/Brisbane")
     weeklywts$Weight <- jan2$wkwthist$avweight[[i]]
 
     if(is.null(start)) {}
