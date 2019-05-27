@@ -38,11 +38,12 @@ statwts <- function(RFID, start=NULL, end=NULL, values=NULL, username = NULL, pa
 
     dailywts <- setNames(data.frame(matrix(ncol = 2, nrow = length(jan2$stwthist$date[[i]]))), c("Date", "Weight"))
     dailywts$Date <- jan2$stwthist$date[[i]]
+    dailywts$Date <- as.Date(dailywts$Date, tz = "Australia/Brisbane")
     dailywts$Weight <- jan2$stwthist$weight[[i]]
 
     if(is.null(start)) {}
     else{if(is.null(end)){dailywts <- dailywts %>% filter(between(as.Date(Date),start,Sys.Date()))}
-      else{dailywts <- dailywts %>% filter(between(as.Date(as.POSIXct(Date, tz = "Australia/Brisbane"),tz = "Australia/Brisbane"),start,end))}}
+      else{dailywts <- dailywts %>% filter(between(as.Date(Date),start,end))}}
 
     #This is the section where we can apply further filters based on breed, class, etc.
 
@@ -54,7 +55,5 @@ statwts <- function(RFID, start=NULL, end=NULL, values=NULL, username = NULL, pa
   cattleinfo <- list(RFID=RFID$RFID, Property=RFID$stationname, DailyWeights=cattleinfo)
 
   return(cattleinfo)
-
-
 
 }
