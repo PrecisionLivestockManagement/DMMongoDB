@@ -6,6 +6,7 @@
 #' @param DateTime in correct format
 #' @param lat in correct format as a number
 #' @param long in correct format as a number
+#' @param voltage in correct format as a number or percentage
 #' @param username you will need to request access from Lauren O'Connor for a username to write data to the database
 #' @param password you will need to request access from Lauren O'Connor for a username to write data to the database
 #' @return a dataframe with a list of the RFID numbers, associated management tags and current paddocks the cattle are in
@@ -14,7 +15,7 @@
 #' @export
 
 
-cowGPS <- function(RFID, DateTime, lat, long, username, password){
+cowGPS <- function(RFID, DateTime, lat, long, voltage, username, password){
 
 
   pass <- sprintf("mongodb://%s:%s@datamuster-shard-00-00-8mplm.mongodb.net:27017,datamuster-shard-00-01-8mplm.mongodb.net:27017,datamuster-shard-00-02-8mplm.mongodb.net:27017/test?ssl=true&replicaSet=DataMuster-shard-0&authSource=admin", username, password)
@@ -22,7 +23,7 @@ cowGPS <- function(RFID, DateTime, lat, long, username, password){
     url = pass,
     verbose = T)
 
-  GPSdata <- sprintf('{"RFID":"%s", "DateTime":{"$date":"%s"}, "lat":%s, "long": %s }', RFID, paste0(substr(DateTime,1,10),"T",substr(DateTime,12,19),"+1000"), lat, long)
+  GPSdata <- sprintf('{"RFID":"%s", "DateTime":{"$date":"%s"}, "lat":%s, "long": %s , "voltage": %s }', RFID, paste0(substr(DateTime,1,10),"T",substr(DateTime,12,19),"+1000"), lat, long, voltage)
 
   GPSIoT$insert(GPSdata)
 

@@ -105,7 +105,7 @@ updatepaddock <- function(RFID, property, paddock, date=NULL, username=NULL, pas
           cattle$update(RFIDS, IDI)
 }}
 
-movecattle(property = property, paddock = paddock, username = username, password = password)
+movecattle(property = property, paddock = unique(paddock), username = username, password = password)
 
 }
 

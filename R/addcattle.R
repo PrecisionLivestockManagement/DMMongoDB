@@ -82,18 +82,18 @@ for (i in 1:length(optfields)){
     checkRFID <- RFID[which(RFID != "xxx xxxxxxxxxxxx")]
     checkRFID <- paste(unlist(checkRFID), collapse = '", "' )
 
-    filtercattle <- sprintf('{"RFID":{"$in":["%s"]}}', checkRFID)
-    check <- cattle$count(query = filtercattle)
-
-    if (check != 0) {
-
-      stop("One or more of the RFID numbers are already registered in the database. Please check that the RFID numbers are correct and try again")}
-
-    check1 <- culls$count(query = filtercattle)
-
-    if (check1 != 0) {
-
-      stop("One or more of the RFID numbers are registered as a cull in the database. Please check that the RFID numbers are correct and try again")}
+    #filtercattle <- sprintf('{"RFID":{"$in":["%s"]}}', checkRFID)
+    # check <- cattle$count(query = filtercattle)
+    #
+    # if (check != 0) {
+    #
+    #   stop("One or more of the RFID numbers are already registered in the database. Please check that the RFID numbers are correct and try again")}
+    #
+    # check1 <- culls$count(query = filtercattle)
+    #
+    # if (check1 != 0) {
+    #
+    #   stop("One or more of the RFID numbers are registered as a cull in the database. Please check that the RFID numbers are correct and try again")}
 
 
   # Check that any sire or dam RFID numbers are in the correct format ---------------------------------------------------------------------
@@ -140,6 +140,12 @@ for (i in 1:length(optfields)){
 
     p<-1
     for (p in 1:length(RFID)){
+
+      filtercattle <- sprintf('{"RFID":"%s"}', RFID[p])
+      check <- cattle$find(query = filtercattle, fields = '{"_id":false, "RFID":true}')
+
+      if (nrow(check) == 1){
+        print(paste0(RFID[p], " is already registered in the database. This animal has not been added"))}  else {
 
       template <- cattle$find(query = '{"RFID":"xxxxxx"}', fields = '{"_id":false}')
 
@@ -256,9 +262,9 @@ for (i in 1:length(optfields)){
 
   cattle$insert(template)
 
-    }
+    }}
 
-movecattle(property = property, paddock = paddock, username = username, password = password)
+movecattle(property = property, paddock = unique(paddock), username = username, password = password)
 
     }
 

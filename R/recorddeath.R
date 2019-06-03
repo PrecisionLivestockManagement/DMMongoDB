@@ -47,7 +47,7 @@ recorddeath <- function(RFID, date=NULL, cause=NULL, property, username=NULL, pa
 
     RFIDS <- sprintf('{"RFID":"%s"}', cows$RFID[i])
 
-    RFIDI <- sprintf('{"$set":{"stationname":"%s", "stationID":"%s", "active":"%s", "exstation":"%s", "geometry.coordinates.0":"%s", "geometry.coordinates.1":"%s",
+    RFIDI <- sprintf('{"$set":{"stationname":"%s", "stationID":"%s", "active":"%s", "exstation":"%s", "geometry.coordinates.0":%s, "geometry.coordinates.1":%s,
                      "properties.Paddock":"%s", "properties.PaddockID":"%s", "properties.deathcause":"%s", "properties.deathDate":{"$date":"%s"}, "properties.ALMS":"%s", "properties.ALMSID":"%s", "properties.ALMSasset_id":"%s"}}',
                      "xxxxxx", "xxxxxx", "FALSE", cows$stationname[i], 0.0, 0.0, "xxxxxx", "xxxxxx", cause[i], paste0(substr(date[i],1,10),"T","00:00:00","+1000"),"FALSE", "xxxxxx", "xxxxxx")
 

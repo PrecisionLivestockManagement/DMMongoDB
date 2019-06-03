@@ -46,7 +46,7 @@ removecattle <- function(RFID, property, date=NULL, username=NULL, password=NULL
 
     RFIDS <- sprintf('{"RFID":"%s"}', cows$RFID[i])
 
-    RFIDI <- sprintf('{"$set":{"stationname":"%s", "stationID":"%s", "active":"%s", "exstation":"%s", "geometry.coordinates.0":"%s", "geometry.coordinates.1":"%s", "properties.Paddock":"%s", "properties.PaddockID":"%s", "properties.exitDate":{"$date":"%s"}, "properties.ALMS":"%s", "properties.ALMSID":"%s", "properties.ALMSasset_id":"%s"}}',
+    RFIDI <- sprintf('{"$set":{"stationname":"%s", "stationID":"%s", "active":"%s", "exstation":"%s", "geometry.coordinates.0":%s, "geometry.coordinates.1":%s, "properties.Paddock":"%s", "properties.PaddockID":"%s", "properties.exitDate":{"$date":"%s"}, "properties.ALMS":"%s", "properties.ALMSID":"%s", "properties.ALMSasset_id":"%s"}}',
     "xxxxxx", "xxxxxx", "FALSE", cows$stationname[i], 0.0, 0.0, "xxxxxx", "xxxxxx", paste0(substr(date[i],1,10),"T","00:00:00","+1000"), "FALSE", "xxxxxx", "xxxxxx")
 
     cattle$update(RFIDS, RFIDI)}}
