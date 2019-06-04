@@ -37,9 +37,10 @@ statwts <- function(RFID, start=NULL, end=NULL, values=NULL, username = NULL, pa
   for(i in 1:length(jan2$RFID)){
 
     dailywts <- setNames(data.frame(matrix(ncol = 2, nrow = length(jan2$stwthist$date[[i]]))), c("Date", "Weight"))
-    dailywts$Date <- jan2$stwthist$date[[i]]
-    dailywts$Date <- as.Date(dailywts$Date, tz = "Australia/Brisbane")
-    dailywts$Weight <- jan2$stwthist$weight[[i]]
+
+    if (nrow(dailywts) >= 1) {
+    dailywts$Date <- as.Date(jan2$stwthist$date[[i]], tz = "Australia/Brisbane")
+    dailywts$Weight <- jan2$stwthist$weight[[i]]}
 
     if(is.null(start)) {}
     else{if(is.null(end)){dailywts <- dailywts %>% filter(between(as.Date(Date),start,Sys.Date()))}

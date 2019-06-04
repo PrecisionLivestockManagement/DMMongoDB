@@ -28,7 +28,7 @@ propcattlecheck <- function(property, days=NULL, username=NULL, password=NULL){
 
   checkanimals <- dailywts(bung$RFID)
   checkanimals <- bind_rows(checkanimals$DailyWeights, .id = "RFID")%>%
-    filter(as.Date(as.POSIXct(Date, tz = "Australia/Brisbane"),tz = "Australia/Brisbane") >= lump)%>%
+    filter(as.Date(Date) >= lump)%>%
     arrange(desc(Date))%>%
   mutate(TimeSinceLastVisit = Sys.time()-Date)
 

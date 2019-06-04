@@ -39,11 +39,7 @@ calvingdate <- function(RFID, values=NULL, username = NULL, password = NULL){
     if (length(jan2$calfhist$date[i][[1]]) != 0){
 
     calving <- setNames(data.frame(matrix(ncol = 1, nrow = length(jan2$calfhist$date[[i]]))), c("Date"))
-    calving$Date <- jan2$calfhist$date[[i]]
-
-
-    #calving <- calving %>% mutate(Date = as.Date(Date, tz = "Australia/Brisbane"))
-
+    calving$Date <- as.Date(jan2$calfhist$date[[i]], tz = "Australia/Brisbane")
 
     #This is the section where we can apply further filters based on breed, class, etc.
 
