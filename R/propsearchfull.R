@@ -32,12 +32,14 @@ propsearchfull <- function(property, paddock=NULL, username=NULL, password=NULL)
   lookfor <- sprintf('{"RFID":true, "properties.Management":true, "properties.Paddock":true, "properties.sex":true,
                      "properties.birthDate":true, "properties.damRFID":true, "properties.sireRFID":true,
                      "properties.breed":true, "properties.colour":true, "properties.brand":true,
-                     "properties.horn":true, "properties.category":true, "_id":false}')
+                     "properties.horn":true, "properties.category":true, "properties.birthWeight":true, "_id":false}')
   propertyinfo <- cattle$find(query = filterstation, fields=lookfor)
 
   propertyinfo$properties["RFID"] <- propertyinfo$RFID
 
   propertyinfo <- propertyinfo$properties
+
+  propertyinfo$birthDate <- as.Date(propertyinfo$birthDate, tz = "Australia/Brisbane")
 
   if(is.null(paddock)){}else{
     propertyinfo <- propertyinfo %>% filter(Paddock %in% paddock)}
