@@ -47,14 +47,14 @@ appalmsuse <- function(property, start=NULL, end=NULL, username = NULL, password
     if(length(jan2$usehist$date[[i]])==0){}else {dailywts$Property <- jan2$stationname[i]}
     if(length(jan2$usehist$date[[i]])==0){}else {dailywts$Paddock <- jan2$properties$Paddock[i]}
     if(length(jan2$usehist$date[[i]])==0){}else {dailywts$ID <- jan2$properties$asset_id[i]}
-    if(length(jan2$usehist$date[[i]])==0){}else {dailywts$Date <- jan2$usehist$date[[i]]}
+    if(length(jan2$usehist$date[[i]])==0){}else {dailywts$Date <- as.Date(jan2$usehist$date[[i]], tz = "Australia/Brisbane")}
     if(length(jan2$usehist$num[[i]])==0){}else{dailywts$GroupCount <- jan2$usehist$num[[i]]}
     if(length(jan2$usehist$numbreed[[i]])==0){}else{dailywts$BreedingCount <- jan2$usehist$numbreed[[i]]}
     if(length(jan2$usehist$numgrow_w[[i]])==0){}else{dailywts$Growing_WeanedCount <- jan2$usehist$numgrow_w[[i]]}
     if(length(jan2$usehist$numgrow_uw[[i]])==0){}else{dailywts$Growing_UnweanedCount <- jan2$usehist$numgrow_uw[[i]]}
 
     dailywts1 <- setNames(data.frame(matrix(NA, ncol = 7, nrow = length(jan2$cattlehist$date[[i]]))), c("Date", "Group", "Breeding",  "Growing_Weaned", "Growing_Unweaned", "CowPercent", "GrowPercent"))
-    if(length(jan2$cattlehist$date[[i]])==0){}else{dailywts1$Date <- jan2$cattlehist$date[[i]]}
+    if(length(jan2$cattlehist$date[[i]])==0){}else{dailywts1$Date <- as.Date(jan2$cattlehist$date[[i]], tz = "Australia/Brisbane")}
     if(length(jan2$cattlehist$num[[i]])==0){}else{dailywts1$Group <- jan2$cattlehist$num[[i]]}
     if(length(jan2$cattlehist$numbreed[[i]])==0){}else{dailywts1$Breeding <- jan2$cattlehist$numbreed[[i]]}
     if(length(jan2$cattlehist$numgrow_w[[i]])==0){}else{dailywts1$Growing_Weaned <- jan2$cattlehist$numgrow_w[[i]]}
@@ -66,7 +66,7 @@ appalmsuse <- function(property, start=NULL, end=NULL, username = NULL, password
 
     if(is.null(start)) {} else {
       if(is.null(end)){use <- use %>% filter(between(as.Date(Date),start-1,Sys.Date()))} else{
-        use <- use %>% filter(between(as.Date(as.POSIXct(Date, tz = "Australia/Brisbane"),tz = "Australia/Brisbane"),start,end+1))}}
+        use <- use %>% filter(between(as.Date(Date),start,end+1))}}
 
     cattleinfo[[jan2$properties$asset_id[i]]] <- as.data.frame(use)
 

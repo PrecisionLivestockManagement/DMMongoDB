@@ -35,7 +35,7 @@ appinfs <- function(property, start=NULL, end=NULL, username=NULL, password=NULL
   for(i in 1:length(jan2$properties$asset_id)){
 
     asset <- setNames(data.frame(matrix(ncol = 2, nrow = length(jan2$usehist$date[[i]]))), c("Date", "Num"))
-    asset$Date <- jan2$usehist$date[[i]]
+    asset$Date <- as.Date(jan2$usehist$date[[i]], tz = "Australia/Brisbane")
     asset$Num <- jan2$usehist$num[[i]]
 
     if(is.null(start)) {}
