@@ -40,7 +40,8 @@ dailywts <- function(RFID, start=NULL, end=NULL, values=NULL, username=NULL, pas
     dailywts <- setNames(data.frame(matrix(ncol = 2, nrow = length(jan2$wthist$date[[i]]))), c("Date", "Weight"))
 
     if (nrow(dailywts) >= 1){
-    dailywts$Date <- strptime(jan2$wthist$date[[i]], format = "%Y-%m-%d %H:%M:%S", tz = "Australia/Brisbane")
+    dailywts$Date <- jan2$wthist$date[[i]]
+    dailywts$Date <- as.POSIXct(strptime(jan2$wthist$date[[i]], format = "%Y-%m-%d %H:%M:%S", tz = "Australia/Brisbane"))
     dailywts$Weight <- jan2$wthist$weight[[i]]}
 
     if(is.null(start)) {}
