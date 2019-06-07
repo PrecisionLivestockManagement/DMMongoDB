@@ -63,6 +63,11 @@ appalmsuse <- function(property, start=NULL, end=NULL, username = NULL, password
     use <- merge.data.frame(dailywts, dailywts1, by = "Date", all = T)
     use$CowPercent <- round((use$BreedingCount/use$Breeding)*100, 0)
     use$GrowPercent <- round(((use$Growing_WeanedCount+use$Growing_UnweanedCount)/(use$Growing_Weaned+use$Growing_Unweaned))*100, 0)
+    use$CowPercent[is.nan(use$CowPercent)] <- 0
+    use$GrowPercent[is.nan(use$GrowPercent)] <- 0
+
+    use$Growing <- use$Growing_Weaned + use$Growing_Unweaned
+    use$GrowingCount <- use$Growing_UnweanedCount + use$Growing_WeanedCount
 
     if(is.null(start)) {} else {
       if(is.null(end)){use <- use %>% filter(between(as.Date(Date),start-1,Sys.Date()))} else{
