@@ -19,7 +19,8 @@ updatepaddock <- function(RFID, property, paddock, date=NULL, username=NULL, pas
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]
-    password =  keyring::key_get("DMMongoDB", username)}
+    password =  keyring::key_get("DMMongoDB", username)
+    }
 
   pass <- sprintf("mongodb://%s:%s@datamuster-shard-00-00-8mplm.mongodb.net:27017,datamuster-shard-00-01-8mplm.mongodb.net:27017,datamuster-shard-00-02-8mplm.mongodb.net:27017/test?ssl=true&replicaSet=DataMuster-shard-0&authSource=admin", username, password)
 
@@ -60,15 +61,9 @@ updatepaddock <- function(RFID, property, paddock, date=NULL, username=NULL, pas
 
   # Check for WoW infrastructure in new paddocks
 
-  filterinfs1 <- sprintf('{"stationname":"%s", "properties.Paddock":{"$in":["%s"]}, "properties.type":"%s"}', property, checkpads, "Walk-over-Weighing Unit")
+  filterinfs <- sprintf('{"stationname":"%s", "paddock":{"$in":["%s"]}, "properties.type":"%s"}', property, checkpads, "Walk-over-Weighing Unit")
 
-  inf1 <- infs$find(query = filterinfs1, fields = '{"_id":true, "properties.Paddock":true, "properties.asset_id":true}')
-
-  filterinfs2 <- sprintf('{"stationname":"%s", "properties.Paddock2":{"$in":["%s"]}, "properties.type":"%s"}', property, checkpads, "Walk-over-Weighing Unit")
-
-  inf2 <- infs$find(query = filterinfs2, fields = '{"_id":true, "properties.Paddock2":true, "properties.asset_id":true}')
-
-  inf <- rbind(inf1, inf2)
+  inf <- infs$find(query = filterinfs, fields = '{"_id":true, "paddock":true, "properties.asset_id":true}')
 
   for (i in 1:length(RFID)){
 
@@ -86,7 +81,7 @@ updatepaddock <- function(RFID, property, paddock, date=NULL, username=NULL, pas
       cattle$update(RFIDS, RFIDI)
       cattle$update(RFIDS, RFIDIlast)
 
-          ALMS <- paddock[i] %in% inf$properties$Paddock
+          ALMS <- paddock[i] %in% inf$paddock[[1]]
 
           if (ALMS == "FALSE"){
 
@@ -97,7 +92,7 @@ updatepaddock <- function(RFID, property, paddock, date=NULL, username=NULL, pas
 
           if (ALMS == "TRUE"){
 
-            WOW <- inf[which(inf$properties$Paddock == paddock[i]),]
+            WOW <- inf[which(inf$paddock[[1]] == paddock[i]),]
 
               IDI <- sprintf('{"$set":{"properties.ALMSdateON":{"$date":"%s"}, "properties.ALMSdateOFF":{"$date":"%s"}, "properties.ALMS":"%s", "properties.ALMSID":"%s", "properties.ALMSasset_id":"%s"}}',
                              paste0(substr(date[i],1,10),"T","00:00:00","+1000"), paste0("1970-01-01","T","10:00:00","+1000"), "TRUE", WOW$`_id`, WOW$properties$asset_id)}

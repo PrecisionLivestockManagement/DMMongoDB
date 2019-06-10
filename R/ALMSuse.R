@@ -35,42 +35,45 @@ ALMSuse <- function(property, paddock=NULL, start=NULL, end=NULL, username = NUL
   if(is.null(paddock)) {
     filterstation <- sprintf('{"stationname":"%s", "properties.type":"%s"}', property, type)} else {
     paddock <- paste(unlist(paddock), collapse = '", "' )
-    filterstation <- sprintf('{"properties.Paddock":{"$in":["%s"]}, "stationname":"%s", "properties.type":"%s"}', paddock, property, type)}
+    filterstation <- sprintf('{"paddock":{"$in":["%s"]}, "stationname":"%s", "properties.type":"%s"}', paddock, property, type)}
 
-  lookfor <- sprintf('{"_id":false, "stationname":true, "properties.asset_id":true, "properties.Paddock":true,
+  lookfor <- sprintf('{"_id":false, "stationname":true, "properties.asset_id":true, "properties.Paddock":true, "paddock":true,
                      "usehist.date":true, "usehist.num":true, "usehist.numbreed":true, "usehist.numgrow_w":true, "usehist.numgrow_uw":true,
                      "cattlehist.date":true, "cattlehist.num":true, "cattlehist.numbreed":true, "cattlehist.numgrow_w":true, "cattlehist.numgrow_uw":true}')
 
   jan2 <- inf$find(query = filterstation, fields=lookfor)
 
-
   cattleinfo <- list()
 
   for(i in 1:length(jan2$properties$asset_id)){
 
-    dailywts <- setNames(data.frame(matrix(NA, ncol = 5, nrow = length(jan2$usehist$date[[i]]))), c("Date", "GroupCount", "BreedingCount", "Growing_WeanedCount", "Growing_UnweanedCount"))
-    if(length(jan2$usehist$date[[i]])==0){}else {dailywts$Date <- as.Date(jan2$usehist$date[[i]], tz = "Australia/Brisbane")}
-    if(length(jan2$usehist$num[[i]])==0){}else{dailywts$GroupCount <- jan2$usehist$num[[i]]}
-    if(length(jan2$usehist$numbreed[[i]])==0){}else{dailywts$BreedingCount <- jan2$usehist$numbreed[[i]]}
-    if(length(jan2$usehist$numgrow_w[[i]])==0){}else{dailywts$Growing_WeanedCount <- jan2$usehist$numgrow_w[[i]]}
-    if(length(jan2$usehist$numgrow_uw[[i]])==0){}else{dailywts$Growing_UnweanedCount <- jan2$usehist$numgrow_uw[[i]]}
+    cattlehist <- setNames(data.frame(matrix(NA, ncol = 9, nrow = length(jan2$cattlehist$date[[i]]))), c("Property", "Paddock", "ID", "Date", "Group", "Breeding",  "Growing_Weaned", "Growing_Unweaned", "Growing"))
+    if (nrow(cattlehist) == 0){}else{
+      cattlehist$Property <- jan2$stationname[i]
+      cattlehist$Paddock <- jan2$properties$Paddock[i]
+      cattlehist$ID <- jan2$properties$asset_id[i]
+      cattlehist$Date <- as.Date(jan2$cattlehist$date[[i]], tz = "Australia/Brisbane")
+      cattlehist$Group <- jan2$cattlehist$num[[i]]
+      cattlehist$Breeding <- jan2$cattlehist$numbreed[[i]]
+      cattlehist$Growing_Weaned <- jan2$cattlehist$numgrow_w[[i]]
+      cattlehist$Growing_Unweaned <- jan2$cattlehist$numgrow_uw[[i]]
+      cattlehist$Growing <- cattlehist$Growing_Weaned + cattlehist$Growing_Unweaned}
 
-    dailywts1 <- setNames(data.frame(matrix(NA, ncol = 5, nrow = length(jan2$cattlehist$date[[i]]))), c("Date", "Group", "Breeding",  "Growing_Weaned", "Growing_Unweaned"))
-    if(length(jan2$cattlehist$date[[i]])==0){}else{dailywts1$Date <- as.Date(jan2$cattlehist$date[[i]], tz = "Australia/Brisbane")}
-    if(length(jan2$cattlehist$num[[i]])==0){}else{dailywts1$Group <- jan2$cattlehist$num[[i]]}
-    if(length(jan2$cattlehist$numbreed[[i]])==0){}else{dailywts1$Breeding <- jan2$cattlehist$numbreed[[i]]}
-    if(length(jan2$cattlehist$numgrow_w[[i]])==0){}else{dailywts1$Growing_Weaned <- jan2$cattlehist$numgrow_w[[i]]}
-    if(length(jan2$cattlehist$numgrow_uw[[i]])==0){}else{dailywts1$Growing_Unweaned <- jan2$cattlehist$numgrow_uw[[i]]}
+    usehist <- setNames(data.frame(matrix(NA, ncol = 6, nrow = length(jan2$usehist$date[[i]]))), c("Date", "GroupCount", "BreedingCount", "Growing_WeanedCount", "Growing_UnweanedCount", "GrowingCount"))
+    if (nrow(usehist) == 0){}else{
+    usehist$Date <- as.Date(jan2$usehist$date[[i]], tz = "Australia/Brisbane")
+    usehist$GroupCount <- jan2$usehist$num[[i]]
+    usehist$BreedingCount <- jan2$usehist$numbreed[[i]]
+    usehist$Growing_WeanedCount <- jan2$usehist$numgrow_w[[i]]
+    usehist$Growing_UnweanedCount <- jan2$usehist$numgrow_uw[[i]]
+    usehist$GrowingCount <- usehist$Growing_WeanedCount + usehist$Growing_UnweanedCount}
 
-    if (nrow(dailywts) == 0) {} else {
+    use <- merge.data.frame(cattlehist, usehist, by = "Date", all = T)
 
-      if (nrow(dailywts1) == 0) {
-        dailywts1 <- setNames(data.frame(matrix(NA, ncol = 5, nrow = length(jan2$usehist$date[[i]]))), c("Date", "Group", "Breeding",  "Growing_Weaned", "Growing_Unweaned"))
-        dailywts1$Date <- jan2$usehist$date[[i]]}
-
-      use <- merge.data.frame(dailywts1, dailywts, by = "Date", all = T)}
-
-    if(exists("use")){
+    use$CowPercent <- round((use$BreedingCount/use$Breeding)*100, 0)
+    use$GrowPercent <- round((use$GrowingCount)/(use$Growing)*100, 0)
+    use$CowPercent[is.nan(use$CowPercent)] <- 0
+    use$GrowPercent[is.nan(use$GrowPercent)] <- 0
 
     if(is.null(start)) {} else {
       if(is.null(end)){use <- use %>% filter(between(as.Date(Date),start-1,Sys.Date()))} else{
@@ -78,13 +81,9 @@ ALMSuse <- function(property, paddock=NULL, start=NULL, end=NULL, username = NUL
 
     cattleinfo[[jan2$properties$asset_id[i]]] <- as.data.frame(use)
 
+}
 
-  asset <- jan2
-  cattleinfo <- list(asset=asset$properties$asset_id, Paddock = asset$properties$Paddock, Property=asset$stationname, DailyUse=cattleinfo)
-
+  cattleinfo <- list(asset=jan2$properties$asset_id, Paddock = jan2$properties$Paddock, Property=jan2$stationname, DailyUse=cattleinfo)
 
   return(cattleinfo)
-}else{return(NULL)}
-
-  }
 }
