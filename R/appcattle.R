@@ -29,7 +29,7 @@ appcattle <- function(property, username=NULL, password=NULL){
 
   property <- paste(unlist(property), collapse = '", "' )
   filterstation <- sprintf('{"stationname":{"$in":["%s"]}}', property)
-  lookfor <- sprintf('{"stationname":true, "RFID":true, "properties.Management":true, "geometry":true, "properties.Paddock":true, "properties.sex":true, "properties.category":true, "properties.stweight":true, "properties.stwtdate":true, "properties.weight":true, "properties.recordedtime":true, "properties.wkweight":true, "properties.wkwtdate":true, "_id":false}')
+  lookfor <- sprintf('{"stationname":true, "RFID":true, "properties.Management":true, "geometry":true, "properties.Paddock":true, "properties.sex":true, "properties.category":true, "properties.stweight":true, "properties.stwtdate":true, "properties.weight":true, "properties.recordedtime":true, "properties.wkweight":true, "properties.wkwtdate":true, "properties.ALMS":true, "_id":false}')
   cattleinfo <- cattle$find(query = filterstation, fields=lookfor)
 
   #cattleinfo$properties$recordedtime <- strptime(cattleinfo$properties$recordedtime, format = "%Y-%m-%d %H:%M:%S", tz = "Australia/Brisbane")
