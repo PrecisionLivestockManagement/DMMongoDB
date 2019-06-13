@@ -4,7 +4,7 @@
 \alias{cowGPS}
 \title{Package with functions to enable easier code to access to DataMuster MongoDB Atlas servers}
 \usage{
-cowGPS(RFID, DateTime, lat, long, username, password)
+cowGPS(RFID, DateTime, lat, long, voltage, username, password)
 }
 \arguments{
 \item{RFID}{the RFID number as txt}
@@ -14,6 +14,8 @@ cowGPS(RFID, DateTime, lat, long, username, password)
 \item{lat}{in correct format as a number}
 
 \item{long}{in correct format as a number}
+
+\item{voltage}{in correct format as a number or percentage}
 
 \item{username}{you will need to request access from Lauren O'Connor for a username to write data to the database}
 
