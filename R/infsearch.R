@@ -21,9 +21,7 @@ infsearch <- function(property, start=NULL, end=NULL, username=NULL, password=NU
 }
 
   pass <- sprintf("mongodb://%s:%s@datamuster-shard-00-00-8mplm.mongodb.net:27017,datamuster-shard-00-01-8mplm.mongodb.net:27017,datamuster-shard-00-02-8mplm.mongodb.net:27017/test?ssl=true&replicaSet=DataMuster-shard-0&authSource=admin", username, password)
-  infrastructure <- mongo(collection = "Infrastructure", db = "DataMuster",
-    url = pass,
-    verbose = T)
+  infrastructure <- mongo(collection = "Infrastructure", db = "DataMuster", url = pass, verbose = T)
 
   property <- paste(unlist(property), collapse = '", "' )
   filterstation <- sprintf('{"stationname":{"$in":["%s"]}, "properties.type":"%s"}', property, "Walk-over-Weighing Unit")
@@ -36,7 +34,8 @@ infsearch <- function(property, start=NULL, end=NULL, username=NULL, password=NU
   for(i in 1:length(jan2$properties$asset_id)){
 
     asset <- setNames(data.frame(matrix(ncol = 2, nrow = length(jan2$usehist$date[[i]]))), c("Date", "Num"))
-    asset$Date <- as.Date(jan2$usehist$date[[i]], tz = "Australia/Brisbane")
+    asset$Date <- jan2$usehist$date[[i]]
+    if(length(asset$date >= 1)){asset$Date <- as.Date(asset$Date, tz = "Australia/Brisbane")}
     asset$Num <- jan2$usehist$num[[i]]
 
     if(is.null(start)) {}
@@ -47,7 +46,8 @@ infsearch <- function(property, start=NULL, end=NULL, username=NULL, password=NU
     UseHist=info
 
     asset1 <- setNames(data.frame(matrix(ncol = 2, nrow = length(jan2$cattlehist$date[[i]]))), c("Date", "Num"))
-    asset1$Date <- as.Date(jan2$cattlehist$date[[i]], tz = "Australia/Brisbane")
+    asset1$Date <- jan2$cattlehist$date[[i]]
+    if(length(asset1$date >= 1)){asset1$Date <- as.Date(asset1$Date, tz = "Australia/Brisbane")}
     asset1$Num <- jan2$cattlehist$num[[i]]
 
     if(is.null(start)) {}
