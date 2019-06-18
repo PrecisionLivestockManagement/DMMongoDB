@@ -15,7 +15,7 @@
 #' @export
 
 
-propsearchfull <- function(property, paddock=NULL, username=NULL, password=NULL){
+propsearchfull <- function(property, paddock=NULL, archives=NULL, username=NULL, password=NULL){
 
   if(is.null(username)||is.null(password)){
   username = keyring::key_list("DMMongoDB")[1,2]
@@ -28,12 +28,18 @@ propsearchfull <- function(property, paddock=NULL, username=NULL, password=NULL)
     verbose = T)
 
   property <- paste(unlist(property), collapse = '", "' )
-  filterstation <- sprintf('{"stationname":{"$in":["%s"]}}', property)
+
+  filterstation1 <- sprintf('{"stationname":{"$in":["%s"]}}', property)
+  filterstation2 <- sprintf('{"$or": [{"exstation":"%s"}, {"stationname":"%s"}]}', property, property)
+
   lookfor <- sprintf('{"RFID":true, "properties.Management":true, "properties.Paddock":true, "properties.sex":true,
                      "properties.birthDate":true, "properties.damRFID":true, "properties.sireRFID":true,
-                     "properties.breed":true, "properties.colour":true, "properties.brand":true,
+                     "properties.breed":true, "properties.colour":true, "properties.brand":true, "properties.exitDate":true,
                      "properties.horn":true, "properties.category":true, "properties.weaned":true, "properties.ALMS":true, "properties.wkwtdate":true, "properties.birthWeight":true, "_id":false}')
-  propertyinfo <- cattle$find(query = filterstation, fields=lookfor)
+
+  if(archives == "TRUE"){
+    propertyinfo <- cattle$find(query = filterstation2, fields=lookfor)}else{
+      propertyinfo <- cattle$find(query = filterstation1, fields=lookfor)}
 
   propertyinfo$properties["RFID"] <- propertyinfo$RFID
 
@@ -41,6 +47,7 @@ propsearchfull <- function(property, paddock=NULL, username=NULL, password=NULL)
 
   propertyinfo$birthDate <- as.Date(propertyinfo$birthDate, tz = "Australia/Brisbane")
   propertyinfo$wkwtdate <- as.Date(propertyinfo$wkwtdate, tz = "Australia/Brisbane")
+  propertyinfo$exitDate <- as.Date(propertyinfo$exitDate, tz = "Australia/Brisbane")
 
   if(is.null(paddock)){}else{
     propertyinfo <- propertyinfo %>% filter(Paddock %in% paddock)}
