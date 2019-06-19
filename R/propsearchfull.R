@@ -34,7 +34,7 @@ propsearchfull <- function(property, paddock=NULL, archives=NULL, username=NULL,
 
   lookfor <- sprintf('{"RFID":true, "properties.Management":true, "properties.Paddock":true, "properties.sex":true,
                      "properties.birthDate":true, "properties.damRFID":true, "properties.sireRFID":true,
-                     "properties.breed":true, "properties.colour":true, "properties.brand":true, "properties.exitDate":true,
+                     "properties.breed":true, "properties.colour":true, "properties.brand":true, "properties.exitDate":true, "properties.deathDate":true,
                      "properties.horn":true, "properties.category":true, "properties.weaned":true, "properties.ALMS":true, "properties.wkwtdate":true, "properties.birthWeight":true, "_id":false}')
 
   if(archives == "TRUE"){
@@ -48,6 +48,7 @@ propsearchfull <- function(property, paddock=NULL, archives=NULL, username=NULL,
   propertyinfo$birthDate <- as.Date(propertyinfo$birthDate, tz = "Australia/Brisbane")
   propertyinfo$wkwtdate <- as.Date(propertyinfo$wkwtdate, tz = "Australia/Brisbane")
   propertyinfo$exitDate <- as.Date(propertyinfo$exitDate, tz = "Australia/Brisbane")
+  propertyinfo$deathDate <- as.Date(propertyinfo$deathDate, tz = "Australia/Brisbane")
 
   if(is.null(paddock)){}else{
     propertyinfo <- propertyinfo %>% filter(Paddock %in% paddock)}
