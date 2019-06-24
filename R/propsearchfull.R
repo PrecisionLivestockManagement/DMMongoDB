@@ -35,11 +35,12 @@ propsearchfull <- function(property, paddock=NULL, archives=NULL, username=NULL,
   lookfor <- sprintf('{"RFID":true, "properties.Management":true, "properties.Paddock":true, "properties.sex":true,
                      "properties.birthDate":true, "properties.damRFID":true, "properties.sireRFID":true,
                      "properties.breed":true, "properties.colour":true, "properties.brand":true, "properties.exitDate":true, "properties.deathDate":true,
-                     "properties.horn":true, "properties.category":true, "properties.weaned":true, "properties.ALMS":true, "properties.wkwtdate":true, "properties.birthWeight":true, "_id":false}')
+                     "properties.horn":true, "properties.category":true, "properties.weaned":true, "properties.ALMS":true, "properties.ALMSasset_id":true, "properties.wkwtdate":true, "properties.birthWeight":true, "_id":false}')
 
-  if(archives == "TRUE"){
-    propertyinfo <- cattle$find(query = filterstation2, fields=lookfor)}else{
-      propertyinfo <- cattle$find(query = filterstation1, fields=lookfor)}
+
+  if(is.null(archives) || archives == "FALSE"){
+    propertyinfo <- cattle$find(query = filterstation1, fields=lookfor)}else{
+      propertyinfo <- cattle$find(query = filterstation2, fields=lookfor)}
 
   propertyinfo$properties["RFID"] <- propertyinfo$RFID
 

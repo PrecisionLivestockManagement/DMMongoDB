@@ -46,10 +46,16 @@ removecattle <- function(RFID, property, date=NULL, username=NULL, password=NULL
 
     RFIDS <- sprintf('{"RFID":"%s"}', cows$RFID[i])
 
+    banger <- cattle$find(query= RFIDS, fields='{"pdkhist.dateOUT":true, "_id":false}')
+    arrpos <- length(banger$pdkhist$dateOUT[[1]])
+
     RFIDI <- sprintf('{"$set":{"stationname":"%s", "stationID":"%s", "active":"%s", "exstation":"%s", "geometry.coordinates.0":%s, "geometry.coordinates.1":%s, "properties.Paddock":"%s", "properties.PaddockID":"%s", "properties.exitDate":{"$date":"%s"}, "properties.ALMS":"%s", "properties.ALMSID":"%s", "properties.ALMSasset_id":"%s"}}',
     "xxxxxx", "xxxxxx", "FALSE", cows$stationname[i], 0.0, 0.0, "xxxxxx", "xxxxxx", paste0(substr(date[i],1,10),"T","00:00:00","+1000"), "FALSE", "xxxxxx", "xxxxxx")
 
-    cattle$update(RFIDS, RFIDI)}}
+    RFIDL <- sprintf('{"$set":{"pdkhist.dateOUT.%s":{"$date":"%s"}}}', arrpos, paste0(substr(date[i],1,10),"T","00:00:00","+1000"))
+
+    cattle$update(RFIDS, RFIDI)
+    cattle$update(RFIDS, RFIDL)}}
 
   #movecattle(property = property, username = username, password = password)
 

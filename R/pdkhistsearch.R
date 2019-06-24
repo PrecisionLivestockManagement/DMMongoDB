@@ -25,7 +25,7 @@ pdkhistsearch <- function(property, paddock=NULL, archives=NULL, start=NULL, end
   password =  keyring::key_get("DMMongoDB", username)
   }
 
-  if(is.null(start)){start <- Sys.Date()}
+  if(is.null(start)){start <- as.Date("1970-01-01")}
   if(is.null(end)){end <- Sys.Date()}
 
   pass <- sprintf("mongodb://%s:%s@datamuster-shard-00-00-8mplm.mongodb.net:27017,datamuster-shard-00-01-8mplm.mongodb.net:27017,datamuster-shard-00-02-8mplm.mongodb.net:27017/test?ssl=true&replicaSet=DataMuster-shard-0&authSource=admin", username, password)
@@ -37,9 +37,9 @@ pdkhistsearch <- function(property, paddock=NULL, archives=NULL, start=NULL, end
 
   lookfor <- sprintf('{"RFID":true, "stationname":true, "pdkhist.name":true, "pdkhist.dateIN":true, "pdkhist.dateOUT":true, "_id":false}')
 
-  if(archives == "TRUE"){
-    jan2 <- cattle$find(query = filterstation2, fields=lookfor)}else{
-    jan2 <- cattle$find(query = filterstation1, fields=lookfor)}
+  if(is.null(archives) || archives == "FALSE"){
+    jan2 <- cattle$find(query = filterstation1, fields=lookfor)}else{
+    jan2 <- cattle$find(query = filterstation2, fields=lookfor)}
 
   cattleinfo <- list()
 
@@ -52,18 +52,22 @@ pdkhistsearch <- function(property, paddock=NULL, archives=NULL, start=NULL, end
       dailywts$name <- jan2$pdkhist$name[[i]]
       if (length(jan2$pdkhist$dateOUT[[i]]) != 0){
         if (length(jan2$pdkhist$dateOUT[[i]]) != nrow(dailywts)){
-          row <- c(jan2$pdkhist$dateOUT[[i]],rep("NA",nrow(dailywts)-length(jan2$pdkhist$dateOUT[[i]])))
-          dailywts$dateOUT <- as.Date(row, tz = "Australia/Brisbane")
+          row <- c(as.Date(jan2$pdkhist$dateOUT[[i]], tz = "Australia/Brisbane"),rep("NA",nrow(dailywts)-length(jan2$pdkhist$dateOUT[[i]])))
+          dailywts$dateOUT <- row
         }else{
       dailywts$dateOUT <- as.Date(jan2$pdkhist$dateOUT[[i]], tz = "Australia/Brisbane")}}}
 
     if(is.null(paddock)){}else{
       dailywts <- dailywts %>% filter(paddock %in% name)
-
     n <- which(dailywts$name == paddock)
     for (p in 1:length(n)){
-     #dailywts <- dailywts %>% filter(dateIN[n[p]] <= start & dateOUT[n[p]] >= start)}
-    dailywts <- dailywts %>% filter(dateIN[n[p]] <= start)}}
+    #  #dailywts <- dailywts %>% filter(dateIN[n[p]] <= start & dateOUT[n[p]] >= start)}
+    dailywts <- dailywts %>% filter(dateIN[n[p]] <= end & (dateOUT[n[p]] >= end || is.na(dateOUT)))}
+
+    dailywts <- dailywts %>% filter(between(as.Date(dateIN[n[p]]),start, end | as.Date(dateOUT[n[p]]),start, end))
+
+    as.Date(dailywts$dateIN[n[p]]) >= start && as.Date(dailywts$dateIN[n[p]]) <= end || as.Date(dailywts$dateOUT[n[p]]) >= start && as.Date(dailywts$dateOUT[n[p]]) <= end
+}
     #This is the section where we can apply further filters based on breed, class, etc.
 
     if (nrow(dailywts) != 0){
