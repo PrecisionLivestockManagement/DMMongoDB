@@ -22,6 +22,7 @@
 #' @param damMTag the dam's management tag number
 #' @param sireRFID the sire's RFID number
 #' @param sireMTag the sire's management tag number
+#' @param animalID this is a unique ID number
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
 #' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
 #' @return a message that indicates the RFID tag number has been successfully updated
@@ -33,7 +34,7 @@
 
 addcattle <- function(RFID, MTag, category, property, paddock, weaned, date=NULL, breed=NULL, brand=NULL,
                       horn=NULL, colour=NULL, sex=NULL, desexed=NULL,  origin=NULL, DOB=NULL, birthWeight=NULL,
-                      damRFID=NULL, damMTag=NULL, sireRFID=NULL, sireMTag=NULL, username=NULL, password=NULL){
+                      damRFID=NULL, damMTag=NULL, sireRFID=NULL, sireMTag=NULL, animalID=NULL, username=NULL, password=NULL){
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]
@@ -62,7 +63,7 @@ addcattle <- function(RFID, MTag, category, property, paddock, weaned, date=NULL
 mandfields <- c("RFID","MTag","category","paddock","weaned","date") #excluding property
 
 optfields <- c("breed", "brand","horn","colour","sex","desexed","origin","DOB","birthWeight","damRFID",
-                "damMTag","sireRFID","sireMTag")
+                "damMTag","sireRFID","sireMTag","animalID")
 
 i<-1
 for (i in 1:length(mandfields)){
@@ -163,6 +164,7 @@ for (i in 1:length(optfields)){
       # Property information
       template$stationname <- property
       template$stationID<- station$`_id`
+      template$properties$entryDate <- as.POSIXct(date[p])
 
       # Paddock information
       temppad <- pad[which(pad$paddname == paddock[p]),]
@@ -191,6 +193,7 @@ for (i in 1:length(optfields)){
       if (!(is.null(origin))){template$properties$origin <- origin[p]}
       if (!(is.null(DOB))){template$properties$birthDate <- as.POSIXct(DOB[p])}
       if (!(is.null(birthWeight))){template$properties$birthWeight <- birthWeight[p]}
+      if (!(is.null(animalID))){template$properties$animalID <- animalID[p]}
 
       if (!(is.null(damRFID))){
 

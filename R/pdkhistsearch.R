@@ -61,13 +61,10 @@ pdkhistsearch <- function(property, paddock=NULL, archives=NULL, start=NULL, end
       dailywts <- dailywts %>% filter(paddock %in% name)
     n <- which(dailywts$name == paddock)
     for (p in 1:length(n)){
-    #  #dailywts <- dailywts %>% filter(dateIN[n[p]] <= start & dateOUT[n[p]] >= start)}
-    dailywts <- dailywts %>% filter(dateIN[n[p]] <= end & (dateOUT[n[p]] >= end || is.na(dateOUT)))}
 
-    dailywts <- dailywts %>% filter(between(as.Date(dateIN[n[p]]),start, end | as.Date(dateOUT[n[p]]),start, end))
+      dailywts <- dailywts %>% filter(as.Date(dateIN[n[p]]) >= start && as.Date(dateIN[n[p]]) <= end || as.Date(dateOUT[n[p]]) >= start && as.Date(dateOUT[n[p]]) <= end || as.Date(dateIN[n[p]]) <= end && is.na(dateOUT[n[p]]))
 
-    as.Date(dailywts$dateIN[n[p]]) >= start && as.Date(dailywts$dateIN[n[p]]) <= end || as.Date(dailywts$dateOUT[n[p]]) >= start && as.Date(dailywts$dateOUT[n[p]]) <= end
-}
+      }}
     #This is the section where we can apply further filters based on breed, class, etc.
 
     if (nrow(dailywts) != 0){

@@ -22,24 +22,38 @@ cattlesearch <- function(RFID, username=NULL, password=NULL){
 }
 
   pass <- sprintf("mongodb://%s:%s@datamuster-shard-00-00-8mplm.mongodb.net:27017,datamuster-shard-00-01-8mplm.mongodb.net:27017,datamuster-shard-00-02-8mplm.mongodb.net:27017/test?ssl=true&replicaSet=DataMuster-shard-0&authSource=admin", username, password)
-  cattle <- mongo(collection = "Cattle", db = "DataMuster",
-    url = pass,
-    verbose = T)
+  cattle <- mongo(collection = "Cattle", db = "DataMuster", url = pass, verbose = T)
 
-  RFID <- paste(unlist(RFID), collapse = '", "' )
-  filterstation <- sprintf('{"RFID":{"$in":["%s"]}}', RFID)
+  RFID1 <- paste(unlist(RFID), collapse = '", "' )
+  filterstation <- sprintf('{"RFID":{"$in":["%s"]}}', RFID1)
+
   lookfor <- sprintf('{"RFID":true, "stationname":true, "active":true, "properties.Management":true, "properties.breed":true,"properties.sex":true,"properties.category":true,"properties.Paddock":true, "_id":false}')
   #lookfor <- sprintf('{"RFID":true, "stationname":true, "_id":false}')
 
   propertyinfo <- cattle$find(query = filterstation, fields=lookfor)
-
   propertyinfo$properties["RFID"] <- propertyinfo$RFID
   propertyinfo$properties["stationname"] <- propertyinfo$stationname
   propertyinfo$properties["active"] <- propertyinfo$active
+  propertyinfo <- propertyinfo$properties
+
+  miss <- RFID[!(RFID %in% propertyinfo$RFID)]
+
+  if (length(miss) != 0){
+
+    miss1 <- paste(unlist(miss), collapse = '", "' )
+    filterstation1 <- sprintf('{"RFIDhist.ID":{"$in":["%s"]}}', miss1)
+    RFIDsearch <- cattle$find(query = filterstation1, fields=lookfor)
+    RFIDsearch$properties["RFID"] <- RFIDsearch$RFID
+    RFIDsearch$properties["stationname"] <- RFIDsearch$stationname
+    RFIDsearch$properties["active"] <- RFIDsearch$active
+    RFIDsearch <- RFIDsearch$properties
+
+    propertyinfo <- rbind(propertyinfo, RFIDsearch)
+
+    print(paste0("The following RFID has superseded a RFID number in the original list ", RFIDsearch$RFID))
+  }
 
   if (nrow(propertyinfo) >= 1){
-
-  propertyinfo <- propertyinfo$properties
 
   propertyinfo <- propertyinfo %>%
     select(RFID, Management, active, stationname, Paddock, category, breed, sex)}

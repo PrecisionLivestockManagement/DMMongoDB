@@ -69,26 +69,30 @@ updatepaddock <- function(RFID, property, paddock, date=NULL, username=NULL, pas
 
     RFIDS <- sprintf('{"RFID":"%s"}', RFID[i])
 
-          banger <- cattle$find(query= RFIDS, fields='{"properties.Paddock":true,"properties.ALMS":true,"properties.ALMSID":true,"pdkhist.dateIN":true, "_id":false}')
+          banger <- cattle$find(query= RFIDS, fields='{"properties.Paddock":true,"properties.ALMS":true,"properties.ALMSID":true,"pdkhist.dateIN":true, "pdkhist.dateOUT":true, "almshist.dateON":true, "almsist.dateOFF":true, "_id":false}')
           arrpos <- length(banger$pdkhist$dateIN[[1]])
+          arrpos1 <- length(banger$pdkhist$dateOUT[[1]])
 
           if (banger$properties$Paddock != paddock[i]){
             temppad <- pad[which(pad$paddname == paddock[i]),]
 
           RFIDIlast <- sprintf('{"$set":{"properties.Paddock":"%s", "properties.PaddockID":"%s"}}', paddock[i], temppad$`_id`)
-          RFIDI <- sprintf('{"$set":{"pdkhist.dateIN.%s":{"$date":"%s"}, "pdkhist.name.%s":"%s", "pdkhist.ID.%s":"%s"}}', arrpos, paste0(substr(date[i],1,10),"T","00:00:00","+1000"), arrpos, paddock[i], arrpos, temppad$`_id`)
+          RFIDI <- sprintf('{"$set":{"pdkhist.dateOUT.%s":{"$date":"%s"}, "pdkhist.dateIN.%s":{"$date":"%s"}, "pdkhist.name.%s":"%s", "pdkhist.ID.%s":"%s"}}', arrpos1, paste0(substr(date[i],1,10),"T","00:00:00","+1000"), arrpos, paste0(substr(date[i],1,10),"T","00:00:00","+1000"), arrpos, paddock[i], arrpos, temppad$`_id`)
 
       cattle$update(RFIDS, RFIDI)
       cattle$update(RFIDS, RFIDIlast)
 
           ALMS <- paddock[i] %in% inf$paddock[[1]]
 
+          arrpos2 <- length(banger$almshist$dateON[[1]])
+          arrpos3 <- length(banger$almshist$dateOFF[[1]])
+
           if (ALMS == "FALSE"){
 
              if (banger$properties$ALMS == "TRUE"){
-              IDI <- sprintf('{"$set":{"properties.ALMSdateOFF":{"$date":"%s"}, "properties.ALMS":"%s", "properties.ALMSID":"%s", "properties.ALMSasset_id":"%s"}}',
-                             paste0(substr(date[i],1,10),"T","00:00:00","+1000"),"FALSE", "xxxxxx", "xxxxxx")}else{
-                       IDI <- sprintf('{"$set":{"properties.ALMS":"%s", "properties.ALMSID":"%s", "properties.ALMSasset_id":"%s"}}', "FALSE", "xxxxxx", "xxxxxx")}}
+
+              IDI <- sprintf('{"$set":{"almshist.dateOFF.%s":{"$date":"%s"}, "properties.ALMS":"%s", "properties.ALMSID":"%s", "properties.ALMSasset_id":"%s"}}',
+                             arrpos3, paste0(substr(date[i],1,10),"T","00:00:00","+1000"),"FALSE", "xxxxxx", "xxxxxx")}}
 
           if (ALMS == "TRUE"){
 
