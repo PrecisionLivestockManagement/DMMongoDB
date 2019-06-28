@@ -18,7 +18,7 @@
 #' @export
 
 
-pdkhistsearch <- function(property, paddock=NULL, archives=NULL, start=NULL, end=NULL, username=NULL, password=NULL){
+pdkhistsearch <- function(property, paddock=NULL, start=NULL, end=NULL, username=NULL, password=NULL){
 
   if(is.null(username)||is.null(password)){
   username = keyring::key_list("DMMongoDB")[1,2]
@@ -32,14 +32,12 @@ pdkhistsearch <- function(property, paddock=NULL, archives=NULL, start=NULL, end
   cattle <- mongo(collection = "Cattle", db = "DataMuster", url = pass, verbose = T)
 
   property <- paste(unlist(property), collapse = '", "' )
-  filterstation1 <- sprintf('{"stationname":{"$in":["%s"]}}', property)
+  #filterstation1 <- sprintf('{"stationname":{"$in":["%s"]}}', property)
   filterstation2 <- sprintf('{"$or": [{"exstation":"%s"}, {"stationname":"%s"}]}', property, property)
 
   lookfor <- sprintf('{"RFID":true, "stationname":true, "pdkhist.name":true, "pdkhist.dateIN":true, "pdkhist.dateOUT":true, "_id":false}')
 
-  if(is.null(archives) || archives == "FALSE"){
-    jan2 <- cattle$find(query = filterstation1, fields=lookfor)}else{
-    jan2 <- cattle$find(query = filterstation2, fields=lookfor)}
+    jan2 <- cattle$find(query = filterstation2, fields=lookfor)
 
   cattleinfo <- list()
 
@@ -52,7 +50,7 @@ pdkhistsearch <- function(property, paddock=NULL, archives=NULL, start=NULL, end
       dailywts$name <- jan2$pdkhist$name[[i]]
       if (length(jan2$pdkhist$dateOUT[[i]]) != 0){
         if (length(jan2$pdkhist$dateOUT[[i]]) != nrow(dailywts)){
-          row <- c(as.Date(jan2$pdkhist$dateOUT[[i]], tz = "Australia/Brisbane"),rep("NA",nrow(dailywts)-length(jan2$pdkhist$dateOUT[[i]])))
+          row <- c(as.Date(jan2$pdkhist$dateOUT[[i]], tz = "Australia/Brisbane"), NA)
           dailywts$dateOUT <- row
         }else{
       dailywts$dateOUT <- as.Date(jan2$pdkhist$dateOUT[[i]], tz = "Australia/Brisbane")}}}
