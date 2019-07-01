@@ -99,10 +99,11 @@ updatepaddock <- function(RFID, property, paddock, date=NULL, username=NULL, pas
             WOW <- inf[which(inf$paddock[[1]] == paddock[i]),]
 
               IDI <- sprintf('{"$set":{"properties.ALMSdateON":{"$date":"%s"}, "properties.ALMSdateOFF":{"$date":"%s"}, "properties.ALMS":"%s", "properties.ALMSID":"%s", "properties.ALMSasset_id":"%s"}}',
-                             paste0(substr(date[i],1,10),"T","00:00:00","+1000"), paste0("1970-01-01","T","10:00:00","+1000"), "TRUE", WOW$`_id`, WOW$properties$asset_id)}
+                             paste0(substr(date[i],1,10),"T","00:00:00","+1000"), paste0("1970-01-01","T","10:00:00","+1000"), "TRUE", WOW$`_id`, WOW$properties$asset_id)
 
-          cattle$update(RFIDS, IDI)
-}}
+          cattle$update(RFIDS, IDI)}
+
+          }}
 
 movecattle(property = property, paddock = unique(paddock), username = username, password = password)
 
