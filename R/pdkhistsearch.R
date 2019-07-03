@@ -56,13 +56,20 @@ pdkhistsearch <- function(property, paddock=NULL, start=NULL, end=NULL, username
       dailywts$dateOUT <- as.Date(jan2$pdkhist$dateOUT[[i]], tz = "Australia/Brisbane")}}}
 
     if(is.null(paddock)){}else{
-      dailywts <- dailywts %>% filter(paddock %in% name)
+
     n <- which(dailywts$name == paddock)
+
+    if (length(n) != 0){
+
     for (p in 1:length(n)){
+      dates <- seq(as.Date(dailywts$dateIN[n[p]]), as.Date(dailywts$dateOUT[n[p]]), by = "days")
+      dates<-dates[between(dates, as.Date(start), as.Date(end))]
 
-      dailywts <- dailywts %>% filter(as.Date(dateIN[n[p]]) >= start && as.Date(dateIN[n[p]]) <= end || as.Date(dateOUT[n[p]]) >= start && as.Date(dateOUT[n[p]]) <= end || as.Date(dateIN[n[p]]) <= end && is.na(dateOUT[n[p]]))
+      if (length(dates) == 0){dailywts$name[n[p]] <- ""}}}
 
-      }}
+      dailywts <- dailywts %>% filter(paddock %in% name)
+      }
+
     #This is the section where we can apply further filters based on breed, class, etc.
 
     if (nrow(dailywts) != 0){
