@@ -29,7 +29,7 @@ calvingdate <- function(RFID, values=NULL, username = NULL, password = NULL){
 
   RFID <- paste(unlist(RFID), collapse = '", "' )
   filterstation <- sprintf('{"RFID":{"$in":["%s"]}}', RFID)
-  jan2 <- cattle$find(query = filterstation, fields='{"RFID":true, "stationname":true, "calfhist.date":true, "_id":false}')
+  jan2 <- cattle$find(query = filterstation, fields='{"RFID":true, "calfhist.date":true, "_id":false}')
 
 
   cattleinfo <- list()
@@ -44,12 +44,13 @@ calvingdate <- function(RFID, values=NULL, username = NULL, password = NULL){
     #This is the section where we can apply further filters based on breed, class, etc.
 
     cattleinfo[[jan2$RFID[i]]] <- as.data.frame(calving)
-}}
+    }else{
+      jan2$RFID[[i]] <- "xxxx"}
+}
 
   RFID <- jan2[which(jan2$RFID!="xxxx"),]
-  cattleinfo <- list(RFID=RFID$RFID, Property=RFID$stationname, CalvingDates=cattleinfo)
+  cattleinfo <- list(RFID=RFID$RFID, CalvingDates=cattleinfo)
 
   return(cattleinfo)
-
 
 }
