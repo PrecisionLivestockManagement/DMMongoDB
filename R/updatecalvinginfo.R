@@ -69,8 +69,6 @@ if (check != length(RFID)) {
         stop("One or more of the MTag numbers cannot be found in the database. Please check that the MTag numbers are correct and try again")}
     }
 
-
-
   # Check that progeny RFID numbers are in the correct format and exist in the database---------------------------------------------------------------------
 
     if (!(is.null(calfRFID))){
@@ -80,15 +78,25 @@ if (check != length(RFID)) {
 checkcalves <- paste(unlist(calfRFID), collapse = '", "' )
 
 filtercalves <- sprintf('{"RFID":{"$in":["%s"]}}', checkcalves)
-check1 <- cattle$count(query = filtercalves)
+check1 <- cattle$find(query = filtercalves, , fields = '{"_id":true}')
 
-if (check1 != length(calfRFID)) {
-  stop("One or more of the calf RFID numbers cannot be found in the database. Please check that the RFID numbers are correct and try again")}
-}
+if (nrow(check1) == 0) {
+  stop("The calf RFID number cannot be found in the database. Please check that the RFID numbers are correct and try again")}
+    }
+
+    if (!(is.null(calfMTag) & is.null(calfRFID))){
+
+      checkcalves <- paste(unlist(calfMTag), collapse = '", "' )
+
+      filtercalves <- sprintf('{"properties.Management":{"$in":["%s"]}}', checkcalves)
+      check1 <- cattle$find(query = filtercalves, fields = '{"_id":true}')
+
+      if (nrow(check1) == 0) {
+        stop("The calf MTag cannot be found in the database. Please check that the MTag is correct and try again")}
+    }
 
   #  Update animal information --------------------------
 
- p<-1
 if(!(is.null(RFID))){
     for (p in 1:length(RFID)){
 
@@ -102,21 +110,21 @@ if(!(is.null(RFID))){
 
       if (length(matchdate) == 0){
 
-      calfid<- cattle$find(query= sprintf('{"RFID":"%s"}', calfRFID[p]), fields='{"_id":true}') #calfRFID
+      #calfid<- cattle$find(query= sprintf('{"RFID":"%s"}', calfRFID[p]), fields='{"_id":true}') #calfRFID
 
-      if (nrow(calfid) == 0){print(paste0('The calf RFID ', calfRFID[p], ' is not registered in the database. Calving details have been noted but is not linked in the database'))
-        RFIDI <- sprintf('{"$set":{"calfhist.date.%s":{"$date":"%s"}, "calfhist.ID.%s":"%s"}}', arrpos, paste0(substr(birthDate[p],1,10),"T","00:00:00","+1000"), arrpos, "xxxxxx")
-      }else{
+      # if (nrow(calfid) == 0){print(paste0('The calf RFID ', calfRFID[p], ' is not registered in the database. Calving details have been noted but is not linked in the database'))
+      #   RFIDI <- sprintf('{"$set":{"calfhist.date.%s":{"$date":"%s"}, "calfhist.ID.%s":"%s"}}', arrpos, paste0(substr(birthDate[p],1,10),"T","00:00:00","+1000"), arrpos, "xxxxxx")
+      # }else{
 
-        RFIDI <- sprintf('{"$set":{"calfhist.date.%s":{"$date":"%s"}, "calfhist.ID.%s":"%s"}}', arrpos, paste0(substr(birthDate[p],1,10),"T","00:00:00","+1000"), arrpos, calfid$`_id`)}
+        RFIDI <- sprintf('{"$set":{"calfhist.date.%s":{"$date":"%s"}, "calfhist.ID.%s":"%s"}}', arrpos, paste0(substr(birthDate[p],1,10),"T","00:00:00","+1000"), arrpos, check1$`_id`)}
       cattle$update(RFIDS, RFIDI)
-      }}}
+      }}
 
     p<-1
     if(is.null(RFID)){
       for (p in 1:length(MTag)){
 
-        RFIDS <- sprintf('{"stationname":"%s","properties.Management":"%s"}', property, MTag[p])
+        RFIDS <- sprintf('{"properties.Management":"%s"}', MTag[p])
 
         banger <- cattle$find(query= RFIDS, fields='{"calfhist.date":true, "_id":false}')
 
@@ -129,15 +137,15 @@ if(!(is.null(RFID))){
 
             if (length(matchdate) == 0){
 
-              calfid<- cattle$find(query= sprintf('{"RFID":"%s"}', calfRFID[p]), fields='{"_id":true}') #calfRFID
+              #calfid<- cattle$find(query= sprintf('{"RFID":"%s"}', calfRFID[p]), fields='{"_id":true}') #calfRFID
 
-              if (nrow(calfid) == 0){print(paste0('The calf RFID ', calfRFID[p], ' is not registered in the database. Calving details have been noted but is not linked in the database'))
-                RFIDI <- sprintf('{"$set":{"calfhist.date.%s":{"$date":"%s"}, "calfhist.ID.%s":"%s"}}', arrpos, paste0(substr(birthDate[p],1,10),"T","00:00:00","+1000"), arrpos, "xxxxxx")
-              }else{
+              # if (nrow(calfid) == 0){print(paste0('The calf RFID ', calfRFID[p], ' is not registered in the database. Calving details have been noted but is not linked in the database'))
+              #   RFIDI <- sprintf('{"$set":{"calfhist.date.%s":{"$date":"%s"}, "calfhist.ID.%s":"%s"}}', arrpos, paste0(substr(birthDate[p],1,10),"T","00:00:00","+1000"), arrpos, "xxxxxx")
+              # }else{
 
-                RFIDI <- sprintf('{"$set":{"calfhist.date.%s":{"$date":"%s"}, "calfhist.ID.%s":"%s"}}', arrpos, paste0(substr(birthDate[p],1,10),"T","00:00:00","+1000"), arrpos, calfid$`_id`)}
+                RFIDI <- sprintf('{"$set":{"calfhist.date.%s":{"$date":"%s"}, "calfhist.ID.%s":"%s"}}', arrpos, paste0(substr(birthDate[p],1,10),"T","00:00:00","+1000"), arrpos, check1$`_id`)}
               cattle$update(RFIDS, RFIDI)
-            }}}}
+            }}}
 
 }
 
