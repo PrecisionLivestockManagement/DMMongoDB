@@ -18,7 +18,8 @@ removecattle <- function(RFID, property, date=NULL, username=NULL, password=NULL
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]
-    password =  keyring::key_get("DMMongoDB", username)}
+    password =  keyring::key_get("DMMongoDB", username)
+    }
 
   pass <- sprintf("mongodb://%s:%s@datamuster-shard-00-00-8mplm.mongodb.net:27017,datamuster-shard-00-01-8mplm.mongodb.net:27017,datamuster-shard-00-02-8mplm.mongodb.net:27017/test?ssl=true&replicaSet=DataMuster-shard-0&authSource=admin", username, password)
 
@@ -55,7 +56,23 @@ removecattle <- function(RFID, property, date=NULL, username=NULL, password=NULL
     RFIDL <- sprintf('{"$set":{"pdkhist.dateOUT.%s":{"$date":"%s"}}}', arrpos, paste0(substr(date[i],1,10),"T","00:00:00","+1000"))
 
     cattle$update(RFIDS, RFIDI)
-    cattle$update(RFIDS, RFIDL)}}
+    cattle$update(RFIDS, RFIDL)}
+
+    if (cows$active[i] == FALSE){
+
+      RFIDS <- sprintf('{"RFID":"%s"}', cows$RFID[i])
+
+      #banger <- cattle$find(query= RFIDS, fields='{"pdkhist.dateOUT":true, "_id":false}')
+      #arrpos <- length(banger$pdkhist$dateOUT[[1]])
+
+      RFIDI <- sprintf('{"$set":{"properties.exitDate":{"$date":"%s"}}}', paste0(substr(date[i],1,10),"T","00:00:00","+1000"))
+
+      #RFIDL <- sprintf('{"$set":{"pdkhist.dateOUT.%s":{"$date":"%s"}}}', arrpos, paste0(substr(date[i],1,10),"T","00:00:00","+1000"))
+
+      cattle$update(RFIDS, RFIDI)
+      #cattle$update(RFIDS, RFIDL)
+      }
+    }
 
   #movecattle(property = property, username = username, password = password)
 
