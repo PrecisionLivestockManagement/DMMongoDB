@@ -8,8 +8,8 @@ addcattle(RFID, MTag, category, property, paddock, weaned, date = NULL,
   breed = NULL, brand = NULL, horn = NULL, colour = NULL,
   sex = NULL, desexed = NULL, origin = NULL, DOB = NULL,
   birthWeight = NULL, damRFID = NULL, damMTag = NULL,
-  sireRFID = NULL, sireMTag = NULL, username = NULL,
-  password = NULL)
+  sireRFID = NULL, sireMTag = NULL, animalID = NULL,
+  username = NULL, password = NULL)
 }
 \arguments{
 \item{RFID}{this is a list of the cattle RFID numbers}
@@ -51,6 +51,8 @@ addcattle(RFID, MTag, category, property, paddock, weaned, date = NULL,
 \item{sireRFID}{the sire's RFID number}
 
 \item{sireMTag}{the sire's management tag number}
+
+\item{animalID}{this is a unique ID number}
 
 \item{username}{if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring}
 

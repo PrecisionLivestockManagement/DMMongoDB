@@ -4,15 +4,13 @@
 \alias{pdkhistsearch}
 \title{Package with functions to enable easier code to access to DataMuster MongoDB Atlas servers}
 \usage{
-pdkhistsearch(property, paddock = NULL, archives = NULL,
-  start = NULL, end = NULL, username = NULL, password = NULL)
+pdkhistsearch(property, paddock = NULL, start = NULL, end = NULL,
+  username = NULL, password = NULL)
 }
 \arguments{
 \item{property}{the name of the property to search the DataMuster MongoDB Atlas server}
 
 \item{paddock}{this is the name of a paddock or list of paddocks as character entries, if no value is entered then all paddocks are loaded}
-
-\item{archives}{if true, the list of animals returned will include those that are no longer on the property}
 
 \item{start}{provide a start date to be returned, this has to be in date format.}
 
@@ -21,6 +19,8 @@ pdkhistsearch(property, paddock = NULL, archives = NULL,
 \item{username}{if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring}
 
 \item{password}{if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access}
+
+\item{archives}{if true, the list of animals returned will include those that are no longer on the property}
 }
 \value{
 a dataframe with a list of the RFID numbers and paddock history
