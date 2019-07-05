@@ -180,7 +180,9 @@ for (i in 1:length(optfields)){
         template$properties$ALMS <- "TRUE"
         template$properties$ALMSID<- tempinf$`_id`
         template$properties$ALMSasset_id<- tempinf$properties$asset_id
-        template$properties$ALMSdateON <- as.POSIXct(date[p])}
+        template$almshist$ID <- list(tempinf$`_id`)
+        template$almshist$asset_id <- list(tempinf$properties$asset_id)
+        template$almshist$dateON <- list(as.POSIXct(date[p]))}
 
     # Optional information
 

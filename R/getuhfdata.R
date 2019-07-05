@@ -25,10 +25,11 @@ getuhfdata <- function(start=NULL, end=NULL, username=NULL, password=NULL){
 
   uhfdata <- mongo(collection = "UHFData", db = "DMIoT", url = pass, verbose = T)
 
-  data <- uhfdata$find(query = '{}', fields='{"RFID":true, "datetime":true, "_id":false}')
+  data <- uhfdata$find(query = '{}', fields='{"RFID":true, "datetime":true, "Wt":true, "_id":false}')
 
   data <- data%>%
-   mutate(datetime = as.POSIXct(strptime(datetime, format = "%Y-%m-%d %H:%M:%S", tz = "Australia/Brisbane")))
+   mutate(datetime = as.POSIXct(strptime(datetime, format = "%Y-%m-%d %H:%M:%S", tz = "Australia/Brisbane")))%>%
+    rename("Reader" = Wt, "Datetime" = datetime)
 
   if(is.null(start)) {}
   else{if(is.null(end)){data <- data %>% filter(between(as.Date(datetime, tz = "Australia/Brisbane"),start,Sys.Date()))}
