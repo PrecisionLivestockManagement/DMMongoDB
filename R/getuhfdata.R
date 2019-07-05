@@ -32,8 +32,8 @@ getuhfdata <- function(start=NULL, end=NULL, username=NULL, password=NULL){
     rename("Reader" = Wt, "Datetime" = datetime)
 
   if(is.null(start)) {}
-  else{if(is.null(end)){data <- data %>% filter(between(as.Date(datetime, tz = "Australia/Brisbane"),start,Sys.Date()))}
-    else{data <- data %>% filter(between(as.Date(datetime, tz = "Australia/Brisbane"),start,end))}}
+  else{if(is.null(end)){data <- data %>% filter(between(as.Date(Datetime, tz = "Australia/Brisbane"),start,Sys.Date()))}
+    else{data <- data %>% filter(between(as.Date(Datetime, tz = "Australia/Brisbane"),start,end))}}
 
   return(data)
 
