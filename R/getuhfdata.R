@@ -29,6 +29,7 @@ getuhfdata <- function(start=NULL, end=NULL, username=NULL, password=NULL){
 
   data <- data%>%
    mutate(datetime = as.POSIXct(strptime(datetime, format = "%Y-%m-%d %H:%M:%S", tz = "Australia/Brisbane")))%>%
+    arrange(datetime)%>%
     rename("Reader" = Wt, "Datetime" = datetime)
 
   if(is.null(start)) {}
