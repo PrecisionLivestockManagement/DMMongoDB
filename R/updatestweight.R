@@ -24,7 +24,7 @@ updatestweight <- function(RFID, weight, date=NULL, username=NULL, password=NULL
   pass <- sprintf("mongodb://%s:%s@datamuster-shard-00-00-8mplm.mongodb.net:27017,datamuster-shard-00-01-8mplm.mongodb.net:27017,datamuster-shard-00-02-8mplm.mongodb.net:27017/test?ssl=true&replicaSet=DataMuster-shard-0&authSource=admin", username, password)
   cattle <- mongo(collection = "Cattle", db = "DataMuster", url = pass, verbose = T)
 
-  if(is.null(date)){date <- Sys.Date()}else{date <- as.POSIXct(date)}
+  if(is.null(date)){date <- Sys.Date()}else{date <- as.Date(date)}
 
   if (length(date) == 1){date <- rep(date, length = length(RFID))}
 
@@ -51,11 +51,15 @@ updatestweight <- function(RFID, weight, date=NULL, username=NULL, password=NULL
     dat <- date[i]
     wt <- weight[i]
 
-    wt <- ifelse(wt == "",0,wt)
-    wt <- ifelse(is.na(wt),0,wt)
+    wt <- ifelse(wt == "" | is.na(wt),0,wt)
+
+    if(!(is.na(dat))){
 
         banger <- cattle$find(query = RFIDS, fields='{"stwthist.date":true, "stwthist.weight":true, "_id":false}')
-         matchdate <- which(banger$stwthist$date[[1]] == dat)
+
+        dates <- as.Date(banger$stwthist$date[[1]], tz = "Australia/Brisbane")
+
+        matchdate <- which(dates == dat)
 
          if (length(matchdate) != 0){
             matchwt <- banger$stwthist$weight[[1]][matchdate]
@@ -67,9 +71,8 @@ updatestweight <- function(RFID, weight, date=NULL, username=NULL, password=NULL
           RFIDIlast <- sprintf('{"$set":{"stwthist.date.%s":{"$date":"%s"}, "stwthist.weight.%s":%s}}', arrpos, paste0(substr(dat,1,10),"T","00:00:00","+1000"), arrpos, wt)
 
       cattle$update(RFIDS, RFIDI)
-      cattle$update(RFIDS, RFIDIlast)
-            }
-         }
+      cattle$update(RFIDS, RFIDIlast)}}}
+
 }
 
 
