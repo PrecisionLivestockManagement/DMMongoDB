@@ -57,14 +57,11 @@ updatestweight <- function(RFID, weight, date=NULL, username=NULL, password=NULL
 
         banger <- cattle$find(query = RFIDS, fields='{"stwthist.date":true, "stwthist.weight":true, "_id":false}')
 
-        dates <- as.Date(banger$stwthist$date[[1]], tz = "Australia/Brisbane")
-
+        if (length(banger$stwthist$date[[1]]) != 0){dates <- as.Date(banger$stwthist$date[[1]], tz = "Australia/Brisbane")
         matchdate <- which(dates == dat)
+        matchwt <- banger$stwthist$weight[[1]][matchdate]}
 
-         if (length(matchdate) != 0){
-            matchwt <- banger$stwthist$weight[[1]][matchdate]
-
-            if (wt %in% matchwt){}}else{
+        if (exists("matchdate") && wt %in% matchwt){}else{
 
           arrpos <- length(banger$stwthist$date[[1]])
           RFIDI <- sprintf('{"$set":{"properties.stweight":%s, "properties.stwtdate":{"$date":"%s"}}}', wt, paste0(substr(dat,1,10),"T","00:00:00","+1000"))

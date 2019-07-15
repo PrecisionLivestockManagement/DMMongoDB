@@ -33,7 +33,7 @@ propsearchfull <- function(property, paddock=NULL, archives=NULL, username=NULL,
   filterstation2 <- sprintf('{"$or": [{"exstation":"%s"}, {"stationname":"%s"}]}', property, property)
 
   lookfor <- sprintf('{"RFID":true, "properties.Management":true, "properties.Paddock":true, "properties.sex":true,
-                     "properties.birthDate":true, "properties.damRFID":true, "properties.sireRFID":true,
+                     "properties.birthDate":true, "properties.damRFID":true, "properties.sireRFID":true, "properties.stwtdate":true, "properties.stweight":true,
                      "properties.breed":true, "properties.colour":true, "properties.brand":true, "properties.exitDate":true, "properties.deathDate":true,
                      "properties.horn":true, "properties.category":true, "properties.weaned":true, "properties.ALMS":true, "properties.ALMSasset_id":true, "properties.wkwtdate":true, "properties.birthWeight":true, "_id":false}')
 
@@ -50,6 +50,7 @@ propsearchfull <- function(property, paddock=NULL, archives=NULL, username=NULL,
   propertyinfo$wkwtdate <- as.Date(propertyinfo$wkwtdate, tz = "Australia/Brisbane")
   propertyinfo$exitDate <- as.Date(propertyinfo$exitDate, tz = "Australia/Brisbane")
   propertyinfo$deathDate <- as.Date(propertyinfo$deathDate, tz = "Australia/Brisbane")
+  propertyinfo$stwtdate <- as.Date(propertyinfo$stwtdate, tz = "Australia/Brisbane")
 
   if(is.null(paddock)){}else{
     propertyinfo <- propertyinfo %>% filter(Paddock %in% paddock)}
