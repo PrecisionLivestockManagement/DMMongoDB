@@ -53,7 +53,7 @@ cattlesearch <- function(RFID, username=NULL, password=NULL){
     print(paste0("The following RFID has superseded a RFID number in the original list ", RFIDsearch$RFID))
   }
 
-  if (nrow(propertyinfo) >= 1){
+  if (class(propertyinfo) != "NULL" && nrow(propertyinfo) >= 1){
 
   propertyinfo <- propertyinfo %>%
     select(RFID, Management, active, stationname, Paddock, category, breed, sex)}
