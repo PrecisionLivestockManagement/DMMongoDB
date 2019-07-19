@@ -34,7 +34,7 @@ loadrampsearch <- function(property, username=NULL, password=NULL){
 
   if (nrow(propertyinfo) == 0){propertyinfo1 <- propertyinfo}
 
-  if (nrow(propertyinfo) >= 1 && nrow(indb) == 0){
+  if (nrow(propertyinfo) >= 1 && class(indb) == "NULL"){
       propertyinfo1 <- propertyinfo%>%
         mutate(Management = "", category = "", breed = "", sex = "")%>%
     select("datetime","RFID","station","Management","category","breed","sex")%>%
