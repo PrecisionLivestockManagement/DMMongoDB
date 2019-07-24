@@ -32,16 +32,14 @@ appcattle <- function(property, username=NULL, password=NULL){
   lookfor <- sprintf('{"stationname":true, "RFID":true, "properties.Management":true, "geometry":true, "properties.Paddock":true, "properties.sex":true, "properties.category":true, "properties.stweight":true, "properties.stwtdate":true, "properties.weight":true, "properties.recordedtime":true, "properties.wkweight":true, "properties.wkwtdate":true, "properties.ALMS":true, "_id":false}')
   cattleinfo <- cattle$find(query = filterstation, fields=lookfor)
 
-  if (nrow(cattleinfo) != 0) {
+
   cattleinfo$properties$stwtdate <- as.Date(cattleinfo$properties$stwtdate, tz = "Australia/Brisbane")
   cattleinfo$properties$wkwtdate <- as.Date(cattleinfo$properties$wkwtdate, tz = "Australia/Brisbane")
 
   cattleinfospatial <- SpatialPointsDataFrame(data.frame(matrix(unlist(cattleinfo$geometry$coordinates), nrow=length(cattleinfo$geometry$coordinates), byrow=T)), cattleinfo$properties)
 
   cattleinfospatial@data["RFID"] <- cattleinfo$RFID
-  cattleinfospatial@data["property"] <- cattleinfo$stationname}else{
-  cattleinfospatial <- cattleinfo
-  }
+  cattleinfospatial@data["property"] <- cattleinfo$stationname
 
   return(cattleinfospatial)
 
