@@ -20,15 +20,18 @@ getwowdata <- function(start=NULL, end=NULL, username, password){
 
   wowdata <- mongo(collection = "INTAWoW", db = "DMIoT", url = pass, verbose = T)
 
-  data <- wowdata$find(query = '{}', fields='{"RFID":true, "Wt":true, "datetime":true,"Location":true, "Pdk":true, "Temp":true, "_id":false}')
-
-  if(is.null(start)) {}
-  else{if(is.null(end)){data <- data %>% filter(between(as.Date(datetime, tz = "Australia/Brisbane"),start,Sys.Date()))}
-    else{data <- data %>% filter(between(as.Date(datetime, tz = "Australia/Brisbane"),start,end))}}
+  data <- wowdata$find(query = '{}', fields='{"RFID":true, "Wt":true, "datetime":true,"Location":true, "Temp":true, "_id":false}')
 
   data <- data%>%
-    mutate(datetime = as.POSIXct(strptime(datetime, format = "%Y-%m-%d %H:%M:%S", tz = "Australia/Brisbane")))%>%
-   rename(Weight = "Wt", Datetime = "datetime", Paddock = "Pdk", Temperature = "Temp")
+    mutate(datetime = as.POSIXct(format(datetime, tz="America/Argentina/Buenos_Aires",usetz=TRUE)))
+
+  if(is.null(start)) {}
+  else{if(is.null(end)){data <- data %>% filter(between(as.Date(datetime, tz = "America/Argentina/Buenos_Aires"),start,Sys.Date()))}
+    else{data <- data %>% filter(between(as.Date(datetime, tz = "America/Argentina/Buenos_Aires"),start,end))}}
+
+  data <- data%>%
+    mutate(datetime = as.POSIXct(strptime(datetime, format = "%Y-%m-%d %H:%M:%S", tz = "America/Argentina/Buenos_Aires")))%>%
+   rename(Weight = "Wt", Datetime = "datetime", Temperature = "Temp")
 
   return(data)
 
