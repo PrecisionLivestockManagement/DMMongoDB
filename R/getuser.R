@@ -29,9 +29,6 @@ getuser <- function(email, username=NULL, password=NULL){
 
   userinfo <- users$find(query = filterusers, fields=lookfor)
 
-  userinfo <- userinfo %>%
-    select(loginemail, accesslevel, writeaccess, stations)
-
   return(userinfo)
 
 }
