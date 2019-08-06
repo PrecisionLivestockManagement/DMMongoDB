@@ -69,7 +69,7 @@ updatepaddock <- function(RFID, property, paddock, date=NULL, username=NULL, pas
 
     RFIDS <- sprintf('{"RFID":"%s"}', RFID[i])
 
-          banger <- cattle$find(query= RFIDS, fields='{"properties.Paddock":true,"properties.ALMS":true,"properties.ALMSID":true,"pdkhist.dateIN":true, "pdkhist.dateOUT":true, "almshist.dateON":true, "almsist.dateOFF":true, "_id":false}')
+          banger <- cattle$find(query= RFIDS, fields='{"properties.Paddock":true,"properties.ALMS":true,"properties.ALMSID":true,"pdkhist.dateIN":true, "pdkhist.dateOUT":true, "almshist.dateON":true, "almshist.dateOFF":true, "_id":false}')
           arrpos <- length(banger$pdkhist$dateIN[[1]])
           arrpos1 <- length(banger$pdkhist$dateOUT[[1]])
 
@@ -98,10 +98,15 @@ updatepaddock <- function(RFID, property, paddock, date=NULL, username=NULL, pas
 
             WOW <- inf[which(inf$paddock[[1]] == paddock[i]),]
 
-              IDI <- sprintf('{"$set":{"properties.ALMSdateON":{"$date":"%s"}, "properties.ALMSdateOFF":{"$date":"%s"}, "properties.ALMS":"%s", "properties.ALMSID":"%s", "properties.ALMSasset_id":"%s"}}',
-                             paste0(substr(date[i],1,10),"T","00:00:00","+1000"), paste0("1970-01-01","T","10:00:00","+1000"), "TRUE", WOW$`_id`, WOW$properties$asset_id)
+              IDI <- sprintf('{"$set":{"almshist.dateON.%s":{"$date":"%s"}, "almshist.dateOFF.%s":{"$date":"%s"}, "almshist.ID.%s":"%s", "almshist.asset_id.%s":"%s"}}',
+                             arrpos2, paste0(substr(date[i],1,10),"T","00:00:00","+1000"), arrpos3, paste0(substr(date[i],1,10),"T","00:00:00","+1000"), arrpos2, WOW$`_id`, arrpos2, WOW$properties$asset_id)
 
-          cattle$update(RFIDS, IDI)}
+              IDIlast <- sprintf('{"$set":{"properties.ALMS":"%s", "properties.ALMSID":"%s", "properties.ALMSasset_id":"%s"}}',
+                             "TRUE", WOW$`_id`, WOW$properties$asset_id)
+
+          cattle$update(RFIDS, IDI)
+          cattle$update(RFIDS, IDIlast)
+          }
 
           }}
 
