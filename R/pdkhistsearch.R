@@ -63,8 +63,12 @@ pdkhistsearch <- function(property, paddock=NULL, start=NULL, end=NULL, username
     if (length(n) != 0){
 
     for (p in 1:length(n)){
+      if (is.na(as.Date(dailywts$dateOUT[n[p]]))){
+        dates <- seq(as.Date(dailywts$dateIN[n[p]]), Sys.Date(), by = "days")
+        dates<-dates[between(dates, as.Date(start), as.Date(end))]
+      }else{
       dates <- seq(as.Date(dailywts$dateIN[n[p]]), as.Date(dailywts$dateOUT[n[p]]), by = "days")
-      dates<-dates[between(dates, as.Date(start), as.Date(end))]
+      dates<-dates[between(dates, as.Date(start), as.Date(end))]}
 
       if (length(dates) == 0){dailywts$name[n[p]] <- ""}}}
 
