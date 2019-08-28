@@ -4,7 +4,8 @@
 \alias{appwowupload}
 \title{Package with functions to enable easier code to access to DataMuster MongoDB Atlas servers}
 \usage{
-appwowupload(RFID, datetime, weight, ALMS, username, password)
+appwowupload(RFID, datetime, weight, ALMS, username = NULL,
+  password = NULL)
 }
 \arguments{
 \item{RFID}{the RFID number as txt}
@@ -20,7 +21,7 @@ appwowupload(RFID, datetime, weight, ALMS, username, password)
 \item{password}{you will need to request access from Lauren O'Connor for a username to write data to the database}
 }
 \value{
-a dataframe with a list of the RFID numbers, associated management tags and current paddocks the cattle are in
+uploads data in a dataframe to the DMMongoDB database
 }
 \description{
 This function allows WoW data to be uploaded from the DataMuster website
