@@ -98,6 +98,8 @@ updatepaddock <- function(RFID, property, paddock, date=NULL, username=NULL, pas
 
             WOW <- inf[which(inf$paddock[[1]] == paddock[i]),]
 
+            if (!(temppad$paddname %in% WOW$paddock[[1]])){
+
               IDI <- sprintf('{"$set":{"almshist.dateON.%s":{"$date":"%s"}, "almshist.dateOFF.%s":{"$date":"%s"}, "almshist.ID.%s":"%s", "almshist.asset_id.%s":"%s"}}',
                              arrpos2, paste0(substr(date[i],1,10),"T","00:00:00","+1000"), arrpos3, paste0(substr(date[i],1,10),"T","00:00:00","+1000"), arrpos2, WOW$`_id`, arrpos2, WOW$properties$asset_id)
 
@@ -106,7 +108,7 @@ updatepaddock <- function(RFID, property, paddock, date=NULL, username=NULL, pas
 
           cattle$update(RFIDS, IDI)
           cattle$update(RFIDS, IDIlast)
-          }
+          }}
 
           }}
 
