@@ -63,7 +63,7 @@ updatepaddock <- function(RFID, property, paddock, date=NULL, username=NULL, pas
 
   filterinfs <- sprintf('{"stationname":"%s", "paddock":{"$in":["%s"]}, "properties.type":"%s"}', property, checkpads, "Walk-over-Weighing Unit")
 
-  inf <- infs$find(query = filterinfs, fields = '{"_id":true, "paddock":true, "properties.asset_id":true}')
+  inf <- infs$find(query = filterinfs, fields = '{"_id":true, "paddock":true, "properties.asset_id":true, "properties.datarecording":true}')
 
   for (i in 1:length(RFID)){
 
@@ -87,14 +87,15 @@ updatepaddock <- function(RFID, property, paddock, date=NULL, username=NULL, pas
           arrpos2 <- length(banger$almshist$dateON[[1]])
           arrpos3 <- length(banger$almshist$dateOFF[[1]])
 
-          if (ALMS == "FALSE"){
+          if (ALMS == "FALSE" ||
+              ALMS == "TRUE" & inf$properties$datarecording == "FALSE"){
 
              if (banger$properties$ALMS == "TRUE"){
 
               IDI <- sprintf('{"$set":{"almshist.dateOFF.%s":{"$date":"%s"}, "properties.ALMS":"%s", "properties.ALMSID":"%s", "properties.ALMSasset_id":"%s"}}',
                              arrpos3, paste0(substr(date[i],1,10),"T","00:00:00","+1000"),"FALSE", "xxxxxx", "xxxxxx")}}
 
-          if (ALMS == "TRUE"){
+          if (ALMS == "TRUE" & inf$properties$datarecording == "TRUE"){
 
             WOW <- inf[which(inf$paddock[[1]] == paddock[i]),]
 
