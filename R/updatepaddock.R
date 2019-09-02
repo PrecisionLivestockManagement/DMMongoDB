@@ -95,7 +95,7 @@ updatepaddock <- function(RFID, property, paddock, date=NULL, username=NULL, pas
               IDI <- sprintf('{"$set":{"almshist.dateOFF.%s":{"$date":"%s"}, "properties.ALMS":"%s", "properties.ALMSID":"%s", "properties.ALMSasset_id":"%s"}}',
                              arrpos3, paste0(substr(date[i],1,10),"T","00:00:00","+1000"),"FALSE", "xxxxxx", "xxxxxx")}}
 
-          if (ALMS == "TRUE" & inf$properties$datarecording == "TRUE"){
+          if (ALMS == "TRUE" && inf$properties$datarecording == "TRUE"){
 
             WOW <- inf[which(inf$paddock[[1]] == paddock[i]),]
 
