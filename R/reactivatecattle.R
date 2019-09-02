@@ -76,6 +76,25 @@ reactivatecattle <- function(RFID, property, paddock, date=NULL, replacevalues=N
 
     updatepaddock(cows$RFID[i], property = property, paddock = paddock[i], date = date[i], username = username, password = password)
 
+    if (replacevalues == "FALSE"){
+
+      banger <- cattle$find(query= RFIDS, fields='{"pdkhist.dateOUT":true, "_id":false}')
+      arrpos <- length(banger$pdkhist$dateOUT[[1]])
+
+      cattle$update(RFIDS, '{"$set":{"pdkhist.dateOUT":[]}}')
+
+      tempdates <- banger$pdkhist$dateOUT[[1]][1:length(banger$pdkhist$dateOUT[[1]])-1]
+
+      if (length(tempdates) != 0){
+
+        for (k in 1:length(tempdates)){
+
+          RFIDL <- sprintf('{"$set":{"pdkhist.dateOUT.%s":{"$date":"%s"}}}', k-1, paste0(tempdates[k],"T","00:00:00","+1000"))
+
+          cattle$update(RFIDS, RFIDL)
+        }}
+    }
+
     }}
 
 }
