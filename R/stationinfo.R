@@ -25,7 +25,7 @@ stationinfo <- function(property=NULL, username=NULL, password=NULL){
   station <- mongo(collection = "Stations", db = "DataMuster", url = pass, verbose = T)
 
 
-  lookfor <- sprintf('{"name":true, "PIC":true, "timezone":true, "_id":false}')
+  lookfor <- sprintf('{"name":true, "PIC":true, "timezone":true, "_id":true}')
 
   if (is.null(property)){
     propertyinfo <- station$find(query = '{}', fields=lookfor)}else{
