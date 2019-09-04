@@ -49,14 +49,14 @@ updatepregtest <- function(RFID, foetalage, date=NULL, username=NULL, password=N
 
   for (i in 1:length(RFID)){
 
+    dat <- date[i]
+    age <- foetalage[i]
+
     if (age == "" | is.na(age)){}else{
 
     match <- RFIDsearch(RFID[i], username = username, password = password)
 
     RFIDS <- sprintf('{"RFID":"%s"}', match$RFID)
-
-    dat <- date[i]
-    age <- foetalage[i]
 
     if (age == 0){
       calvedate <- "1970-01-01T10:00:00+1000"} else{
