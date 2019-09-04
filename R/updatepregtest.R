@@ -40,7 +40,7 @@ updatepregtest <- function(RFID, foetalage, date=NULL, username=NULL, password=N
   #filtercattle <- sprintf('{"RFID":{"$in":["%s"]}}', checkRFID)
   #check <- cattle$count(query = filtercattle)
 
-  check <- cattlesearch(RFID, username = username, password = password)
+  check <- RFIDsearch(RFID, username = username, password = password)
 
   if (nrow(check) != length(RFID)) {
 
@@ -49,9 +49,9 @@ updatepregtest <- function(RFID, foetalage, date=NULL, username=NULL, password=N
 
   for (i in 1:length(RFID)){
 
-    match <- cattlesearch(RFID[i])
+    match <- RFIDsearch(RFID[i], username = username, password = password)
 
-    RFIDS <- sprintf('{"RFID":"%s"}', match$RFID[i])
+    RFIDS <- sprintf('{"RFID":"%s"}', match$RFID)
 
     dat <- date[i]
     age <- foetalage[i]
@@ -80,7 +80,10 @@ updatepregtest <- function(RFID, foetalage, date=NULL, username=NULL, password=N
       cattle$update(RFIDS, RFIDI)
       cattle$update(RFIDS, RFIDIlast)
         }
-        }
+    }
+
+    if(exists("matchdate")){rm(matchdate)}
+       if(exists("matchage")){rm(matchage)}
 
     }
 
