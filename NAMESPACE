@@ -2,6 +2,7 @@
 
 export(ALMSuse)
 export(RFIDcattlecheck)
+export(RFIDsearch)
 export(addcattle)
 export(almshistsearch)
 export(appalmsuse)

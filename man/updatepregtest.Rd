@@ -10,16 +10,16 @@ updatepregtest(RFID, foetalage, date = NULL, username = NULL,
 \arguments{
 \item{RFID}{this is a list of the cattle RFID numbers}
 
-\item{foetalage}{this is a list of the cattle weights}
+\item{foetalage}{this is a list of the foetal age in weeks}
 
-\item{date}{provide the date that the weight was measured, this has to be in date format. Default is today's date.}
+\item{date}{provide the date that the pregnancy diagnosis was measured, this has to be in date format. Default is today's date.}
 
 \item{username}{if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring}
 
 \item{password}{if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access}
 }
 \value{
-a message that indicates the weights been successfully updated
+a message that indicates the pregnancy results been successfully updated
 }
 \description{
 This function inserts a new static weight for individual or groups of cattle based on a list of RFID values. If you need assistance please email \email{info@datamuster.net.au} to seek help or suggest improvements.

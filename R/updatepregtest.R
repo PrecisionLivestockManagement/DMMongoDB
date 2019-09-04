@@ -30,25 +30,28 @@ updatepregtest <- function(RFID, foetalage, date=NULL, username=NULL, password=N
 
   if (length(date) == 1){date <- rep(date, length = length(RFID))}
 
-
   # Checks that the RFID numbers are in the correct format and are registered in the database
 
-  checkRFID <- paste(unlist(RFID), collapse = '", "' )
+  #checkRFID <- paste(unlist(RFID), collapse = '", "' )
 
   if("TRUE" %in% (nchar(as.character(RFID))!= 16)) {
     stop(paste0("One or more of the previous RFID numbers are not in the correct format. Please ensure all RFIDs are in the format 'xxx xxxxxxxxxxxx'"))}
 
-  filtercattle <- sprintf('{"RFID":{"$in":["%s"]}}', checkRFID)
-  check <- cattle$count(query = filtercattle)
+  #filtercattle <- sprintf('{"RFID":{"$in":["%s"]}}', checkRFID)
+  #check <- cattle$count(query = filtercattle)
 
-  if (check != length(RFID)) {
+  check <- cattlesearch(RFID, username = username, password = password)
+
+  if (nrow(check) != length(RFID)) {
 
     stop("One or more of the RFID numbers cannot be found in the database. Please check that the RFID numbers are correct and try again")}
 
 
   for (i in 1:length(RFID)){
 
-    RFIDS <- sprintf('{"RFID":"%s"}', RFID[i])
+    match <- cattlesearch(RFID[i])
+
+    RFIDS <- sprintf('{"RFID":"%s"}', match$RFID[i])
 
     dat <- date[i]
     age <- foetalage[i]
