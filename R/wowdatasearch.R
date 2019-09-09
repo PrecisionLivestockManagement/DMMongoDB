@@ -25,7 +25,7 @@ wowdatasearch <- function(start=NULL, end=NULL, username=NULL, password=NULL){
 
   wowdata <- mongo(collection = "WoWData", db = "DMIoT", url = pass, verbose = T)
 
-  data <- wowdata$find(query = '{}', fields='{"RFID":true, "Wt":true, "datetime":true,"Location":true, "_id":false}')
+  data <- wowdata$find(query = '{}', fields='{"RFID":true, "Wt":true, "datetime":true, "Location":true, "import":true, "match":true, "_id":false}')
 
   #data <- data%>%
     #mutate(datetime = as.POSIXct(format(datetime, tz="America/Argentina/Buenos_Aires",usetz=TRUE)))
