@@ -45,7 +45,7 @@ infsearch <- function(property=NULL, active=NULL, infstype=NULL, username=NULL, 
 
   infsinfo$statdate <- as.Date(infsinfo$statdate, tz = "Australia/Brisbane")
 
-  if(is.null(type)){}else{
+  if(is.null(infstype)){}else{
   infsinfo <- infsinfo%>%
               filter(type %in% infstype)
 
