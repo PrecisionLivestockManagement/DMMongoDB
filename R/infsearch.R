@@ -13,7 +13,7 @@
 #' @export
 
 
-infsearch <- function(property=NULL, active=NULL, username=NULL, password=NULL){
+infsearch <- function(property=NULL, active=NULL, infstype=NULL, username=NULL, password=NULL){
 
   if(is.null(username)||is.null(password)){
   username = keyring::key_list("DMMongoDB")[1,2]
@@ -33,7 +33,7 @@ infsearch <- function(property=NULL, active=NULL, username=NULL, password=NULL){
   filterstation <- sprintf('{"stationname":{"$in":["%s"]}}', property)}else{
   filterstation <- sprintf('{"stationname":{"$in":["%s"]}, "properties.datarecording":"%s"}', property, "TRUE")}
 
-  lookfor <- sprintf('{"stationname":true, "properties.asset_id":true, "properties.Paddock":true, "properties.datarecording":true,
+  lookfor <- sprintf('{"stationname":true, "properties.asset_id":true, "properties.Paddock":true, "properties.datarecording":true, "properties.type":true,
                        "properties.telemetry_out":true, "properties.lastsignal":true, "properties.usenum":true, "_id":false}')
 
   infsinfo <- infrastructure$find(query = filterstation, fields = lookfor)
@@ -41,6 +41,13 @@ infsearch <- function(property=NULL, active=NULL, username=NULL, password=NULL){
   infsinfo$properties["stationname"] <- infsinfo$stationname
 
   infsinfo <- infsinfo$properties
+
+  if(is.null(type)){}else{
+  infsinfo <- infsinfo%>%
+              filter(type %in% infstype)
+
+
+  }
 
   return(infsinfo)
 
