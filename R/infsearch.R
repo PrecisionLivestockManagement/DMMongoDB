@@ -34,7 +34,7 @@ infsearch <- function(property=NULL, active=NULL, infstype=NULL, username=NULL, 
   filterstation <- sprintf('{"stationname":{"$in":["%s"]}, "properties.datarecording":"%s"}', property, "TRUE")}
 
   lookfor <- sprintf('{"stationname":true, "properties.asset_id":true, "properties.Paddock":true, "properties.datarecording":true, "properties.type":true,
-                       "properties.telemetry_out":true, "properties.lastsignal":true, "properties.usenum":true,
+                       "properties.telemetry_out":true, "properties.lastsignal":true, "properties.usenum":true, "properties.filename":true,
                        "properties.statdate":true, "properties.statEID":true, "properties.statweight":true, "_id":false}')
 
   infsinfo <- infrastructure$find(query = filterstation, fields = lookfor)
