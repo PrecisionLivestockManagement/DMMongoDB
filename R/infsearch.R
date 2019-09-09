@@ -13,7 +13,7 @@
 #' @export
 
 
-infsearch <- function(property, start=NULL, end=NULL, username=NULL, password=NULL){
+infsearch <- function(property=NULL, active=NULL, username=NULL, password=NULL){
 
   if(is.null(username)||is.null(password)){
   username = keyring::key_list("DMMongoDB")[1,2]
@@ -23,46 +23,26 @@ infsearch <- function(property, start=NULL, end=NULL, username=NULL, password=NU
   pass <- sprintf("mongodb://%s:%s@datamuster-shard-00-00-8mplm.mongodb.net:27017,datamuster-shard-00-01-8mplm.mongodb.net:27017,datamuster-shard-00-02-8mplm.mongodb.net:27017/test?ssl=true&replicaSet=DataMuster-shard-0&authSource=admin", username, password)
   infrastructure <- mongo(collection = "Infrastructure", db = "DataMuster", url = pass, verbose = T)
 
+  if(is.null(property)){
+  property <- stationinfo(username = username, password = password)
+  property <- property$Name}
+
   property <- paste(unlist(property), collapse = '", "' )
-  filterstation <- sprintf('{"stationname":{"$in":["%s"]}, "properties.type":"%s"}', property, "Walk-over-Weighing Unit")
 
-  info <- list()
+  if(is.null(active) || active == "FALSE"){
+  filterstation <- sprintf('{"stationname":{"$in":["%s"]}}', property)}else{
+  filterstation <- sprintf('{"stationname":{"$in":["%s"]}, "properties.datarecording":"%s"}', property, "TRUE")}
 
-  jan2 <- infrastructure$find(query = filterstation, fields='{"stationname":true, "properties.asset_id":true, "properties.Paddock":true, "properties.datarecording":true, "usehist.date":true, "usehist.num":true, "cattlehist.date":true, "cattlehist.num":true, "_id":true}')
+  lookfor <- sprintf('{"stationname":true, "properties.asset_id":true, "properties.Paddock":true, "properties.datarecording":true,
+                       "properties.lastsignal":true, "properties.usenum":true, "_id":false}')
 
-  if(length(jan2$properties$asset_id)<1) {info <- NULL} else {
-  for(i in 1:length(jan2$properties$asset_id)){
+  infsinfo <- infrastructure$find(query = filterstation, fields = lookfor)
 
-    asset <- setNames(data.frame(matrix(ncol = 2, nrow = length(jan2$usehist$date[[i]]))), c("Date", "Num"))
-    asset$Date <- jan2$usehist$date[[i]]
-    if(length(asset$date >= 1)){asset$Date <- as.Date(asset$Date, tz = "Australia/Brisbane")}
-    asset$Num <- jan2$usehist$num[[i]]
+  infsinfo$properties["stationname"] <- infsinfo$stationname
 
-    if(is.null(start)) {}
-    else{if(is.null(end)){asset <- asset %>% filter(between(as.Date(Date),start,Sys.Date()))}
-      else{asset <- asset %>% filter(between(as.Date(Date),start,end))}}
+  infsinfo <- infsinfo$properties
 
-    info[[jan2$properties$asset_id[i]]] <- as.data.frame(asset)
-    UseHist=info
-
-    asset1 <- setNames(data.frame(matrix(ncol = 2, nrow = length(jan2$cattlehist$date[[i]]))), c("Date", "Num"))
-    asset1$Date <- jan2$cattlehist$date[[i]]
-    if(length(asset1$date >= 1)){asset1$Date <- as.Date(asset1$Date, tz = "Australia/Brisbane")}
-    asset1$Num <- jan2$cattlehist$num[[i]]
-
-    if(is.null(start)) {}
-    else{if(is.null(end)){asset1 <- asset1 %>% filter(between(as.Date(Date),start,Sys.Date()))}
-    else{asset1 <- asset1 %>% filter(between(as.Date(Date),start,end))}}
-
-    info[[jan2$properties$asset_id[i]]] <- as.data.frame(asset1)
-    CattleHist=info
-    }
-
-  info <- list(property=jan2$stationname, assetlistname=jan2$properties$asset_id, assetid = jan2$`_id`, paddock=jan2$properties$Paddock, active=jan2$properties$datarecording, UseHist = UseHist, CattleHist = CattleHist)
-
-  }
-
-  return(info)
+  return(infsinfo)
 
 }
 
