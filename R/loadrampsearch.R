@@ -14,7 +14,7 @@
 #' @export
 
 
-loadrampsearch <- function(property, username=NULL, password=NULL){
+loadrampsearch <- function(property=NULL, username=NULL, password=NULL){
 
   if(is.null(username)||is.null(password)){
   username = keyring::key_list("DMMongoDB")[1,2]
@@ -24,9 +24,11 @@ loadrampsearch <- function(property, username=NULL, password=NULL){
   pass <- sprintf("mongodb://%s:%s@datamuster-shard-00-00-8mplm.mongodb.net:27017,datamuster-shard-00-01-8mplm.mongodb.net:27017,datamuster-shard-00-02-8mplm.mongodb.net:27017/test?ssl=true&replicaSet=DataMuster-shard-0&authSource=admin", username, password)
   loadramps <- mongo(collection = "LoadRamps", db = "DMIoT", url = pass, verbose = T)
 
+  if (!is.null(property)){
   property <- paste(unlist(property), collapse = '", "' )
+  filterstation <- sprintf('{"station":{"$in":["%s"]}, "actioned":"%s"}', property, "0")}else{
+  filterstation <- sprintf('{"actioned":"%s"}', "0")}
 
-  filterstation <- sprintf('{"station":{"$in":["%s"]}, "actioned":"%s"}', property, "0")
   lookfor <- sprintf('{"RFID":true, "datetime":true, "station":true, "_id":false}')
   propertyinfo <- loadramps$find(query = filterstation, fields=lookfor)
 
