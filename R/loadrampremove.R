@@ -36,10 +36,7 @@ loadrampremove <- function(RFID, username=NULL, password=NULL){
       trebble <- loadramps$find(query = IDS, fields = '{"_id":true, "datetime":true}')
       setdate <- as.Date(trebble$datetime[1], tz = "Australia/Brisbane")
 
-    RFIDI <- sprintf('{"$set":{"stationname":"%s", "stationID":"%s", "active":"%s", "exstation":"%s", "geometry.coordinates.0":%s, "geometry.coordinates.1":%s, "properties.Paddock":"%s", "properties.PaddockID":"%s", "properties.exitDate":{"$date":"%s"}, "properties.ALMS":"%s", "properties.ALMSID":"%s", "properties.ALMSasset_id":"%s"}}',
-    "xxxxxx", "xxxxxx", "FALSE", banger$stationname, 0.0, 0.0, "xxxxxx", "xxxxxx", paste0(setdate,"T","00:00:00","+1000"), "FALSE", "xxxxxx", "xxxxxx")
-
-    cattle$update(RFIDS, RFIDI)
+     removecattle(RFID = RFID[i], property = , date = setdate, username = username, password = password)
 
     IDI <- sprintf('{"$set":{"actioned":"%s"}}', "1")
 

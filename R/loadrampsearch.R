@@ -46,8 +46,9 @@ loadrampsearch <- function(property=NULL, username=NULL, password=NULL){
   if (nrow(propertyinfo) >= 1 && class(indb) == "data.frame"){
 
   propertyinfo1 <- full_join(propertyinfo, indb, by = "RFID")%>%
-    select("datetime","RFID","station","Management","category","breed","sex")%>%
-    arrange(datetime)}
+    select("datetime","RFID","stationname","Management","category","breed","sex")%>%
+    arrange(datetime)
+  }
 
   return(propertyinfo1)
 }

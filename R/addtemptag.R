@@ -27,8 +27,6 @@ addtemptag <- function(RFID, date, weight, location, test_tag=NULL, username=NUL
 
     returnfields <- sprintf('{"RFID":true, "_id":false}')
 
-    checkRFID <- paste(unlist(checkRFID), collapse = '", "' )
-
     for (i in 1:length(RFID)){
 
     searchRFID <- sprintf('{"RFID":"%s"}', RFID[i])

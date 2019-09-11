@@ -3,7 +3,6 @@
 #' This function removes individual or groups of cattle from a station. It searches based on a list of RFID values. It is recommended that you use the propsearch function to find a list of cattle RFID numbers for a particular property. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
 #' @name removecattle
 #' @param RFID this is a list of cattle RFID numbers
-#' @param property this is the name of the property
 #' @param date provide the date that the animal left the station, this has to be in date format. Default is today's date.
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
 #' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
@@ -14,7 +13,7 @@
 #' @export
 
 
-removecattle <- function(RFID, property, date=NULL, username=NULL, password=NULL){
+removecattle <- function(RFID, date=NULL, username=NULL, password=NULL){
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]
