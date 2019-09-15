@@ -107,9 +107,10 @@ updatepaddock <- function(RFID, property, paddock, date=NULL, username=NULL, pas
               IDIlast <- sprintf('{"$set":{"properties.ALMS":"%s", "properties.ALMSID":"%s", "properties.ALMSasset_id":"%s"}}',
                              "TRUE", WOW$`_id`, WOW$properties$asset_id)
 
-          cattle$update(RFIDS, IDI)
           cattle$update(RFIDS, IDIlast)
-          }}
+            }}
+
+          cattle$update(RFIDS, IDI)
 
           }}
 
