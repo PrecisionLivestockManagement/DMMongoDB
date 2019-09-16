@@ -4,7 +4,7 @@
 \alias{loadrampsearch}
 \title{Package with functions to enable easier code to access the DataMuster MongoDB Atlas servers}
 \usage{
-loadrampsearch(property, username = NULL, password = NULL)
+loadrampsearch(property = NULL, username = NULL, password = NULL)
 }
 \arguments{
 \item{property}{the name of the property to search the DataMuster MongoDB Atlas server}

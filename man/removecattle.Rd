@@ -4,13 +4,10 @@
 \alias{removecattle}
 \title{Remove cattle from a station}
 \usage{
-removecattle(RFID, property, date = NULL, username = NULL,
-  password = NULL)
+removecattle(RFID, date = NULL, username = NULL, password = NULL)
 }
 \arguments{
 \item{RFID}{this is a list of cattle RFID numbers}
-
-\item{property}{this is the name of the property}
 
 \item{date}{provide the date that the animal left the station, this has to be in date format. Default is today's date.}
 
