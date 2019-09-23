@@ -30,7 +30,7 @@ propsearchfull <- function(property, paddock=NULL, archives=NULL, username=NULL,
   property <- paste(unlist(property), collapse = '", "' )
 
   filterstation1 <- sprintf('{"stationname":{"$in":["%s"]}}', property)
-  filterstation2 <- sprintf('{"$or": [{"exstation":"%s"}, {"stationname":"%s"}]}', property, property)
+  filterstation2 <- sprintf('{"$or": [{"exstation":{"$in":["%s"]}}, {"stationname":{"$in":["%s"]}}]}', property, property)
 
   lookfor <- sprintf('{"RFID":true, "properties.Management":true, "properties.Paddock":true, "properties.sex":true,
                      "properties.birthDate":true, "properties.damRFID":true, "properties.sireRFID":true, "properties.stwtdate":true, "properties.stweight":true,
