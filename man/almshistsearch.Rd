@@ -4,8 +4,8 @@
 \alias{almshistsearch}
 \title{Package with functions to enable easier code to access to DataMuster MongoDB Atlas servers}
 \usage{
-almshistsearch(property, alms = NULL, start = NULL, end = NULL,
-  username = NULL, password = NULL)
+almshistsearch(property = NULL, alms = NULL, start = NULL,
+  end = NULL, username = NULL, password = NULL)
 }
 \arguments{
 \item{property}{the name of the property to search the DataMuster MongoDB Atlas server}
