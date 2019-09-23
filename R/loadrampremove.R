@@ -36,7 +36,7 @@ loadrampremove <- function(RFID, username=NULL, password=NULL){
       trebble <- loadramps$find(query = IDS, fields = '{"_id":true, "datetime":true}')
       setdate <- as.Date(trebble$datetime[1], tz = "Australia/Brisbane")
 
-     removecattle(RFID = RFID[i], property = , date = setdate, username = username, password = password)
+     #removecattle(RFID = RFID[i], property = , date = setdate, username = username, password = password)
 
     IDI <- sprintf('{"$set":{"actioned":"%s"}}', "1")
 
