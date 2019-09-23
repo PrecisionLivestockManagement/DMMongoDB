@@ -93,7 +93,10 @@ updatepaddock <- function(RFID, property, paddock, date=NULL, username=NULL, pas
              if (banger$properties$ALMS == "TRUE"){
 
               IDI <- sprintf('{"$set":{"almshist.dateOFF.%s":{"$date":"%s"}, "properties.ALMS":"%s", "properties.ALMSID":"%s", "properties.ALMSasset_id":"%s"}}',
-                             arrpos3, paste0(substr(date[i],1,10),"T","00:00:00","+1000"),"FALSE", "xxxxxx", "xxxxxx")}}
+                             arrpos3, paste0(substr(date[i],1,10),"T","00:00:00","+1000"),"FALSE", "xxxxxx", "xxxxxx")
+
+              cattle$update(RFIDS, IDI)
+              }}
 
           if (ALMS == "TRUE" && inf$properties$datarecording == "TRUE"){
 
@@ -108,9 +111,8 @@ updatepaddock <- function(RFID, property, paddock, date=NULL, username=NULL, pas
                              "TRUE", WOW$`_id`, WOW$properties$asset_id)
 
           cattle$update(RFIDS, IDIlast)
-            }}
-
           cattle$update(RFIDS, IDI)
+            }}
 
           }}
 
