@@ -1,0 +1,57 @@
+#' Add new infrastructure
+#'
+#' This function adds new infrastructure to the MongoDB database. You can only access this function if you have read and write permission
+#' @name addnewinfs
+#' @param property name of the property to be added
+#' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
+#' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
+#' @return message to say the user has been successfully added
+#' @author Lauren O'Connor \email{lauren.oconnor@@datamuster.net.au}
+#' @import mongolite
+#' @import keyring
+#' @export
+
+
+addnewinfs <- function(property, paddock, infstype, assetID, fileout=NULL, active=NULL, training=NULL, telemetry=NULL, date=NULL, username=NULL, password=NULL){
+
+  if(is.null(username)||is.null(password)){
+    username = keyring::key_list("DMMongoDB")[1,2]
+    password =  keyring::key_get("DMMongoDB", username)
+  }
+
+    pass <- sprintf("mongodb://%s:%s@datamuster-shard-00-00-8mplm.mongodb.net:27017,datamuster-shard-00-01-8mplm.mongodb.net:27017,datamuster-shard-00-02-8mplm.mongodb.net:27017/test?ssl=true&replicaSet=DataMuster-shard-0&authSource=admin", username, password)
+    stations <- mongo(collection = "Stations", db = "DataMuster", url = pass, verbose = T)
+    paddocks <- mongo(collection = "Paddocks", db = "DataMuster", url = pass, verbose = T)
+    infrastructure <- mongo(collection = "Infrastructure", db = "DataMuster", url = pass, verbose = T)
+
+    propertyinfo <- stationinfo(property)
+
+    template <- infrastructure$find(query = '{"stationname": "xxxxxx"}', fields='{"_id":false}')
+
+
+    #Input new infrastructure details into the template dataframe --------
+
+    template$stationname <- property
+    template$stationID <- propertyinfo$`_id`
+
+    template$properties$asset_id <- assetID
+    template$properties$type <- infstype
+    template$properties$datarecording <- ifelse(is.null(active), "TRUE", active)
+    template$properties$fileout <- ifelse(is.null(fileout), "FALSE", fileout)
+    template$properties$training <- ifelse(is.null(training), "FALSE", training)
+    template$properties$telemetry_out <- ifelse(is.null(telemetry), "FALSE", telemetry)
+    template$properties$Paddock <- paddock
+
+    template$paddock <- list(paddock)
+
+    template$pdkhist$name <- list(paddock)
+    template$pdkhist$ID <- list("xxxxxx")
+    template$pdkhist$dateIN <- list(as.POSIXct(ifelse(is.null(date), Sys.Date(), date)))
+
+    rownames(template)<-c()
+    rownames(template$geometry)<-c()
+    rownames(template$properties)<-c()
+
+    infrastructure$insert(template)
+
+}
