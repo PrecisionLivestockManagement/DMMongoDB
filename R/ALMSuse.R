@@ -30,8 +30,9 @@ ALMSuse <- function(property, username = NULL, password = NULL){
 
   data <- almsuse$find(query = filterdata, fields = '{"_id":false}')
 
+  if (nrow(data) != 0){
   data <- data%>%
-    mutate(Date = as.Date(Date, tz = "Australia/Brisbane"))
+    mutate(Date = as.Date(Date, tz = "Australia/Brisbane"))}
 
 
   return(data)
