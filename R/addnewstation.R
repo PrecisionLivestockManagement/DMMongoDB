@@ -15,7 +15,7 @@
 #' @export
 
 
-addnewstation <- function(stationname, stationshortname, long, lat, PIC=NULL, timezone=NULL, username=NULL, password=NULL){
+addnewstation <- function(stationname, stationshortname, long, lat, ha=NULL, PIC=NULL, timezone=NULL, username=NULL, password=NULL){
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]
@@ -39,10 +39,32 @@ addnewstation <- function(stationname, stationshortname, long, lat, PIC=NULL, ti
     template$latitude<- lat
     template$PIC <- ifelse(!is.null(PIC), PIC, "xxxxxx")
     template$timezone <- ifelse(!is.null(timezone), timezone, "Australia/Brisbane")
+    template$hectares <- ifelse(!is.null(ha), ha, 100)
 
     rownames(template)<-c()
     rownames(template$geometry)<-c()
 
     stations$insert(template)
+
+    areasqm <- ha * 10000
+    distfromcentre <- ((areasqm^0.5)/2)/100000
+
+    c1lat <- lat + distfromcentre
+    c1long <- long + distfromcentre
+    c2lat <-  lat - distfromcentre
+    c2long <- long + distfromcentre
+    c3lat <- lat - distfromcentre
+    c3long <- long - distfromcentre
+    c4lat <- lat + distfromcentre
+    c4long <- long - distfromcentre
+    c5lat <-  c1lat
+    c5long <- c1long
+
+    coords <- paste0("[",c1long,",",c1lat,"],[",c2long,",",c2lat,"],[",c3long,",",c3lat,"],[",c4long,",",c4lat,"],[",c5long,",",c5lat,"]")
+
+    stations <- mongo(collection = "Stations", db = "DataMuster", url = pass, verbose = T)
+    IDI <- sprintf('{"name":"%s"}', stationname)
+    IDS <- sprintf('{"$set":{"geometry.coordinates":[[%s]]}}', coords)
+    stations$update(IDI, IDS)
 
 }
