@@ -31,6 +31,8 @@ addnewstation <- function(stationname, stationshortname, long, lat, ha=NULL, PIC
 
     template <- prop[prop$name == "Tremere", ]
 
+    if(is.null(ha)){ha <- 100}
+
     #Input new station details into the template dataframe --------
 
     template$name<- stationname
