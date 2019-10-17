@@ -27,23 +27,43 @@ appcattle <- function(property, username=NULL, password=NULL){
     url = pass,
     verbose = T)
 
-  property <- paste(unlist(property), collapse = '", "' )
-  filterstation <- sprintf('{"stationname":{"$in":["%s"]}}', property)
+  property1 <- paste(unlist(property), collapse = '", "' )
+  filterstation <- sprintf('{"stationname":{"$in":["%s"]}}', property1)
   lookfor <- sprintf('{"stationname":true, "RFID":true, "properties.Management":true, "geometry":true, "properties.Paddock":true, "properties.sex":true, "properties.category":true, "properties.stweight":true, "properties.stwtdate":true, "properties.weight":true, "properties.recordedtime":true, "properties.wkweight":true, "properties.wkwtdate":true, "properties.ALMS":true, "_id":false}')
   cattleinfo <- cattle$find(query = filterstation, fields=lookfor)
 
-  if(nrow(cattleinfo) != 0){
-  cattleinfo$properties$stwtdate <- as.Date(cattleinfo$properties$stwtdate, tz = "Australia/Brisbane")
-  cattleinfo$properties$wkwtdate <- as.Date(cattleinfo$properties$wkwtdate, tz = "Australia/Brisbane")
+  if (nrow(cattleinfo) != 0){
 
-  cattleinfospatial <- SpatialPointsDataFrame(data.frame(matrix(unlist(cattleinfo$geometry$coordinates), nrow=length(cattleinfo$geometry$coordinates), byrow=T)), cattleinfo$properties)
+  cattleinfo$properties$RFID <- cattleinfo$RFID
+  cattleinfo$properties$stationname <- cattleinfo$stationname
+  cattleinfo$properties$geom <- cattleinfo$geometry$coordinates
+  cattleinfo <- cattleinfo$properties}
 
-  cattleinfospatial@data["RFID"] <- cattleinfo$RFID
-  cattleinfospatial@data["property"] <- cattleinfo$stationname}else{
+  if(length(unique(cattleinfo$stationname)) != length(property)){
 
-  cattleinfospatial <- SpatialPoints(data.frame(x = 0, y = 0))
+  missingprops <- property[!(property %in% cattleinfo$stationname)]
 
+  cattleinfo1 <- cattle$find(query = sprintf('{"RFID":"xxxxxx"}'), fields=lookfor)
+  cattleinfo1 <- cattleinfo1[rep(1:nrow(cattleinfo1),each=length(missingprops)),]
+
+  cattleinfo1$stationname <- missingprops
+
+  cattleinfo1$properties$RFID <- cattleinfo1$RFID
+  cattleinfo1$properties$stationname <- cattleinfo1$stationname
+  cattleinfo1$properties$geom <- cattleinfo1$geometry$coordinates
+  cattleinfo1 <- cattleinfo1$properties
+
+  cattleinfo <- rbind(cattleinfo, cattleinfo1)
   }
+
+  cattleinfo$stwtdate <- as.Date(cattleinfo$stwtdate, tz = "Australia/Brisbane")
+  cattleinfo$wkwtdate <- as.Date(cattleinfo$wkwtdate, tz = "Australia/Brisbane")
+
+  cattleinfospatial <- SpatialPointsDataFrame(data.frame(matrix(unlist(cattleinfo$geom), nrow=length(cattleinfo$geom), byrow=T)), cattleinfo%>%select(-"geom"))
+
+  cattleinfospatial <- cattleinfospatial %>% rename(property = stationname)
+
+  #cattleinfospatial <- SpatialPointsDataFrame(data.frame(matrix(c(0, 0), nrow=1, ncol=2, byrow = TRUE)), cattleinfo)
 
   return(cattleinfospatial)
 
