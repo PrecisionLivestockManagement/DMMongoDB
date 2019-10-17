@@ -4,8 +4,8 @@
 \alias{addnewstation}
 \title{Add new user}
 \usage{
-addnewstation(stationname, stationshortname, long, lat, PIC = NULL,
-  timezone = NULL, username = NULL, password = NULL)
+addnewstation(stationname, stationshortname, long, lat, ha = NULL,
+  PIC = NULL, timezone = NULL, username = NULL, password = NULL)
 }
 \arguments{
 \item{stationname}{name of the property to be added}
