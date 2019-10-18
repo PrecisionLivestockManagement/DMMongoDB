@@ -48,21 +48,26 @@ addnewpaddock <- function(property, paddockname, filedir, filename, filetype, us
 
     unzip(filename)
 
-    file <- st_read("doc.kml")
+    #file <- st_read("doc.kml")
 
-    file <- file[3]
+
+    foo = readOGR("doc.kml", lyr[1])
+
+    pads = toGeoJSON(data=foo, name = "data", dest=tempdir())
+
+    #file <- file[3]
 
     #file$geometry[[1]][[1]] <- matrix(file$geometry[[1]][[1]][file$geometry[[1]][[1]] != 0], ncol = 2)
 
-    file[2:7] <- template$properties
+    #file[2:7] <- template$properties
 
-    PropPadds <- st_transform(file, CRS("+proj=longlat +datum=WGS84 +no_defs"))
+    #PropPadds <- st_transform(file, CRS("+proj=longlat +datum=WGS84 +no_defs"))
 
     # Output spatial dataframe as a geojson file with the MongoDB format, rather than worrying about directories etc just create a temporary file
-    pads = tempfile(fileext=".geojson")
+    #pads = tempfile(fileext=".geojson")
 
     # Write the spatial dataframe to the temporary geojson file
-    st_write(PropPadds, pads, "GeoJSON", driver="GeoJSON")
+    #st_write(PropPadds, pads, "GeoJSON", driver="GeoJSON")
     }
 
     # When rgdal writes the geojson file it includes header information and commas at the end of lines - if we want to continue to have each document representing
