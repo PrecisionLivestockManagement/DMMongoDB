@@ -18,7 +18,8 @@ recorddeath <- function(RFID, date=NULL, cause=NULL, property, username=NULL, pa
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]
-    password =  keyring::key_get("DMMongoDB", username)}
+    password =  keyring::key_get("DMMongoDB", username)
+    }
 
   pass <- sprintf("mongodb://%s:%s@datamuster-shard-00-00-8mplm.mongodb.net:27017,datamuster-shard-00-01-8mplm.mongodb.net:27017,datamuster-shard-00-02-8mplm.mongodb.net:27017/test?ssl=true&replicaSet=DataMuster-shard-0&authSource=admin", username, password)
 
@@ -45,15 +46,27 @@ recorddeath <- function(RFID, date=NULL, cause=NULL, property, username=NULL, pa
 
   for (i in 1:length(cows$RFID)){
 
+    banger <- cattle$find(query = sprintf('{"RFID":"%s"}', cows$RFID[i]), fields= sprintf('{"RFID":true,"pdkhist.dateOUT":true,"almshist.dateOFF":true, "_id":false}'))
+    arrpos1 <- length(banger$pdkhist$dateOUT[[1]])+1
+    arrpos2 <- length(banger$almshist$dateOFF[[1]])+1
+
     RFIDS <- sprintf('{"RFID":"%s"}', cows$RFID[i])
 
     RFIDI <- sprintf('{"$set":{"stationname":"%s", "stationID":"%s", "active":"%s", "exstation":"%s", "geometry.coordinates.0":%s, "geometry.coordinates.1":%s,
                      "properties.Paddock":"%s", "properties.PaddockID":"%s", "properties.deathcause":"%s", "properties.deathDate":{"$date":"%s"}, "properties.ALMS":"%s", "properties.ALMSID":"%s", "properties.ALMSasset_id":"%s"}}',
                      "xxxxxx", "xxxxxx", "FALSE", cows$stationname[i], 0.0, 0.0, "xxxxxx", "xxxxxx", cause[i], paste0(substr(date[i],1,10),"T","00:00:00","+1000"),"FALSE", "xxxxxx", "xxxxxx")
 
-      cattle$update(RFIDS, RFIDI)}
+    RFIDII <- sprintf('{"$set":{"pdkhist.dateOUT.%s":{"$date":"%s"}}}', arrpos1, paste0(substr(date[i],1,10),"T","00:00:00","+1000"))
 
-  #movecattle(property = property, username = username, password = password)
+    cattle$update(RFIDS, RFIDI)
+    cattle$update(RFIDS, RFIDII)
+
+    if(cows$ALMS == "TRUE"){
+    RFIDIII <- sprintf('{"$set":{"almshist.dateOFF.%s":{"$date":"%s"}}}', arrpos2, paste0(substr(date[i],1,10),"T","00:00:00","+1000"))
+    cattle$update(RFIDS, RFIDIII)
+    }
+
+    }
 
 }
 
