@@ -74,7 +74,10 @@ updatepaddock <- function(RFID, property, paddock, date=NULL, username=NULL, pas
           arrpos1 <- length(banger$pdkhist$dateOUT[[1]])
 
           if (banger$properties$Paddock != paddock[i]){
-            temppad <- pad[which(pad$paddname == paddock[i]),]
+
+          # Update paddock
+
+          temppad <- pad[which(pad$paddname == paddock[i]),]
 
           RFIDIlast <- sprintf('{"$set":{"properties.Paddock":"%s", "properties.PaddockID":"%s"}}', paddock[i], temppad$`_id`)
           RFIDI <- sprintf('{"$set":{"pdkhist.dateOUT.%s":{"$date":"%s"}, "pdkhist.dateIN.%s":{"$date":"%s"}, "pdkhist.name.%s":"%s", "pdkhist.ID.%s":"%s"}}', arrpos1, paste0(substr(date[i],1,10),"T","00:00:00","+1000"), arrpos, paste0(substr(date[i],1,10),"T","00:00:00","+1000"), arrpos, paddock[i], arrpos, temppad$`_id`)
@@ -82,7 +85,9 @@ updatepaddock <- function(RFID, property, paddock, date=NULL, username=NULL, pas
       cattle$update(RFIDS, RFIDI)
       cattle$update(RFIDS, RFIDIlast)
 
-          ALMS <- paddock[i] %in% inf$paddock[[1]]
+          # Update ALMS status
+
+          ALMS <- paddock[i] %in% inf$paddock[[1]] # Does the new paddock have an ALMS? TRUE or FALSE
 
           arrpos2 <- length(banger$almshist$dateON[[1]])
           arrpos3 <- length(banger$almshist$dateOFF[[1]])
@@ -90,7 +95,7 @@ updatepaddock <- function(RFID, property, paddock, date=NULL, username=NULL, pas
           if (ALMS == "FALSE" ||
               ALMS == "TRUE" & inf$properties$datarecording == "FALSE"){
 
-             if (banger$properties$ALMS == "TRUE"){
+             if (banger$properties$ALMS == "TRUE"){ # Takes animal off ALMS if new paddock doesn't have an ALMS or if the ALMS is not active
 
               IDI <- sprintf('{"$set":{"almshist.dateOFF.%s":{"$date":"%s"}, "properties.ALMS":"%s", "properties.ALMSID":"%s", "properties.ALMSasset_id":"%s"}}',
                              arrpos3, paste0(substr(date[i],1,10),"T","00:00:00","+1000"),"FALSE", "xxxxxx", "xxxxxx")
@@ -102,7 +107,7 @@ updatepaddock <- function(RFID, property, paddock, date=NULL, username=NULL, pas
 
             WOW <- inf[which(inf$paddock[[1]] == paddock[i]),]
 
-            if (!(temppad$paddname %in% WOW$paddock[[1]])){
+            #if (!(temppad$paddname %in% WOW$paddock[[1]])){
 
               IDI <- sprintf('{"$set":{"almshist.dateON.%s":{"$date":"%s"}, "almshist.dateOFF.%s":{"$date":"%s"}, "almshist.ID.%s":"%s", "almshist.asset_id.%s":"%s"}}',
                              arrpos2, paste0(substr(date[i],1,10),"T","00:00:00","+1000"), arrpos3, paste0(substr(date[i],1,10),"T","00:00:00","+1000"), arrpos2, WOW$`_id`, arrpos2, WOW$properties$asset_id)
@@ -112,7 +117,8 @@ updatepaddock <- function(RFID, property, paddock, date=NULL, username=NULL, pas
 
           cattle$update(RFIDS, IDIlast)
           cattle$update(RFIDS, IDI)
-            }}
+          }
+          #}
 
           }}
 
