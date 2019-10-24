@@ -4,19 +4,19 @@
 \alias{addnewpaddock}
 \title{Add a new paddock}
 \usage{
-addnewpaddock(property, paddockname, filedir, filename, filetype,
-  username = NULL, password = NULL)
+addnewpaddock(property, filedir, filetype, paddockname = NULL,
+  filename = NULL, username = NULL, password = NULL)
 }
 \arguments{
 \item{property}{this is the name of the property}
 
-\item{paddockname}{this is the name of the paddock or paddocks}
-
 \item{filedir}{the location of the spatial file}
 
-\item{filename}{the name of the spatial file}
-
 \item{filetype}{the type of spatial file (e.g. shp, kmz)}
+
+\item{paddockname}{this is the name of the paddock or paddocks. If NULL, the paddock will be named as the paddock number}
+
+\item{filename}{the name of the spatial file. If NULL, all spatial files in the directory will be read and added as paddocks}
 
 \item{username}{if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring}
 
