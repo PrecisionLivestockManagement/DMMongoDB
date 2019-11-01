@@ -154,8 +154,10 @@ for (i in 1:length(optfields)){
 
       #Identification, category & weaning information
       template$RFID <- RFID[p]
+
+      if(RFID[p] != "xxx xxxxxxxxxxxx"){
       template$RFIDhist$date <- list(as.POSIXct(date[p]))
-      template$RFIDhist$ID <- list(RFID[p])
+      template$RFIDhist$ID <- list(RFID[p])}
 
       template$properties$Management <- as.character(MTag[p])
       template$properties$category <- category[p]
