@@ -4,22 +4,32 @@
 \alias{apptsisessionupload}
 \title{Package with functions to enable easier code to access to DataMuster MongoDB Atlas servers}
 \usage{
-apptsisessionupload(Tag, EID, date, liveweight, NLIS = NULL,
+apptsisessionupload(Tag, EID, date, liveweight, property, NLIS = NULL,
   pdkfrom = NULL, pdkto = NULL, notes = NULL, username = NULL,
   password = NULL)
 }
 \arguments{
+\item{Tag}{the RFID number as txt}
+
+\item{EID}{the RFID number as txt}
+
+\item{date}{the RFID number as txt}
+
+\item{liveweight}{the RFID number as txt}
+
+\item{property}{the RFID number as txt}
+
+\item{NLIS}{the RFID number as txt}
+
+\item{pdkfrom}{in correct format}
+
+\item{pdkto}{in correct format}
+
+\item{notes}{in correct format}
+
 \item{username}{you will need to request access from Lauren O'Connor for a username to write data to the database}
 
 \item{password}{you will need to request access from Lauren O'Connor for a username to write data to the database}
-
-\item{RFID}{the RFID number as txt}
-
-\item{datetime}{in correct format}
-
-\item{weight}{in correct format}
-
-\item{ALMS}{in correct format}
 }
 \value{
 uploads data in a dataframe to the DMMongoDB database
