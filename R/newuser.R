@@ -37,24 +37,7 @@ newuser <- function(user, email, access, property, username=NULL, password=NULL)
     template$accesslevel <- access
 
     if (template$accesslevel == "user") {
-
-    i<-1
-
-    for (i in 1:length(property)) {
-
-    template$stations[[1]][i+1]<- property[[i]][1]} } else {
-
-      if (template$accesslevel == "admin") {
-
-        stations <- mongo(collection = "Stations", db = "DataMuster", url = pass, verbose = T)
-
-        props <- stations$find(query = '{}', fields = '{"name":true, "_id":false}')
-
-        props1 <- split(props, col(props))
-
-        for (i in 1:length(props1$`1`$name)) {
-
-          template$stations[[1]][i]<- props1$`1`$name[i]} } }
+      template$stations <- list(property)}
 
     rownames(template)<-c()
 
