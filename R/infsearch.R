@@ -39,18 +39,17 @@ infsearch <- function(property=NULL, active=NULL, infstype=NULL, username=NULL, 
 
   infsinfo <- infrastructure$find(query = filterstation, fields = lookfor)
 
+  if (nrow(infsinfo) == 0){infsinfo <- infrastructure$find(query = '{"stationname":"xxxxxx"}', fields = lookfor)}
+
   infsinfo$properties["stationname"] <- infsinfo$stationname
 
   infsinfo <- infsinfo$properties
 
-  infsinfo$statdate <- as.Date(infsinfo$statdate, tz = "Australia/Brisbane")
+  if(nrow(infsinfo) != 0){infsinfo$statdate <- as.Date(infsinfo$statdate, tz = "Australia/Brisbane")}
 
   if(is.null(infstype)){}else{
   infsinfo <- infsinfo%>%
-              filter(type %in% infstype)
-
-
-  }
+              filter(type %in% infstype)}
 
   return(infsinfo)
 
