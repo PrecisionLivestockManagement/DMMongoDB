@@ -24,6 +24,7 @@ addnewstation <- function(stationname, stationshortname, long, lat, ha=NULL, PIC
 
     pass <- sprintf("mongodb://%s:%s@datamuster-shard-00-00-8mplm.mongodb.net:27017,datamuster-shard-00-01-8mplm.mongodb.net:27017,datamuster-shard-00-02-8mplm.mongodb.net:27017/test?ssl=true&replicaSet=DataMuster-shard-0&authSource=admin", username, password)
     stations <- mongo(collection = "Stations", db = "DataMuster", url = pass, verbose = T)
+    paddocks <- mongo(collection = "Paddocks", db = "DataMuster", url = pass, verbose = T)
 
     prop <- stations$find(query = '{}', fields = '{"_id":false}')
 
@@ -32,21 +33,25 @@ addnewstation <- function(stationname, stationshortname, long, lat, ha=NULL, PIC
     template <- prop[prop$name == "Tremere", ]
 
     if(is.null(ha)){ha <- 100}
+    if(is.null(PIC)){PIC <- "xxxxxx"}
+    if(is.null(timezone)){timezone <- "Australia/Brisbane"}
 
-    #Input new station details into the template dataframe --------
+    #Input new station details into a template dataframe and insert into database --------
 
     template$name<- stationname
     template$shortname <- stationshortname
     template$longitude<-long
     template$latitude<- lat
-    template$PIC <- ifelse(!is.null(PIC), PIC, "xxxxxx")
-    template$timezone <- ifelse(!is.null(timezone), timezone, "Australia/Brisbane")
-    template$hectares <- ifelse(!is.null(ha), ha, 100)
+    template$PIC <- PIC
+    template$timezone <- timezone
+    template$hectares <- ha
 
     rownames(template)<-c()
     rownames(template$geometry)<-c()
 
     stations$insert(template)
+
+    #Generate the polygon coordinates and update the Stations collection
 
     areasqm <- ha * 10000
     distfromcentre <- ((areasqm^0.5)/2)/100000
@@ -68,5 +73,27 @@ addnewstation <- function(stationname, stationshortname, long, lat, ha=NULL, PIC
     IDI <- sprintf('{"name":"%s"}', stationname)
     IDS <- sprintf('{"$set":{"geometry.coordinates":[[%s]]}}', coords)
     stations$update(IDI, IDS)
+
+    #Create a temporary paddock in the Paddocks collection using the polygon coordinates. This will be removed if other paddocks are added.
+
+    propertyinfo <- stationinfo(stationname, username = username, password = password)
+    propertyid <- propertyinfo$`_id`
+
+    template <- paddocks$find(query = '{"stationname":"xxxxxx"}', fields = '{"_id":false}')
+    template$stationname <- stationname
+    template$stationID <- propertyid
+    template$properties$datasource <- "stationpolygon"
+    template$properties$hectares <- ha
+    template$paddname <- stationname
+    template$paddnum <- 1
+
+    rownames(template)<-c()
+    rownames(template$geometry)<-c()
+
+    paddocks$insert(template)
+
+    IDS <- sprintf('{"stationname":"%s"}', stationname)
+    IDI <- sprintf('{"$set":{"geometry.coordinates":[[%s]]}}', coords)
+    paddocks$update(IDS, IDI)
 
 }
