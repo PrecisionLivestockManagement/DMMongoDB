@@ -4,11 +4,13 @@
 \alias{appcalvingupload}
 \title{Package with functions to enable easier code to access to DataMuster MongoDB Atlas servers}
 \usage{
-appcalvingupload(dalfID, cowID, date, weight, sex, brand, udder,
+appcalvingupload(calfID, cowID, date, weight, sex, brand, udder,
   frontteats, rearteats, comment, paddock, property, username = NULL,
   password = NULL)
 }
 \arguments{
+\item{calfID}{the management tag number assigned to the calf}
+
 \item{cowID}{the management tag number of the dam}
 
 \item{date}{the calving date}
@@ -34,8 +36,6 @@ appcalvingupload(dalfID, cowID, date, weight, sex, brand, udder,
 \item{username}{you will need to request access from Lauren O'Connor for a username to write data to the database}
 
 \item{password}{you will need to request access from Lauren O'Connor for a username to write data to the database}
-
-\item{calfID}{the management tag number assigned to the calf}
 }
 \value{
 uploads data in a dataframe to the DMMongoDB database

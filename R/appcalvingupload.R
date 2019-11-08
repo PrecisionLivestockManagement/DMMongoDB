@@ -30,14 +30,46 @@ appcalvingupload <- function(calfID, cowID, date, weight, sex, brand, udder, fro
   }
 
   pass <- sprintf("mongodb://%s:%s@datamuster-shard-00-00-8mplm.mongodb.net:27017,datamuster-shard-00-01-8mplm.mongodb.net:27017,datamuster-shard-00-02-8mplm.mongodb.net:27017/test?ssl=true&replicaSet=DataMuster-shard-0&authSource=admin", username, password)
+  cattle <- mongo(collection = "Cattle", db = "DataMuster", url = pass, verbose = T)
   calvingdata <- mongo(collection = "appcalving", db = "DMIoT", url = pass, verbose = T)
 
-  date <- as.Date(date, format = "%d/%m/%Y")
   weight <- ifelse(weight == "", 0, weight)
+  cowID <- gsub("-", "/", cowID) #All tags in the database are recorded with a / instead of a -
+
+  # Check dates are in the correct format
+
+  datepattern <- "[0-9]{2}/[0-9]{2}/[0-9]{4}"
+
+  checkdates <- grepl(datepattern,date)
+
+  if ("FALSE" %in% checkdates){
+    n <- which(checkdates == "FALSE")
+    problemdates <- date[n]
+
+    stop("The following Date/s are not in the correct format: ", paste(unlist(problemdates), collapse='     '))}else{
+    date <- as.Date(date, format = "%d/%m/%Y")
+  }
+
+
+  # Find cows in the database
+
+  checkIDS <- cowID[cowID != ""]
+  checkcows <- paste(unlist(checkIDS), collapse = '", "' )
+
+    filtercattle <- sprintf('{"properties.Management":{"$in":["%s"]}}', checkcows)
+    cows <- cattle$find(query = filtercattle, fields = '{"properties.Management":true, "stationname":true, "_id":false}')
+
+    cows <- cows%>%filter(stationname == property)
+
+    if (nrow(cows) < length(checkIDS)) {
+
+      problemcowtags <- as.character(checkIDS[!(checkIDS %in% cows$properties$Management)])
+
+      stop("The following Cow ID number/s cannot be found in the database: ", paste(unlist(problemcowtags), collapse='     '))}else{
 
   data <- sprintf('{"Date":{"$date":"%s"}, "Calf ID":"%s", "Weight":%s, "Sex":"%s", "Cow ID":"%s", "Brand":"%s", "Udder":"%s", "Front teats":"%s", "Rear teats":"%s", "Comment":"%s", "Paddock":"%s", "stationname":"%s", "createdAt":{"$date":"%s"}}',
                   paste0(substr(date,1,10),"T","00:00:00","+1000"), calfID, weight, sex, cowID, brand, udder, frontteats, rearteats, comment, paddock, property, paste0(substr(Sys.time(),1,10),"T",substr(Sys.time(),12,19),"+1000"))
 
-  calvingdata$insert(data)
+  calvingdata$insert(data)}
 
 }
