@@ -2,30 +2,29 @@
 #'
 #' This function adds individual or groups of cattle to the DataMuster database. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
 #' @name addcattle
-#' @param RFID this is a list of the cattle RFID numbers
-#' @param MTag this is a list of the cattle managemeny tag numbers
+#' @param RFID a list of the RFID number/s
+#' @param MTag a list of the management tag number/s
 #' @param category the class of animal (breeding or growing)
-#' @param property the name of the property to add the cattle
-#' @param paddock the name of the paddock to add the cattle
-#' @param weaned the weaned status of the animal. TRUE if cattle are weaned and FALSE if cattle are not weaned
-#' @param date provide the date that the animals were added, this has to be in date format. Default is today's date
+#' @param property the name of the property to add the animal/s
+#' @param paddock the name of the paddock to add the animal/s
+#' @param weaned TRUE if the animal/s are weaned or FALSE if animal/s are not weaned, default is TRUE
+#' @param date the date that the animal/s were added in date format, default is today's date
 #' @param breed the animal's breed
 #' @param brand the animal's brand
-#' @param horn the animal's horn status
-#' @param colour the animal's sex, male or female
-#' @param sex the animal's sex, male or female
-#' @param desexed the animal's desexed status, TRUE if castrated/spayed, FALSE if entire
-#' @param origin the animal's previous location
-#' @param DOB the animal's date of bith, this has to be in date format
-#' @param birthWeight the animal's weight at bith
+#' @param horn the animal's horn status (e.g. horn, poll, scur)
+#' @param colour the animal's colour
+#' @param sex the animal's sex (male or female)
+#' @param desexed TRUE if the animal/s are castrated/spayed or FALSE if the animal/s are entire, default is FALSE
+#' @param DOB the animal's date of bith in date format
+#' @param birthWeight the animal's weight at birth
 #' @param damRFID the dam's RFID number
 #' @param damMTag the dam's management tag number
 #' @param sireRFID the sire's RFID number
 #' @param sireMTag the sire's management tag number
-#' @param animalID this is a unique ID number
+#' @param animalID only applicable to a select few original animals, a unique database identification number
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
 #' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
-#' @return a message that indicates the RFID tag number has been successfully updated
+#' @return a message that indicates the cattle have been successfully updated
 #' @author Dave Swain \email{dave.swain@@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@@datamuster.net.au}
 #' @import mongolite
 #' @import keyring
@@ -33,7 +32,7 @@
 
 
 addcattle <- function(RFID, MTag, category, property, paddock, weaned, date=NULL, breed=NULL, brand=NULL,
-                      horn=NULL, colour=NULL, sex=NULL, desexed=NULL,  origin=NULL, DOB=NULL, birthWeight=NULL,
+                      horn=NULL, colour=NULL, sex=NULL, desexed=NULL,  DOB=NULL, birthWeight=NULL,
                       damRFID=NULL, damMTag=NULL, sireRFID=NULL, sireMTag=NULL, animalID=NULL, username=NULL, password=NULL){
 
   if(is.null(username)||is.null(password)){
@@ -48,7 +47,7 @@ addcattle <- function(RFID, MTag, category, property, paddock, weaned, date=NULL
     infs <- mongo(collection = "Infrastructure", db = "DataMuster", url = pass, verbose = T)
     culls <- mongo(collection = "Culls", db = "DataMuster", url = pass, verbose = T)
 
-    if(is.null(date)){date <- Sys.Date()}else{date <- as.POSIXct(date)}
+    if(is.null(date)){date <- Sys.Date()}else{date <- ymd(date) - hours(10)}
 
     if (length(date) == 1){date <- rep(date, length = length(RFID))}
 
@@ -62,7 +61,7 @@ addcattle <- function(RFID, MTag, category, property, paddock, weaned, date=NULL
 
 mandfields <- c("RFID","MTag","category","paddock","weaned","date") #excluding property
 
-optfields <- c("breed", "brand","horn","colour","sex","desexed","origin","DOB","birthWeight","damRFID",
+optfields <- c("breed", "brand","horn","colour","sex","desexed","DOB","birthWeight","damRFID",
                 "damMTag","sireRFID","sireMTag","animalID")
 
 i<-1
@@ -194,8 +193,7 @@ for (i in 1:length(optfields)){
       if (!(is.null(colour))){template$properties$colour <- tolower(colour[p])}
       if (!(is.null(sex))){template$properties$sex <- tolower(sex[p])}
       if (!(is.null(desexed))){template$properties$desexed <- desexed[p]}
-      if (!(is.null(origin))){template$properties$origin <- origin[p]}
-      if (!(is.null(DOB))){template$properties$birthDate <- as.POSIXct(DOB[p])}
+      if (!(is.null(DOB))){template$properties$birthDate <- ymd(DOB[p]) - hours(10)}
       if (!(is.null(birthWeight))){template$properties$birthWeight <- birthWeight[p]}
       if (!(is.null(animalID))){template$properties$animalID <- animalID[p]}
 
@@ -235,7 +233,7 @@ for (i in 1:length(optfields)){
         if (template$properties$damMTag == "xxxxxx"){
         template$properties$damMTag <- as.character(damMTag[p])
 
-        filterdam <- sprintf('{"properties.Management":"%s"}', damMTag[p])
+        filterdam <- sprintf('{"stationname":"%s", "properties.Management":"%s"}', property, damMTag[p])
         dam <- cattle$find(query = filterdam, fields = '{"_id":true, "RFID":true}')
 
         if (nrow(dam) == 0){
@@ -250,7 +248,7 @@ for (i in 1:length(optfields)){
         if (template$properties$sireMTag == "xxxxxx"){
           template$properties$sireMTag <- as.character(sireMTag[p])
 
-          filtersire <- sprintf('{"properties.Management":"%s"}', sireMTag[p])
+          filtersire <- sprintf('{"stationname":"%s", "properties.Management":"%s"}', property, sireMTag[p])
           sire <- cattle$find(query = filtersire, fields = '{"_id":true, "RFID":true}')
 
           if (nrow(sire) == 0){

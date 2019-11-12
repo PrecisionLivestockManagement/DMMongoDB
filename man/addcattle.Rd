@@ -6,43 +6,40 @@
 \usage{
 addcattle(RFID, MTag, category, property, paddock, weaned, date = NULL,
   breed = NULL, brand = NULL, horn = NULL, colour = NULL,
-  sex = NULL, desexed = NULL, origin = NULL, DOB = NULL,
-  birthWeight = NULL, damRFID = NULL, damMTag = NULL,
-  sireRFID = NULL, sireMTag = NULL, animalID = NULL,
-  username = NULL, password = NULL)
+  sex = NULL, desexed = NULL, DOB = NULL, birthWeight = NULL,
+  damRFID = NULL, damMTag = NULL, sireRFID = NULL, sireMTag = NULL,
+  animalID = NULL, username = NULL, password = NULL)
 }
 \arguments{
-\item{RFID}{this is a list of the cattle RFID numbers}
+\item{RFID}{a list of the RFID number/s}
 
-\item{MTag}{this is a list of the cattle managemeny tag numbers}
+\item{MTag}{a list of the management tag number/s}
 
 \item{category}{the class of animal (breeding or growing)}
 
-\item{property}{the name of the property to add the cattle}
+\item{property}{the name of the property to add the animal/s}
 
-\item{paddock}{the name of the paddock to add the cattle}
+\item{paddock}{the name of the paddock to add the animal/s}
 
-\item{weaned}{the weaned status of the animal. TRUE if cattle are weaned and FALSE if cattle are not weaned}
+\item{weaned}{TRUE if the animal/s are weaned or FALSE if animal/s are not weaned, default is TRUE}
 
-\item{date}{provide the date that the animals were added, this has to be in date format. Default is today's date}
+\item{date}{the date that the animal/s were added in date format, default is today's date}
 
 \item{breed}{the animal's breed}
 
 \item{brand}{the animal's brand}
 
-\item{horn}{the animal's horn status}
+\item{horn}{the animal's horn status (e.g. horn, poll, scur)}
 
-\item{colour}{the animal's sex, male or female}
+\item{colour}{the animal's colour}
 
-\item{sex}{the animal's sex, male or female}
+\item{sex}{the animal's sex (male or female)}
 
-\item{desexed}{the animal's desexed status, TRUE if castrated/spayed, FALSE if entire}
+\item{desexed}{TRUE if the animal/s are castrated/spayed or FALSE if the animal/s are entire, default is FALSE}
 
-\item{origin}{the animal's previous location}
+\item{DOB}{the animal's date of bith in date format}
 
-\item{DOB}{the animal's date of bith, this has to be in date format}
-
-\item{birthWeight}{the animal's weight at bith}
+\item{birthWeight}{the animal's weight at birth}
 
 \item{damRFID}{the dam's RFID number}
 
@@ -52,14 +49,14 @@ addcattle(RFID, MTag, category, property, paddock, weaned, date = NULL,
 
 \item{sireMTag}{the sire's management tag number}
 
-\item{animalID}{this is a unique ID number}
+\item{animalID}{only applicable to a select few original animals, a unique database identification number}
 
 \item{username}{if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring}
 
 \item{password}{if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access}
 }
 \value{
-a message that indicates the RFID tag number has been successfully updated
+a message that indicates the cattle have been successfully updated
 }
 \description{
 This function adds individual or groups of cattle to the DataMuster database. If you need assistance please email \email{info@datamuster.net.au} to seek help or suggest improvements.
