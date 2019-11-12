@@ -2,31 +2,31 @@
 % Please edit documentation in R/addnewpaddock.R
 \name{addnewpaddock}
 \alias{addnewpaddock}
-\title{Add a new paddock}
+\title{Add paddocks to the DataMuster database}
 \usage{
 addnewpaddock(property, filedir, filetype, paddockname = NULL,
   filename = NULL, username = NULL, password = NULL)
 }
 \arguments{
-\item{property}{this is the name of the property}
+\item{property}{the name of the property to add the paddocks}
 
-\item{filedir}{the location of the spatial file}
+\item{filedir}{the location of the spatial file containing the paddock coordinates}
 
 \item{filetype}{the type of spatial file (e.g. shp, kmz)}
 
-\item{paddockname}{this is the name of the paddock or paddocks. If NULL, the paddock will be named as the paddock number}
+\item{paddockname}{the name of the paddock/s, if NULL the paddock will be assigned a numeric name}
 
-\item{filename}{the name of the spatial file. If NULL, all spatial files in the directory will be read and added as paddocks}
+\item{filename}{the name of the spatial file, if NULL all spatial files in the directory will be read and added as paddocks}
 
 \item{username}{if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring}
 
 \item{password}{if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access}
 }
 \value{
-a message that indicates the paddock has been successfully updated
+a message that indicates the paddock/s have been successfully added
 }
 \description{
-This function adds a new paddock or paddocks to the DataMuster database. If you need assistance please email \email{info@datamuster.net.au} to seek help or suggest improvements.
+This function adds individual or groups of paddocks to the DataMuster database. If you need assistance please email \email{info@datamuster.net.au} to seek help or suggest improvements.
 }
 \author{
 Dave Swain \email{dave.swain@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@datamuster.net.au}

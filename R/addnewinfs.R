@@ -1,6 +1,6 @@
-#' Add new infrastructure
+#' Add infrastructure to the DataMuster database
 #'
-#' This function adds new infrastructure to the MongoDB database. You can only access this function if you have read and write permission
+#' This function adds new infrastructure to the DataMuster database. You can only access this function if you have read and write permission
 #' @name addnewinfs
 #' @param property the name of the property to add the infrastructure
 #' @param paddock the name of the paddock to add the infrastructure

@@ -2,7 +2,7 @@
 % Please edit documentation in R/addnewinfs.R
 \name{addnewinfs}
 \alias{addnewinfs}
-\title{Add new infrastructure}
+\title{Add infrastructure to the DataMuster database}
 \usage{
 addnewinfs(property, paddock, infstype, assetID, fileout = NULL,
   active = NULL, training = NULL, telemetry = NULL, date = NULL,
@@ -35,7 +35,7 @@ addnewinfs(property, paddock, infstype, assetID, fileout = NULL,
 message to say the infrastructure has been successfully added
 }
 \description{
-This function adds new infrastructure to the MongoDB database. You can only access this function if you have read and write permission
+This function adds new infrastructure to the DataMuster database. You can only access this function if you have read and write permission
 }
 \author{
 Dave Swain \email{dave.swain@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@datamuster.net.au}

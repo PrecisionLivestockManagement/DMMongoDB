@@ -2,7 +2,7 @@
 % Please edit documentation in R/addcattle.R
 \name{addcattle}
 \alias{addcattle}
-\title{Add cattle to DataMuster database}
+\title{Add cattle to the DataMuster database}
 \usage{
 addcattle(RFID, MTag, category, property, paddock, weaned, date = NULL,
   breed = NULL, brand = NULL, horn = NULL, colour = NULL,

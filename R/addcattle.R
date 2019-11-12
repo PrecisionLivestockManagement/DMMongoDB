@@ -1,4 +1,4 @@
-#' Add cattle to DataMuster database
+#' Add cattle to the DataMuster database
 #'
 #' This function adds individual or groups of cattle to the DataMuster database. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
 #' @name addcattle

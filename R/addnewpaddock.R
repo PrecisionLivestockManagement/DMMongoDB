@@ -1,15 +1,15 @@
-#' Add a new paddock
+#' Add paddocks to the DataMuster database
 #'
-#' This function adds a new paddock or paddocks to the DataMuster database. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
+#' This function adds individual or groups of paddocks to the DataMuster database. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
 #' @name addnewpaddock
-#' @param property this is the name of the property
-#' @param paddockname this is the name of the paddock or paddocks. If NULL, the paddock will be named as the paddock number
-#' @param filedir the location of the spatial file
-#' @param filename the name of the spatial file. If NULL, all spatial files in the directory will be read and added as paddocks
+#' @param property the name of the property to add the paddocks
+#' @param paddockname the name of the paddock/s, if NULL the paddock will be assigned a numeric name
+#' @param filedir the location of the spatial file containing the paddock coordinates
+#' @param filename the name of the spatial file, if NULL all spatial files in the directory will be read and added as paddocks
 #' @param filetype the type of spatial file (e.g. shp, kmz)
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
 #' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
-#' @return a message that indicates the paddock has been successfully updated
+#' @return a message that indicates the paddock/s have been successfully added
 #' @author Dave Swain \email{dave.swain@@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@@datamuster.net.au}
 #' @import mongolite
 #' @import keyring
