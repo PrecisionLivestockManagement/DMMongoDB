@@ -9,18 +9,34 @@ addnewinfs(property, paddock, infstype, assetID, fileout = NULL,
   username = NULL, password = NULL)
 }
 \arguments{
-\item{property}{name of the property to be added}
+\item{property}{the name of the property to add the infrastructure}
+
+\item{paddock}{the name of the paddock to add the infrastructure}
+
+\item{infstype}{the type of infrastructure (e.g. Walk-over-Weighing Unit, EID Reader, Water sensor)}
+
+\item{assetID}{the asset identification of the infrastructure}
+
+\item{fileout}{TRUE if the data is written to file or FALSE if the data is sent direct to the DataMuster database, default is FALSE.}
+
+\item{active}{TRUE if the infrastructure is actively recording data or FALSE if the infrastructure is not yet recording data, default is TRUE.}
+
+\item{training}{only applicable for Walk-over-Weighing Units, TRUE if the herd is currently under training or FALSE if the herd is already trained, default is FALSE.}
+
+\item{telemetry}{only applicable for Walk-over-Weighing Units, TRUE if the Unit emits an hourly telemetry signal or FALSE if the Unit does not emit an hourly telemetry signal, default is FALSE.}
+
+\item{date}{the date that the infrastructure was installed in date format, default is today's date.}
 
 \item{username}{if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring}
 
-\item{password}{if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access}
+\item{password}{if you include a username you will also need to add a password, contact Lauren O'Connor if you don't have access}
 }
 \value{
-message to say the user has been successfully added
+message to say the infrastructure has been successfully added
 }
 \description{
 This function adds new infrastructure to the MongoDB database. You can only access this function if you have read and write permission
 }
 \author{
-Lauren O'Connor \email{lauren.oconnor@datamuster.net.au}
+Dave Swain \email{dave.swain@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@datamuster.net.au}
 }

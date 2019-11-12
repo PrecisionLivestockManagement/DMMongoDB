@@ -4,26 +4,25 @@
 \alias{updatecalvinginfo}
 \title{Update cow calving information to DataMuster database}
 \usage{
-updatecalvinginfo(RFID = NULL, MTag = NULL, property,
-  calfRFID = NULL, calfMTag = NULL, birthDate = NULL,
+updatecalvinginfo(MTag, calfMTag, property, birthDate = NULL,
   username = NULL, password = NULL)
 }
 \arguments{
-\item{RFID}{this is a list of the cow RFID numbers}
-
 \item{MTag}{this is a list of the cow management tag numbers}
 
-\item{property}{the name of the property to add the cattle}
-
-\item{calfRFID}{the calf's RFID number}
-
 \item{calfMTag}{the calf's management tag number}
+
+\item{property}{the name of the property to add the cattle}
 
 \item{birthDate}{the cow's date of calving, this has to be in date format}
 
 \item{username}{if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring}
 
 \item{password}{if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access}
+
+\item{RFID}{this is a list of the cow RFID numbers}
+
+\item{calfRFID}{the calf's RFID number}
 }
 \value{
 a message that indicates the RFID tag number has been successfully updated

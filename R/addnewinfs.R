@@ -2,11 +2,19 @@
 #'
 #' This function adds new infrastructure to the MongoDB database. You can only access this function if you have read and write permission
 #' @name addnewinfs
-#' @param property name of the property to be added
+#' @param property the name of the property to add the infrastructure
+#' @param paddock the name of the paddock to add the infrastructure
+#' @param infstype the type of infrastructure (e.g. Walk-over-Weighing Unit, EID Reader, Water sensor)
+#' @param assetID the asset identification of the infrastructure
+#' @param fileout TRUE if the data is written to file or FALSE if the data is sent direct to the DataMuster database, default is FALSE.
+#' @param active TRUE if the infrastructure is actively recording data or FALSE if the infrastructure is not yet recording data, default is TRUE.
+#' @param training only applicable for Walk-over-Weighing Units, TRUE if the herd is currently under training or FALSE if the herd is already trained, default is FALSE.
+#' @param telemetry only applicable for Walk-over-Weighing Units, TRUE if the Unit emits an hourly telemetry signal or FALSE if the Unit does not emit an hourly telemetry signal, default is FALSE.
+#' @param date the date that the infrastructure was installed in date format, default is today's date.
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
-#' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
-#' @return message to say the user has been successfully added
-#' @author Lauren O'Connor \email{lauren.oconnor@@datamuster.net.au}
+#' @param password if you include a username you will also need to add a password, contact Lauren O'Connor if you don't have access
+#' @return message to say the infrastructure has been successfully added
+#' @author Dave Swain \email{dave.swain@@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@@datamuster.net.au}
 #' @import mongolite
 #' @import keyring
 #' @export
