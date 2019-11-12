@@ -1,15 +1,18 @@
-#' Add new user
+#' Add a new station to the DataMuster database
 #'
-#' This function adds a new user to the MongoDB database. You can only access this function if you have read and write permission
+#' This function adds a new station to the DataMuster database. You can only access this function if you have read and write permission
 #' @name addnewstation
-#' @param stationname name of the property to be added
-#' @param stationshortname a shortened name of the property to be added
-#' @param lat latitude coordinate of a point on the property
-#' @param long longitude coordinate of a point on the property
+#' @param stationname the name of the property
+#' @param stationshortname a shortened stationname
+#' @param lat the latitude of a coordinate point to locate the property
+#' @param long the longitude of a coordinate point to locate the property
+#' @param ha the area of the staion in hectares, default is 100 ha
+#' @param PIC the Property Identification Code
+#' @param timezone the local timezone, default is Australia/Brisbane
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
 #' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
-#' @return message to say the user has been successfully added
-#' @author Lauren O'Connor \email{lauren.oconnor@@datamuster.net.au}
+#' @return message to say the station has been successfully added
+#' @author Dave Swain \email{dave.swain@@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@@datamuster.net.au}
 #' @import mongolite
 #' @import keyring
 #' @export
