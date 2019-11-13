@@ -45,13 +45,22 @@ addcattle <- function(RFID, MTag, category, property, paddock, weaned, date=NULL
     stations <- mongo(collection = "Stations", db = "DataMuster", url = pass, verbose = T)
     paddocks <- mongo(collection = "Paddocks", db = "DataMuster", url = pass, verbose = T)
     infs <- mongo(collection = "Infrastructure", db = "DataMuster", url = pass, verbose = T)
-    culls <- mongo(collection = "Culls", db = "DataMuster", url = pass, verbose = T)
 
-    if(is.null(date)){date <- Sys.Date()}else{date <- ymd(date) - hours(10)}
+    if(is.null(date)){date <- Sys.Date()}
 
     if (length(date) == 1){date <- rep(date, length = length(RFID))}
 
+    date <- as.character(date)
+    date <- as.POSIXct(date, format="%Y-%m-%d", tz = "GMT")
+    date <- date - as.difftime(10, unit="hours")
+    #attributes(date)$tzone <- "Australia/Brisbane"
 
+    if (!is.null(DOB)){
+    DOB <- as.character(DOB)
+    DOB <- as.POSIXct(DOB, format="%Y-%m-%d", tz = "GMT")
+    DOB <- DOB - as.difftime(10, unit="hours")
+    #attributes(DOB)$tzone <- "Australia/Brisbane"
+    }
 
     #  Create template dataframes --------------------------
 
@@ -193,7 +202,7 @@ for (i in 1:length(optfields)){
       if (!(is.null(colour))){template$properties$colour <- tolower(colour[p])}
       if (!(is.null(sex))){template$properties$sex <- tolower(sex[p])}
       if (!(is.null(desexed))){template$properties$desexed <- desexed[p]}
-      if (!(is.null(DOB))){template$properties$birthDate <- ymd(DOB[p]) - hours(10)}
+      if (!(is.null(DOB))){template$properties$birthDate <- DOB[p]}
       if (!(is.null(birthWeight))){template$properties$birthWeight <- birthWeight[p]}
       if (!(is.null(animalID))){template$properties$animalID <- animalID[p]}
 
