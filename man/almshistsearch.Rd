@@ -12,9 +12,9 @@ almshistsearch(property = NULL, alms = NULL, start = NULL,
 
 \item{alms}{this is the asset_id of an ALMS or list of ALMS asset_id's as character entries, if no value is entered then all alms units for the property are loaded}
 
-\item{start}{provide a start date to be returned, this has to be in date format.}
+\item{start}{provide a start date to be returned, in date format.}
 
-\item{end}{provide a end date to be returned, this has to be in date format.}
+\item{end}{provide a end date to be returned, in date format.}
 
 \item{username}{if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring}
 
