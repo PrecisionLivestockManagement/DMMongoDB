@@ -13,7 +13,6 @@
 #' @author Dave Swain \email{dave.swain@@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@@datamuster.net.au}
 #' @import mongolite
 #' @import keyring
-#' @import sf
 #' @import rgdal
 #' @import leafletR
 #' @export

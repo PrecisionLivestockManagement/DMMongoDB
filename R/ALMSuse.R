@@ -1,12 +1,11 @@
-#' Package with functions to enable easier code to access to DataMuster MongoDB Atlas servers
+#' Retrieve data on cattle ALMS use from the DataMuster database
 #'
-#' This function provides a list of cattle
-#' usage of an ALMS unit for a property from MongoDB. Inputs need to be a list of one or more property names and if only one property a paddock name can be included
+#' This function provides a list of cattle usage, by date, of ALMS units for a property. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
 #' @name ALMSuse
-#' @param property the name of the property to search the DataMuster MongoDB Atlas server
+#' @param property the name of the property to query
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
 #' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
-#' @return a dataframe with a list of the cattle numbers associated with the ALMS and the number of cattle recorded
+#' @return a dataframe of the cattle RFID numbers and ALMS visit count per day (0 = no visit, 1 = visit)
 #' @author Dave Swain \email{dave.swain@@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@@datamuster.net.au}
 #' @import mongolite
 #' @import keyring
@@ -14,7 +13,7 @@
 #' @export
 
 
-ALMSuse <- function(property, username = NULL, password = NULL){
+ALMSuse <- function(property, username=NULL, password=NULL){
 
   if(is.null(username)||is.null(password)){
   username = keyring::key_list("DMMongoDB")[1,2]

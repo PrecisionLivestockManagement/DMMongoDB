@@ -2,30 +2,29 @@
 % Please edit documentation in R/almshistsearch.R
 \name{almshistsearch}
 \alias{almshistsearch}
-\title{Package with functions to enable easier code to access to DataMuster MongoDB Atlas servers}
+\title{Retrieve data on cattle allocations to ALMS units from the DataMuster database}
 \usage{
 almshistsearch(property = NULL, alms = NULL, start = NULL,
   end = NULL, username = NULL, password = NULL)
 }
 \arguments{
-\item{property}{the name of the property to search the DataMuster MongoDB Atlas server}
+\item{property}{the name of the property to query}
 
-\item{alms}{this is the asset_id of an ALMS or list of ALMS asset_id's as character entries, if no value is entered then all alms units for the property are loaded}
+\item{alms}{a list of the ALMS asset_id's as character entries, if NULL all ALMS units for the property are loaded}
 
-\item{start}{provide a start date to be returned, in date format.}
+\item{start}{a start date to be returned in date format, default is "2015-01-01"}
 
-\item{end}{provide a end date to be returned, in date format.}
+\item{end}{an end date to be returned in date format, default is today's date}
 
 \item{username}{if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring}
 
 \item{password}{if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access}
 }
 \value{
-a dataframe with a list of the RFID numbers and alms history
+a dataframe with a list of the cattle RFID numbers and dates on/off the ALMS unit/s
 }
 \description{
-This function provides a list of cattle
-for a property from MongoDB including life data. Inputs need to be a list of one or more property names and if only one property a paddock name can be included
+This function provides a list of cattle that have been allocated to ALMS units during specified time periods for a property. If you need assistance please email \email{info@datamuster.net.au} to seek help or suggest improvements.
 }
 \author{
 Dave Swain \email{dave.swain@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@datamuster.net.au}
