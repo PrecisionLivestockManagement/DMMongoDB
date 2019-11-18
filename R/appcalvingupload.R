@@ -1,24 +1,25 @@
-#' Package with functions to enable easier code to access to DataMuster MongoDB Atlas servers
+#' Upload calving data to the DataMuster database
 #'
-#' This function allows calving data to be uploaded from the DataMuster website
+#' This function allows calving data to be uploaded via the DataMuster website
 #' @name appcalvingupload
-#' @param date the calving date
-#' @param calfID the management tag number assigned to the calf
-#' @param weight the birth weight of the calf
-#' @param sex the sex of the calf
-#' @param cowID the management tag number of the dam
-#' @param brand the dam's brand
-#' @param udder the udder score of the dam
-#' @param frontteats the teat score of the dam's front teats
-#' @param rearteats the teat score of the dam's rear teats
-#' @param comment observations made by the stationhand as txt
-#' @param paddock the paddock the dam calved in
-#' @param property the property that the dam calved on
-#' @param username you will need to request access from Lauren O'Connor for a username to write data to the database
-#' @param password you will need to request access from Lauren O'Connor for a username to write data to the database
-#' @return uploads data in a dataframe to the DMMongoDB database
+#' @param date a list of the calving dates in date format
+#' @param calfID a list of calf management tag number/s
+#' @param weight a list of calf birth weights
+#' @param sex the calf's sex (male or female)
+#' @param cowID a list of cow management tag number/s
+#' @param brand the cow's brand
+#' @param udder the cow's udder score
+#' @param frontteats the cow's front teat score
+#' @param rearteats the cow's rear teat score
+#' @param comment observations made by the stationhand as a character entry
+#' @param paddock the name of the calving paddock
+#' @param property the name of the property
+#' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
+#' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
+#' @return a message that indicates the data has been successfully uploaded
 #' @author Dave Swain \email{dave.swain@@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@@datamuster.net.au}
 #' @import mongolite
+#' @import keyring
 #' @export
 
 

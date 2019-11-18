@@ -2,46 +2,46 @@
 % Please edit documentation in R/appcalvingupload.R
 \name{appcalvingupload}
 \alias{appcalvingupload}
-\title{Package with functions to enable easier code to access to DataMuster MongoDB Atlas servers}
+\title{Upload calving data to the DataMuster database}
 \usage{
 appcalvingupload(calfID, cowID, date, weight, sex, brand, udder,
   frontteats, rearteats, comment, paddock, property, username = NULL,
   password = NULL)
 }
 \arguments{
-\item{calfID}{the management tag number assigned to the calf}
+\item{calfID}{a list of calf management tag number/s}
 
-\item{cowID}{the management tag number of the dam}
+\item{cowID}{a list of cow management tag number/s}
 
-\item{date}{the calving date}
+\item{date}{a list of the calving dates in date format}
 
-\item{weight}{the birth weight of the calf}
+\item{weight}{a list of calf birth weights}
 
-\item{sex}{the sex of the calf}
+\item{sex}{the calf's sex (male or female)}
 
-\item{brand}{the dam's brand}
+\item{brand}{the cow's brand}
 
-\item{udder}{the udder score of the dam}
+\item{udder}{the cow's udder score}
 
-\item{frontteats}{the teat score of the dam's front teats}
+\item{frontteats}{the cow's front teat score}
 
-\item{rearteats}{the teat score of the dam's rear teats}
+\item{rearteats}{the cow's rear teat score}
 
-\item{comment}{observations made by the stationhand as txt}
+\item{comment}{observations made by the stationhand as a character entry}
 
-\item{paddock}{the paddock the dam calved in}
+\item{paddock}{the name of the calving paddock}
 
-\item{property}{the property that the dam calved on}
+\item{property}{the name of the property}
 
-\item{username}{you will need to request access from Lauren O'Connor for a username to write data to the database}
+\item{username}{if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring}
 
-\item{password}{you will need to request access from Lauren O'Connor for a username to write data to the database}
+\item{password}{if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access}
 }
 \value{
-uploads data in a dataframe to the DMMongoDB database
+a message that indicates the data has been successfully uploaded
 }
 \description{
-This function allows calving data to be uploaded from the DataMuster website
+This function allows calving data to be uploaded via the DataMuster website
 }
 \author{
 Dave Swain \email{dave.swain@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@datamuster.net.au}
