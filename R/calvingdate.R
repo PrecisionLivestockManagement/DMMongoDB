@@ -1,14 +1,12 @@
-#' Cattle static weights
+#' Retrieve data on calving from the DataMuster database
 #'
-#' This function pulls in daily weights for individual or groups of cattle for specified periods. It searches based on a list of RFID values. It is recommended that you use the propsearch function to find a list of cattle RFID numbers for a particular property. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
+#' This function pulls in calving data for individual or groups of cattle. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
 #' @name calvingdate
-#' @param RFID this is a list of cattle RFID numbers
-#' @param start provide a start date to be returned, this has to be in date format.
-#' @param end provide a end date to be returned, this has to be in date format.
-#' @param values this is the minimum number of weight values that need to be recorded to be uploaded. The default is to load all animals that have at least one value.
+#' @param RFID a list of cattle RFID numbers
+#' @param values the minimum number of calving date values required, default 1
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
 #' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
-#' @return A list that includes a list of the RFID numbers that have been returned, the list of cattle stations that are associated with these RFID numbers and a dataframe for each RFID number that provides date and daily weights for each animal. Please note daily ALMS records are not reliable indicators of cattle weights, the weekly average data is much more reliable. However, the daily values can be useful to identify fine scale changes in weight associated with calving events. The daily data is also available for researchers to identify improved weekly averaging algorithms based on the daily data.
+#' @return a list of RFID numbers and associated calving dates
 #' @author Dave Swain \email{dave.swain@@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@@datamuster.net.au}
 #' @import mongolite
 #' @import keyring

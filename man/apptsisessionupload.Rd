@@ -2,40 +2,40 @@
 % Please edit documentation in R/apptsisessionupload.R
 \name{apptsisessionupload}
 \alias{apptsisessionupload}
-\title{Package with functions to enable easier code to access to DataMuster MongoDB Atlas servers}
+\title{Upload Gallagher TSi session data to the DataMuster database}
 \usage{
 apptsisessionupload(Tag, EID, date, liveweight, property, NLIS = NULL,
   pdkfrom = NULL, pdkto = NULL, notes = NULL, username = NULL,
   password = NULL)
 }
 \arguments{
-\item{Tag}{the RFID number as txt}
+\item{Tag}{a list of cattle management tag numbers}
 
-\item{EID}{the RFID number as txt}
+\item{EID}{a list of cattle RFID numbers}
 
-\item{date}{the RFID number as txt}
+\item{date}{a list of dates in date format}
 
-\item{liveweight}{the RFID number as txt}
+\item{liveweight}{a list of cattle weights}
 
-\item{property}{the RFID number as txt}
+\item{property}{the name of the property}
 
-\item{NLIS}{the RFID number as txt}
+\item{NLIS}{a list of cattle RFID numbers}
 
-\item{pdkfrom}{in correct format}
+\item{pdkfrom}{a list of paddock names the cattle have moved from}
 
-\item{pdkto}{in correct format}
+\item{pdkto}{a list of paddock names the cattle have moved to}
 
-\item{notes}{in correct format}
+\item{notes}{observations made by the stationhand as a character entry}
 
-\item{username}{you will need to request access from Lauren O'Connor for a username to write data to the database}
+\item{username}{if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring}
 
-\item{password}{you will need to request access from Lauren O'Connor for a username to write data to the database}
+\item{password}{if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access}
 }
 \value{
-uploads data in a dataframe to the DMMongoDB database
+a message that indicates the data has been successfully uploaded
 }
 \description{
-This function allows Gallagher TSi session data to be uploaded from the DataMuster website
+This function allows Gallagher TSi session data to be uploaded via the DataMuster website
 }
 \author{
 Dave Swain \email{dave.swain@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@datamuster.net.au}

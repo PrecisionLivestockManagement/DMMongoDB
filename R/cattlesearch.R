@@ -1,12 +1,11 @@
-#' Package with functions to enable easier code to access to DataMuster MongoDB Atlas servers
+#' Retrieve data on cattle from the DataMuster database
 #'
-#' This function provides details for a list of cattle
-#' RFID numbers from MongoDB. Inputs need to be a list of one or more RFID numbers
+#' This function provides a list of cattle RFID numbers with associated general information (category, breed, sex, property, paddock, database status). If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
 #' @name cattlesearch
-#' @param RFID the list of RFID numbers to search the DataMuster MongoDB Atlas server
+#' @param RFID a list of cattle RFID numbers to query
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
 #' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
-#' @return a dataframe with a list of the RFID numbers, associated management tags and current paddocks the cattle are in
+#' @return a dataframe with a list of the RFID numbers and associated information
 #' @author Dave Swain \email{dave.swain@@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@@datamuster.net.au}
 #' @import mongolite
 #' @import keyring

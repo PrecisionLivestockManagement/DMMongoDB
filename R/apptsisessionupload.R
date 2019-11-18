@@ -1,19 +1,19 @@
-#' Package with functions to enable easier code to access to DataMuster MongoDB Atlas servers
+#' Upload Gallagher TSi session data to the DataMuster database
 #'
-#' This function allows Gallagher TSi session data to be uploaded from the DataMuster website
+#' This function allows Gallagher TSi session data to be uploaded via the DataMuster website
 #' @name apptsisessionupload
-#' @param Tag the RFID number as txt
-#' @param EID the RFID number as txt
-#' @param date the RFID number as txt
-#' @param liveweight the RFID number as txt
-#' @param property the RFID number as txt
-#' @param NLIS the RFID number as txt
-#' @param pdkfrom in correct format
-#' @param pdkto in correct format
-#' @param notes in correct format
-#' @param username you will need to request access from Lauren O'Connor for a username to write data to the database
-#' @param password you will need to request access from Lauren O'Connor for a username to write data to the database
-#' @return uploads data in a dataframe to the DMMongoDB database
+#' @param Tag a list of cattle management tag numbers
+#' @param EID a list of cattle RFID numbers
+#' @param date a list of dates in date format
+#' @param liveweight a list of cattle weights
+#' @param property the name of the property
+#' @param NLIS a list of cattle RFID numbers
+#' @param pdkfrom a list of paddock names the cattle have moved from
+#' @param pdkto a list of paddock names the cattle have moved to
+#' @param notes observations made by the stationhand as a character entry
+#' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
+#' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
+#' @return a message that indicates the data has been successfully uploaded
 #' @author Dave Swain \email{dave.swain@@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@@datamuster.net.au}
 #' @import mongolite
 #' @export

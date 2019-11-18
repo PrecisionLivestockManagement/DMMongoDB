@@ -1,16 +1,16 @@
-#' Calculate Cattle weekly weights
+#' Retrieve data on cattle ALMS weekly weights from the DataMuster database
 #'
-#' This function pulls in the daily weights weights for individual or groups of cattle for specified periods and calculates average weekly weights. It searches based on a list of RFID values. It is recommended that you use the propsearch function to find a list of cattle RFID numbers for a particular property. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
+#' This function calculates average weekly weights from daily ALMS weights for individual or groups of cattle. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
 #' @name calcweeklywts
-#' @param RFID this is a list of cattle RFID numbers
-#' @param start provide a start date to be returned, this has to be in date format.
-#' @param end provide a end date to be returned, this has to be in date format.
-#' @param values this is the minimum number of weight values that need to included to calculate an average weekly weight. The default is 4.
-#' @param sd this is the minimin standard deviation between daily weight values needed to calculate an average weekly weight. The default is 25.
-#' @param remove.duplicates if TRUE, duplicate date time values are removed from the weekly weight calculation. The default is TRUE.
+#' @param RFID a list of cattle RFID numbers
+#' @param start a start date to be returned in date format.
+#' @param end an end date to be returned in date format.
+#' @param values the minimum number of daily weight values required to calculate an average weekly weight, default is 4
+#' @param s.d the minimin standard deviation between daily weight values required to calculate an average weekly weight, default is 25
+#' @param remove.duplicates TRUE if duplicate date time values are to removed from the weekly weight calculation or FALSE if all values are to be included, default is TRUE
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
 #' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
-#' @return A dataframe of weekly weight statistics for each RFID number.
+#' @return a dataframe of cattle RFID numbers and weekly weight statistics
 #' @author Dave Swain \email{dave.swain@@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@@datamuster.net.au}
 #' @import mongolite
 #' @import keyring
@@ -19,7 +19,7 @@
 #' @export
 
 
-calcweeklywts <- function(RFID, start = NULL, end = NULL, values = NULL, s.d = NULL, remove.duplicates = NULL, username = NULL, password = NULL){
+calcweeklywts <- function(RFID, start=NULL, end=NULL, values=NULL, s.d=NULL, remove.duplicates=NULL, username=NULL, password=NULL){
 
 
   if(is.null(username) || is.null(password)){
