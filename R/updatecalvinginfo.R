@@ -52,8 +52,10 @@ updatecalvinginfo <- function(MTag, calfMTag, property, birthDate=NULL, username
 
         problemcowtags <- as.character(MTag[!(MTag %in% cows$properties$Management)])
 
+        if (length(problemcowtags) != 0){ #Indicates they are not in the database
+
         stop(paste0("The following MTag numbers cannot be found in the database. Please check that the MTag numbers are correct and try again: "), problemcowtags)}
-    }
+    }}
 
 # Find calves in the database
 
