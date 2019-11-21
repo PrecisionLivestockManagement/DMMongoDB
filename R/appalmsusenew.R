@@ -32,9 +32,13 @@ appalmsusenew <- function(property, start=NULL, end=NULL, username = NULL, passw
 
   cows <- propsearchfull(property, archives = TRUE, username = username, password = password)
 
+  cows <- cows%>%
+          filter(RFID != "xxx xxxxxxxxxxxx")
+
   cattlehistory <- almshistsearch(property, start = start, end = end, username = username, password = password)
 
   cattlehistory <- bind_rows(cattlehistory$ALMSHistory, .id = "RFID")%>%
+    filter(RFID != "xxx xxxxxxxxxxxx")%>%
     mutate(dateOFF = as.character(dateOFF),
            dateOFF = ifelse(is.na(dateOFF), as.character(Sys.Date()), dateOFF))
 
@@ -67,7 +71,7 @@ appalmsusenew <- function(property, start=NULL, end=NULL, username = NULL, passw
     usehistory$Count <- ifelse(paste0(usehistory$RFID, usehistory$Date) %in% paste0(cattleweights$RFID, cattleweights$Date), 1, 0)
 
     cattleinfo <- left_join(usehistory, cows, by = "RFID")%>%
-      select(Date, Property, ALMS.x, RFID, category, sex, Count)%>%
+      select(Date, Property, ALMS.x, RFID, Management, category, sex, Count)%>%
       rename(ALMS = "ALMS.x", Category = "category", Sex = "sex")
   }
 
