@@ -51,7 +51,10 @@ dailywts <- function(RFID, start=NULL, end=NULL, values=NULL, username=NULL, pas
     #This is the section where we can apply further filters based on breed, class, etc.
 
     if(nrow(dailywts)<values){jan2$RFID[[i]] <- "xxxx"}
-    else{cattleinfo[[jan2$RFID[i]]] <- as.data.frame(dailywts)}
+    else{
+
+      dailywts <- dailywts[order(dailywts$Date),]
+      cattleinfo[[jan2$RFID[i]]] <- as.data.frame(dailywts)}
   }
 
   RFID <- jan2[which(jan2$RFID!="xxxx"),]
