@@ -42,7 +42,7 @@ calcweeklywts <- function(RFID, start=NULL, end=NULL, values=NULL, s.d=NULL, rem
 
   RFID <- paste(unlist(RFID), collapse = '", "' )
 
-  tempwts <- dailywts(RFID, start, end)
+  tempwts <- dailywtsNEW(RFID, start, end)
 
   filterstation <- sprintf('{"RFID":{"$in":["%s"]}}', RFID)
   jan <- cattle$find(query = filterstation, fields='{"RFID":true, "stationname":true, "pdkhist.dateIN":true, "pdkhist.name":true, "_id":false}')
@@ -64,10 +64,13 @@ calcweeklywts <- function(RFID, start=NULL, end=NULL, values=NULL, s.d=NULL, rem
 
           if (end1 < end) {
 
-        wts <- tempwts$DailyWeights[[k]] %>% filter(between(as.Date(Date, tz = "Australia/Brisbane"), start1, end1))
+        wts <- tempwts$DailyWeights[[k]] %>% filter(between(as.Date(datetime, tz = "Australia/Brisbane"), start1, end1))
 
-        if(remove.duplicates == "FALSE") {stuck <- wts$Weight} else {
-          stuck <- wts$Weight[!duplicated(wts$Date)]}
+        wts <- wts%>%
+               filter(Wt != 0)
+
+        if(remove.duplicates == "FALSE") {stuck <- wts$Wt} else {
+          stuck <- wts$Wt[!duplicated(wts$datetime)]}
 
         for(i in 1:length(stuck)){if(length(stuck) < values){break}else{
           if(sd(stuck) > s.d){stuck <- rm.outlier(stuck)}else
@@ -79,7 +82,7 @@ calcweeklywts <- function(RFID, start=NULL, end=NULL, values=NULL, s.d=NULL, rem
 
           data <- data.frame(Date = as.character(end1), avweight = round(tup2,1), sdweights = round(tup1,1), numweights = tup3)
 
-          n <- tail(which(pdhist$dateIN[[1]] < as.Date(data$Date)),1)
+          n <- tail(which(as.Date(pdhist$dateIN[[1]]) < as.Date(data$Date)),1)
           data$paddock <- ifelse(length(n) ==1, pdhist$name[[1]][n], NA)
           #data$paddock <- pdhist$name[[1]][n]
 
