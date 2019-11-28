@@ -53,14 +53,14 @@ dailywtsNEW <- function(RFID, start=NULL, end=NULL, values=NULL, username=NULL, 
 
   cattlewts <- setNames(data.frame(matrix(ncol = 2, nrow = nrow(wts))), c("Date", "Weight"))
 
-   if(nrow(wts)<values){cows$RFID[i] <- "xxxx"}else{
+   if(nrow(cattlewts)<values){cows$RFID[i] <- "xxxx"}else{
 
     cattlewts$Date <- as.POSIXct(strptime(wts$datetime, format = "%Y-%m-%d %H:%M:%S", tz = "Australia/Brisbane"))
     cattlewts$Weight <- wts$Wt
 
-    wts <- wts[order(wts$datetime),]
+    cattlewts <- cattlewts[order(cattlewts$Date),]
 
-    cattleinfo[[cows$RFID[i]]] <- as.data.frame(wts)}
+    cattleinfo[[cows$RFID[i]]] <- as.data.frame(cattlewts)}
   }
 
   RFID <- cows[which(cows$RFID!="xxxx"),]
