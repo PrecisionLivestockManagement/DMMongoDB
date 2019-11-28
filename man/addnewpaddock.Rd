@@ -14,7 +14,7 @@ addnewpaddock(property, filetype, filedir = NULL, paddockname = NULL,
 
 \item{filedir}{the location of the spatial file containing the paddock coordinates}
 
-\item{paddockname}{the name of the paddock/s, if NULL the paddock will be assigned a numeric name}
+\item{paddockname}{the name of the paddock/s, if NULL the paddock will be assigned a numeric name, if "filename" the name of the file will be assigned}
 
 \item{filename}{the name of the spatial file, if NULL all spatial files in the directory will be read and added as paddocks}
 

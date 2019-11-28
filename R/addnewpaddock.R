@@ -3,7 +3,7 @@
 #' This function adds individual or groups of paddocks to the DataMuster database. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
 #' @name addnewpaddock
 #' @param property the name of the property to add the paddocks
-#' @param paddockname the name of the paddock/s, if NULL the paddock will be assigned a numeric name
+#' @param paddockname the name of the paddock/s, if NULL the paddock will be assigned a numeric name, if "filename" the name of the file will be assigned
 #' @param filedir the location of the spatial file containing the paddock coordinates
 #' @param filename the name of the spatial file, if NULL all spatial files in the directory will be read and added as paddocks
 #' @param filetype the type of spatial file (e.g. shp, kmz, coords), if inputting raw coordinates they must be listed in pairs with long first then lat, if in decimal degrees minutes they must be in the format "35d9'58.12\"S"  "66d40'42.74\"W"
@@ -59,6 +59,8 @@ addnewpaddock <- function(property, filetype, filedir=NULL, paddockname=NULL, fi
 
       if(is.null(filename)){filename <- list.files(path = filedir, pattern = ".kmz")}
 
+      if(paddockname == "filename"){paddockname <- sub("\\..*","",filename)}
+
       for (i in 1:length(filename)){
 
         file <- filename[i]
@@ -80,7 +82,7 @@ addnewpaddock <- function(property, filetype, filedir=NULL, paddockname=NULL, fi
 
         #Add paddname and paddnum to the template dataframe and insert into the database
         count <- paddocks$count(query = sprintf('{"stationname":"%s"}', property))
-        template$paddname <- ifelse(is.null(paddockname), as.character(count+1), paddockname)
+        template$paddname <- ifelse(is.null(paddockname), as.character(count+1), paddockname[i])
         template$paddnum <- as.integer(count+1)
         template$properties$hectares <- area
         paddocks$insert(template)
@@ -97,6 +99,8 @@ addnewpaddock <- function(property, filetype, filedir=NULL, paddockname=NULL, fi
     if(filetype == "kml"){
 
       if(is.null(filename)){filename <- list.files(path = filedir, pattern = ".kml")}
+
+      if(paddockname == "filename"){paddockname <- sub("\\..*","",filename)}
 
       for (i in 1:length(filename)){
 
@@ -119,7 +123,7 @@ addnewpaddock <- function(property, filetype, filedir=NULL, paddockname=NULL, fi
 
         #Add paddname and paddnum to the template dataframe and insert into the database
         count <- paddocks$count(query = sprintf('{"stationname":"%s"}', property))
-        template$paddname <- ifelse(is.null(paddockname), as.character(count+1), paddockname)
+        template$paddname <- ifelse(is.null(paddockname), as.character(count+1), paddockname[i])
         template$paddnum <- as.integer(count+1)
         template$properties$hectares <- area
         paddocks$insert(template)
