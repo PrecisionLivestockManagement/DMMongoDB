@@ -6,7 +6,7 @@
 #' @param stationshortname a shortened stationname
 #' @param lat the latitude of a coordinate point to locate the property
 #' @param long the longitude of a coordinate point to locate the property
-#' @param ha the area of the staion in hectares, default is 100 ha
+#' @param area the area of the staion in hectares, default is 100 ha
 #' @param PIC the Property Identification Code
 #' @param timezone the local timezone, default is Australia/Brisbane
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
@@ -18,7 +18,7 @@
 #' @export
 
 
-addnewstation <- function(stationname, stationshortname, long, lat, ha=NULL, PIC=NULL, timezone=NULL, username=NULL, password=NULL){
+addnewstation <- function(stationname, stationshortname, long, lat, area=NULL, PIC=NULL, timezone=NULL, username=NULL, password=NULL){
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]
@@ -35,7 +35,7 @@ addnewstation <- function(stationname, stationshortname, long, lat, ha=NULL, PIC
 
     template <- prop[prop$name == "Tremere", ]
 
-    if(is.null(ha)){ha <- 100}
+    if(is.null(area)){area <- 100}
     if(is.null(PIC)){PIC <- "xxxxxx"}
     if(is.null(timezone)){timezone <- "Australia/Brisbane"}
 
@@ -47,7 +47,7 @@ addnewstation <- function(stationname, stationshortname, long, lat, ha=NULL, PIC
     template$latitude<- lat
     template$PIC <- PIC
     template$timezone <- timezone
-    template$hectares <- ha
+    template$hectares <- area
 
     rownames(template)<-c()
     rownames(template$geometry)<-c()
@@ -56,7 +56,7 @@ addnewstation <- function(stationname, stationshortname, long, lat, ha=NULL, PIC
 
     #Generate the polygon coordinates and update the Stations collection
 
-    areasqm <- ha * 10000
+    areasqm <- area * 10000
     distfromcentre <- ((areasqm^0.5)/2)/100000
 
     c1lat <- lat + distfromcentre
@@ -86,7 +86,7 @@ addnewstation <- function(stationname, stationshortname, long, lat, ha=NULL, PIC
     template$stationname <- stationname
     template$stationID <- propertyid
     template$properties$datasource <- "stationpolygon"
-    template$properties$hectares <- ha
+    template$properties$hectares <- area
     template$paddname <- stationname
     template$paddnum <- 1
 
