@@ -21,11 +21,12 @@ appalmsusenew <- function(property, start=NULL, end=NULL, username = NULL, passw
     username = keyring::key_list("DMMongoDB")[1,2]
     password =  keyring::key_get("DMMongoDB", username)
   }
+
   pass <- sprintf("mongodb://%s:%s@datamuster-shard-00-00-8mplm.mongodb.net:27017,datamuster-shard-00-01-8mplm.mongodb.net:27017,datamuster-shard-00-02-8mplm.mongodb.net:27017/test?ssl=true&replicaSet=DataMuster-shard-0&authSource=admin", username, password)
   cattle <- mongo(collection = "Cattle", db = "DataMuster", url = pass, verbose = T)
   inf <- mongo(collection = "Infrastructure", db = "DataMuster", url = pass, verbose = T)
 
-  if(is.null(start)){start <- as.Date("2015-01-01")}
+  if(is.null(start)){start <- as.Date("2014-09-01")}
   if(is.null(end)){end <- Sys.Date()}
 
   wowunits <- infsearch(property, infstype = "Walk-over-Weighing Unit", username = username, password = password)
@@ -42,7 +43,7 @@ appalmsusenew <- function(property, start=NULL, end=NULL, username = NULL, passw
     mutate(dateOFF = as.character(dateOFF),
            dateOFF = ifelse(is.na(dateOFF), as.character(Sys.Date()), dateOFF))
 
-  cattleweights <- dailywts(cows$RFID, start = start, end = end, username = username, password = password)
+  cattleweights <- dailywtsNEW(cows$RFID, start = start, end = end, username = username, password = password)
 
   cattleweights <- bind_rows(cattleweights$DailyWeights, .id = "RFID")%>%
     mutate(Date = as.Date(Date, tz = "Australia/Brisbane"))%>%
