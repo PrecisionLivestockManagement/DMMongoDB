@@ -67,12 +67,16 @@ almshistsearch <- function(property=NULL, alms=NULL, start=NULL, end=NULL, usern
       if (length(n) != 0){
 
         for (p in 1:length(n)){
+
           if (is.na(dailywts$dateOFF[n[p]])){
           dates <- seq(as.Date(dailywts$dateON[n[p]]), Sys.Date(), by = "days")}else{
           dates <- seq(as.Date(dailywts$dateON[n[p]]), as.Date(dailywts$dateOFF[n[p]]), by = "days")}
+
           dates<-dates[between(dates, as.Date(start), as.Date(end))]
 
           if (length(dates) == 0){dailywts$ALMS[n[p]] <- NA}}}
+
+      dailywts <- dailywts %>% filter(!(is.na(ALMS)))
 
       if(is.null(alms)){}else{
       dailywts <- dailywts %>% filter(!(is.na(ALMS)), ALMS %in% alms)}
