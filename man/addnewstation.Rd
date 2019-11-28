@@ -4,7 +4,7 @@
 \alias{addnewstation}
 \title{Add a new station to the DataMuster database}
 \usage{
-addnewstation(stationname, stationshortname, long, lat, ha = NULL,
+addnewstation(stationname, stationshortname, long, lat, area = NULL,
   PIC = NULL, timezone = NULL, username = NULL, password = NULL)
 }
 \arguments{
@@ -16,7 +16,7 @@ addnewstation(stationname, stationshortname, long, lat, ha = NULL,
 
 \item{lat}{the latitude of a coordinate point to locate the property}
 
-\item{ha}{the area of the staion in hectares, default is 100 ha}
+\item{area}{the area of the staion in hectares, default is 100 ha}
 
 \item{PIC}{the Property Identification Code}
 

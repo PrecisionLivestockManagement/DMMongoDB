@@ -4,15 +4,15 @@
 \alias{addnewpaddock}
 \title{Add paddocks to the DataMuster database}
 \usage{
-addnewpaddock(property, filedir, filetype, paddockname = NULL,
-  filename = NULL, username = NULL, password = NULL)
+addnewpaddock(property, filetype, filedir = NULL, paddockname = NULL,
+  filename = NULL, coords = NULL, username = NULL, password = NULL)
 }
 \arguments{
 \item{property}{the name of the property to add the paddocks}
 
-\item{filedir}{the location of the spatial file containing the paddock coordinates}
+\item{filetype}{the type of spatial file (e.g. shp, kmz, coords), if inputting raw coordinates they must be listed in pairs with long first then lat, if in decimal degrees minutes they must be in the format "35d9'58.12\"S"  "66d40'42.74\"W"}
 
-\item{filetype}{the type of spatial file (e.g. shp, kmz)}
+\item{filedir}{the location of the spatial file containing the paddock coordinates}
 
 \item{paddockname}{the name of the paddock/s, if NULL the paddock will be assigned a numeric name}
 
