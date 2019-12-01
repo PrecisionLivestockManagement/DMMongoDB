@@ -4,20 +4,24 @@
 \alias{wowdatasearch}
 \title{Retrieve data from the DataMuster MongoDB database}
 \usage{
-wowdatasearch(start = NULL, end = NULL, username = NULL,
-  password = NULL)
+wowdatasearch(start = NULL, end = NULL, location = NULL,
+  remove.telemetry = NULL, username = NULL, password = NULL)
 }
 \arguments{
-\item{start}{provide a start date and time to be returned, this has to be in datetime format.}
+\item{start}{provide a start date and time to be returned, in date format.}
 
-\item{end}{provide a end date and time to be returned, this has to be in datetime format.}
+\item{end}{provide a end date and time to be returned, in date format.}
 
-\item{username}{required for access. Please email \email{info@datamuster.net.au} to acquire a username.}
+\item{location}{the name of the alms unit, if NULL data for all units will be returned}
 
-\item{password}{required for access. Please email \email{info@datamuster.net.au} to acquire a password.}
+\item{remove.telemetry}{if TRUE the telemetry signals will be removed from the search results, if null or FALSE the telemetry signal data will be included in the search results}
+
+\item{username}{required for access. Please email \email{info@datamuster.net.au} to acquire a username}
+
+\item{password}{required for access. Please email \email{info@datamuster.net.au} to acquire a password}
 }
 \value{
-a dataframe of WoW weights that have been recorded during specified time periods.
+a dataframe of WoW weights that have been recorded during specified time periods
 }
 \description{
 This function pulls in WoW weights for specified time periods. If you need assistance please email \email{info@datamuster.net.au} to seek help or suggest improvements.
