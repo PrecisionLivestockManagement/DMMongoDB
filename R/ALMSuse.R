@@ -17,6 +17,15 @@
 ALMSuse <- function(property, start = NULL, username = NULL, password = NULL){
 
 
+
+  days <- Sys.Date()-start
+
+  seconds <- days * 60 * 60 * 24
+
+  Time <- Sys.time() - seconds
+
+  trumpper <- strftime(Time, format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT")
+
   if(is.null(username)||is.null(password)){
   username = keyring::key_list("DMMongoDB")[1,2]
   password =  keyring::key_get("DMMongoDB", username)
@@ -27,7 +36,7 @@ ALMSuse <- function(property, start = NULL, username = NULL, password = NULL){
 
   property <- paste(unlist(property), collapse = '", "' )
 if (is.null(start)){filterdata <- sprintf('{"Property":{"$in":["%s"]}', property)} else {
-  filterdata <- sprintf('{"Property":{"$in":["%s"]},"Date": { "$gte" : { "$date" : "%s" }}}', property, start)}
+  filterdata <- sprintf('{"Property":{"$in":["%s"]},"Date": { "$gte" : { "$date" : "%s" }}}', property, trumpper)}
 
   data <- almsuse$find(query = filterdata, fields = '{"_id":false}')
 

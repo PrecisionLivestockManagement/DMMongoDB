@@ -4,8 +4,7 @@
 \alias{ALMSuse}
 \title{Package with functions to enable easier code to access to DataMuster MongoDB Atlas servers}
 \usage{
-ALMSuse(property, start = NULL, end = NULL, username = NULL,
-  password = NULL)
+ALMSuse(property, start = NULL, username = NULL, password = NULL)
 }
 \arguments{
 \item{property}{the name of the property to search the DataMuster MongoDB Atlas server}
