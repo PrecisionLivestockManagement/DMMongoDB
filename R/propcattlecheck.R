@@ -15,22 +15,23 @@
 propcattlecheck <- function(property, days=NULL, username=NULL, password=NULL){
 
   if(is.null(username)||is.null(password)){
-  bung <- propsearch(property)
-  }else{
-    bung <- propsearch(property, username=username, password=password)
+    username = keyring::key_list("DMMongoDB")[1,2]
+    password =  keyring::key_get("DMMongoDB", username)
   }
+
+    bung <- propsearch(property, username=username, password=password)
+
 
   if(is.null(days)){
     lump <- Sys.Date()
-  }
-  else {
+  }else {
     lump <- Sys.Date() - days}
 
-  checkanimals <- dailywts(bung$RFID)
+  checkanimals <- dailywtsNEW(bung$RFID)
   checkanimals <- bind_rows(checkanimals$DailyWeights, .id = "RFID")%>%
     filter(as.Date(Date) >= lump)%>%
-    arrange(desc(Date))%>%
-  mutate(TimeSinceLastVisit = Sys.time()-Date)
+    arrange(Date)%>%
+    mutate(TimeSinceLastVisit = round(Sys.time()-Date,1))
 
   checkanimals
 

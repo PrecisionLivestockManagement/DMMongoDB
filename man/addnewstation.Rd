@@ -2,30 +2,36 @@
 % Please edit documentation in R/addnewstation.R
 \name{addnewstation}
 \alias{addnewstation}
-\title{Add new user}
+\title{Add a new station to the DataMuster database}
 \usage{
-addnewstation(stationname, stationshortname, long, lat, ha = NULL,
+addnewstation(stationname, stationshortname, long, lat, area = NULL,
   PIC = NULL, timezone = NULL, username = NULL, password = NULL)
 }
 \arguments{
-\item{stationname}{name of the property to be added}
+\item{stationname}{the name of the property}
 
-\item{stationshortname}{a shortened name of the property to be added}
+\item{stationshortname}{a shortened stationname}
 
-\item{long}{longitude coordinate of a point on the property}
+\item{long}{the longitude of a coordinate point to locate the property}
 
-\item{lat}{latitude coordinate of a point on the property}
+\item{lat}{the latitude of a coordinate point to locate the property}
+
+\item{area}{the area of the staion in hectares, default is 100 ha}
+
+\item{PIC}{the Property Identification Code}
+
+\item{timezone}{the local timezone, default is Australia/Brisbane}
 
 \item{username}{if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring}
 
 \item{password}{if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access}
 }
 \value{
-message to say the user has been successfully added
+message to say the station has been successfully added
 }
 \description{
-This function adds a new user to the MongoDB database. You can only access this function if you have read and write permission
+This function adds a new station to the DataMuster database. You can only access this function if you have read and write permission
 }
 \author{
-Lauren O'Connor \email{lauren.oconnor@datamuster.net.au}
+Dave Swain \email{dave.swain@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@datamuster.net.au}
 }

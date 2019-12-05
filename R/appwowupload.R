@@ -1,16 +1,17 @@
-#' Package with functions to enable easier code to access to DataMuster MongoDB Atlas servers
+#' Upload DataMuster WoW data to the DataMuster database
 #'
-#' This function allows WoW data to be uploaded from the DataMuster website
+#' This function allows DataMuster WoW data to be uploaded via the DataMuster website
 #' @name appwowupload
-#' @param RFID the RFID number as txt
-#' @param datetime in correct format
-#' @param weight in correct format
-#' @param ALMS in correct format
-#' @param username you will need to request access from Lauren O'Connor for a username to write data to the database
-#' @param password you will need to request access from Lauren O'Connor for a username to write data to the database
-#' @return uploads data in a dataframe to the DMMongoDB database
+#' @param RFID a list of the cattle RFID numbers
+#' @param datetime a list of timestamps in POSIXct format
+#' @param weight a list of cattle weights
+#' @param ALMS a list of ALMS identification codes as character entries
+#' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
+#' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
+#' @return a message that indicates the data has been successfully uploaded
 #' @author Dave Swain \email{dave.swain@@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@@datamuster.net.au}
 #' @import mongolite
+#' @import keyring
 #' @export
 
 

@@ -47,8 +47,8 @@ recorddeath <- function(RFID, date=NULL, cause=NULL, property, username=NULL, pa
   for (i in 1:length(cows$RFID)){
 
     banger <- cattle$find(query = sprintf('{"RFID":"%s"}', cows$RFID[i]), fields= sprintf('{"RFID":true,"pdkhist.dateOUT":true,"almshist.dateOFF":true, "_id":false}'))
-    arrpos1 <- length(banger$pdkhist$dateOUT[[1]])+1
-    arrpos2 <- length(banger$almshist$dateOFF[[1]])+1
+    arrpos1 <- length(banger$pdkhist$dateOUT[[1]])
+    arrpos2 <- length(banger$almshist$dateOFF[[1]])
 
     RFIDS <- sprintf('{"RFID":"%s"}', cows$RFID[i])
 

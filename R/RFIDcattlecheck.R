@@ -14,21 +14,23 @@
 
 RFIDcattlecheck <- function(RFID, days=NULL, username=NULL, password=NULL){
 
+  if(is.null(username)||is.null(password)){
+    username = keyring::key_list("DMMongoDB")[1,2]
+    password =  keyring::key_get("DMMongoDB", username)
+  }
+
 if(is.null(days)){
   lump <- Sys.Date()
-  }
-  else {
+  }  else {
   lump <- Sys.Date() - days
   }
-if(is.null(username)||is.null(password)){checkanimals <- dailywts(RFID)}else{
 
-  checkanimals <- dailywts(RFID, username=username, password=password)
-}
+  checkanimals <- dailywtsNEW(RFID, username=username, password=password)
 
 checkanimals <- bind_rows(checkanimals$DailyWeights, .id = "RFID")%>%
   filter(as.Date(Date) >= lump)%>%
-  arrange(desc(Date))%>%
-  mutate(TimeSinceLastVisit = Sys.time()-Date)
+  arrange(Date)%>%
+  mutate(TimeSinceLastVisit = round(Sys.time()-Date,1))
 
 checkanimals
 

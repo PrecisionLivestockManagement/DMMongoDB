@@ -1,12 +1,12 @@
-#' Add new user from Keyring
+#' Add a new user to the DataMuster database
 #'
-#' This function adds a new user to the MongoDB database. You can only access this function if you have read and write permission
+#' This function adds a new user to the DataMuster database.
 #' @name appnewuser
-#' @param email the email address of the user that was used to register via the DataMuster website
+#' @param email the email address of the user
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
 #' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
-#' @return message to say the user has been successfully added
-#' @author Lauren O'Connor \email{lauren.oconnor@@datamuster.net.au}
+#' @return a message to say the user has been successfully added
+#' @author Dave Swain \email{dave.swain@@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@@datamuster.net.au}
 #' @import mongolite
 #' @import keyring
 #' @export

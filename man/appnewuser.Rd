@@ -2,23 +2,23 @@
 % Please edit documentation in R/appnewuser.R
 \name{appnewuser}
 \alias{appnewuser}
-\title{Add new user from Keyring}
+\title{Add a new user to the DataMuster database}
 \usage{
 appnewuser(email, username = NULL, password = NULL)
 }
 \arguments{
-\item{email}{the email address of the user that was used to register via the DataMuster website}
+\item{email}{the email address of the user}
 
 \item{username}{if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring}
 
 \item{password}{if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access}
 }
 \value{
-message to say the user has been successfully added
+a message to say the user has been successfully added
 }
 \description{
-This function adds a new user to the MongoDB database. You can only access this function if you have read and write permission
+This function adds a new user to the DataMuster database.
 }
 \author{
-Lauren O'Connor \email{lauren.oconnor@datamuster.net.au}
+Dave Swain \email{dave.swain@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@datamuster.net.au}
 }

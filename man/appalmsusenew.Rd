@@ -2,7 +2,7 @@
 % Please edit documentation in R/appalmsusenew.R
 \name{appalmsusenew}
 \alias{appalmsusenew}
-\title{Package with functions to enable easier code to access to DataMuster MongoDB Atlas servers}
+\title{Upload ALMS use data}
 \usage{
 appalmsusenew(property, start = NULL, end = NULL, username = NULL,
   password = NULL)
@@ -17,15 +17,12 @@ appalmsusenew(property, start = NULL, end = NULL, username = NULL,
 \item{username}{if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring}
 
 \item{password}{if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access}
-
-\item{paddock}{this is the name of a paddock or list of paddocks as character entries, if no value is entered then all paddocks are loaded}
 }
 \value{
 a dataframe with a list of the cattle numbers associated with the ALMS and the number of cattle recorded
 }
 \description{
-This function provides a list of cattle
-usage of an ALMS unit for a property from MongoDB. Inputs need to be a list of one or more property names and if only one property a paddock name can be included
+This function allows ALMS usage data to be added to the DataMuster database
 }
 \author{
 Dave Swain \email{dave.swain@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@datamuster.net.au}

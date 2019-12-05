@@ -2,34 +2,34 @@
 % Please edit documentation in R/calcweeklywts.R
 \name{calcweeklywts}
 \alias{calcweeklywts}
-\title{Calculate Cattle weekly weights}
+\title{Retrieve data on cattle ALMS weekly weights from the DataMuster database}
 \usage{
 calcweeklywts(RFID, start = NULL, end = NULL, values = NULL,
   s.d = NULL, remove.duplicates = NULL, username = NULL,
   password = NULL)
 }
 \arguments{
-\item{RFID}{this is a list of cattle RFID numbers}
+\item{RFID}{a list of cattle RFID numbers}
 
-\item{start}{provide a start date to be returned, this has to be in date format.}
+\item{start}{a start date to be returned in date format.}
 
-\item{end}{provide a end date to be returned, this has to be in date format.}
+\item{end}{an end date to be returned in date format.}
 
-\item{values}{this is the minimum number of weight values that need to included to calculate an average weekly weight. The default is 4.}
+\item{values}{the minimum number of daily weight values required to calculate an average weekly weight, default is 4}
 
-\item{remove.duplicates}{if TRUE, duplicate date time values are removed from the weekly weight calculation. The default is TRUE.}
+\item{s.d}{the minimin standard deviation between daily weight values required to calculate an average weekly weight, default is 25}
+
+\item{remove.duplicates}{TRUE if duplicate date time values are to removed from the weekly weight calculation or FALSE if all values are to be included, default is TRUE}
 
 \item{username}{if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring}
 
 \item{password}{if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access}
-
-\item{sd}{this is the minimin standard deviation between daily weight values needed to calculate an average weekly weight. The default is 25.}
 }
 \value{
-A dataframe of weekly weight statistics for each RFID number.
+a dataframe of cattle RFID numbers and weekly weight statistics
 }
 \description{
-This function pulls in the daily weights weights for individual or groups of cattle for specified periods and calculates average weekly weights. It searches based on a list of RFID values. It is recommended that you use the propsearch function to find a list of cattle RFID numbers for a particular property. If you need assistance please email \email{info@datamuster.net.au} to seek help or suggest improvements.
+This function calculates average weekly weights from daily ALMS weights for individual or groups of cattle. If you need assistance please email \email{info@datamuster.net.au} to seek help or suggest improvements.
 }
 \author{
 Dave Swain \email{dave.swain@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@datamuster.net.au}

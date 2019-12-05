@@ -1,4 +1,4 @@
-#' Set up access credential for DataMuster
+#' Set up access credentials for DataMuster database
 #'
 #' The function needs to be run first of all. It stores the credentials on the local machine to provide ongoing access to the DMMongoDB.
 #' Please check with Lauren O'Connor \email{lauren.oconnor@@datamuster.net.au} to get login details and make sure you run this function before any others as it will be essential

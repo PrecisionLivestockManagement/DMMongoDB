@@ -2,29 +2,29 @@
 % Please edit documentation in R/appwowupload.R
 \name{appwowupload}
 \alias{appwowupload}
-\title{Package with functions to enable easier code to access to DataMuster MongoDB Atlas servers}
+\title{Upload DataMuster WoW data to the DataMuster database}
 \usage{
 appwowupload(RFID, datetime, weight, ALMS, username = NULL,
   password = NULL)
 }
 \arguments{
-\item{RFID}{the RFID number as txt}
+\item{RFID}{a list of the cattle RFID numbers}
 
-\item{datetime}{in correct format}
+\item{datetime}{a list of timestamps in POSIXct format}
 
-\item{weight}{in correct format}
+\item{weight}{a list of cattle weights}
 
-\item{ALMS}{in correct format}
+\item{ALMS}{a list of ALMS identification codes as character entries}
 
-\item{username}{you will need to request access from Lauren O'Connor for a username to write data to the database}
+\item{username}{if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring}
 
-\item{password}{you will need to request access from Lauren O'Connor for a username to write data to the database}
+\item{password}{if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access}
 }
 \value{
-uploads data in a dataframe to the DMMongoDB database
+a message that indicates the data has been successfully uploaded
 }
 \description{
-This function allows WoW data to be uploaded from the DataMuster website
+This function allows DataMuster WoW data to be uploaded via the DataMuster website
 }
 \author{
 Dave Swain \email{dave.swain@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@datamuster.net.au}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/dmaccess.R
 \name{dmaccess}
 \alias{dmaccess}
-\title{Set up access credential for DataMuster}
+\title{Set up access credentials for DataMuster database}
 \usage{
 dmaccess(user)
 }

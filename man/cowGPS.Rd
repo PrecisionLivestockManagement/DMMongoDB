@@ -2,30 +2,30 @@
 % Please edit documentation in R/cowGPS.R
 \name{cowGPS}
 \alias{cowGPS}
-\title{Package with functions to enable easier code to access to DataMuster MongoDB Atlas servers}
+\title{Upload GPS data to the DataMuster database}
 \usage{
 cowGPS(RFID, DateTime, lat, long, voltage, username, password)
 }
 \arguments{
-\item{RFID}{the RFID number as txt}
+\item{RFID}{a list of cattle RFID numbers}
 
-\item{DateTime}{in correct format}
+\item{DateTime}{a list of timestamps in POSIXct format}
 
-\item{lat}{in correct format as a number}
+\item{lat}{the latitude of a coordinate point}
 
-\item{long}{in correct format as a number}
+\item{long}{the longitude of a coordinate point}
 
-\item{voltage}{in correct format as a number or percentage}
+\item{voltage}{the voltage of the device as a number or percentage}
 
-\item{username}{you will need to request access from Lauren O'Connor for a username to write data to the database}
+\item{username}{if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring}
 
-\item{password}{you will need to request access from Lauren O'Connor for a username to write data to the database}
+\item{password}{if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access}
 }
 \value{
-a dataframe with a list of the RFID numbers, associated management tags and current paddocks the cattle are in
+a message that indicates the data has been successfully added
 }
 \description{
-This function allows GPS data to be added for an indivdual animal and can be used to export server data into the DataMuster MongoDB data storage and provide live updates
+This function allows GPS data to be added to the DataMuster database
 }
 \author{
 Dave Swain \email{dave.swain@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@datamuster.net.au}

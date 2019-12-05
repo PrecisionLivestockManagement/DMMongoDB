@@ -1,15 +1,14 @@
-#' Package with functions to enable easier code to access to DataMuster MongoDB Atlas servers
+#' Retrieve data on cattle allocations to ALMS units from the DataMuster database
 #'
-#' This function provides a list of cattle
-#' for a property from MongoDB including life data. Inputs need to be a list of one or more property names and if only one property a paddock name can be included
+#' This function provides a list of cattle that have been allocated to ALMS units during specified time periods for a property. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
 #' @name almshistsearch
-#' @param property the name of the property to search the DataMuster MongoDB Atlas server
-#' @param alms this is the asset_id of an ALMS or list of ALMS asset_id's as character entries, if no value is entered then all alms units for the property are loaded
-#' @param start provide a start date to be returned, this has to be in date format.
-#' @param end provide a end date to be returned, this has to be in date format.
+#' @param property the name of the property to query
+#' @param alms a list of the ALMS asset_id's as character entries, if NULL all ALMS units for the property are loaded
+#' @param start a start date to be returned in date format, default is "2015-01-01"
+#' @param end an end date to be returned in date format, default is today's date
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
 #' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
-#' @return a dataframe with a list of the RFID numbers and alms history
+#' @return a dataframe with a list of the cattle RFID numbers and dates on/off the ALMS unit/s
 #' @author Dave Swain \email{dave.swain@@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@@datamuster.net.au}
 #' @import mongolite
 #' @import keyring
@@ -68,12 +67,16 @@ almshistsearch <- function(property=NULL, alms=NULL, start=NULL, end=NULL, usern
       if (length(n) != 0){
 
         for (p in 1:length(n)){
+
           if (is.na(dailywts$dateOFF[n[p]])){
           dates <- seq(as.Date(dailywts$dateON[n[p]]), Sys.Date(), by = "days")}else{
           dates <- seq(as.Date(dailywts$dateON[n[p]]), as.Date(dailywts$dateOFF[n[p]]), by = "days")}
+
           dates<-dates[between(dates, as.Date(start), as.Date(end))]
 
           if (length(dates) == 0){dailywts$ALMS[n[p]] <- NA}}}
+
+      dailywts <- dailywts %>% filter(!(is.na(ALMS)))
 
       if(is.null(alms)){}else{
       dailywts <- dailywts %>% filter(!(is.na(ALMS)), ALMS %in% alms)}
