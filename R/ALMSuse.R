@@ -14,7 +14,7 @@
 #' @export
 
 
-ALMSuse <- function(property, username = NULL, password = NULL){
+ALMSuse <- function(property, start = NULL, end=NULL, username = NULL, password = NULL){
 
   if(is.null(username)||is.null(password)){
   username = keyring::key_list("DMMongoDB")[1,2]
@@ -32,8 +32,12 @@ ALMSuse <- function(property, username = NULL, password = NULL){
 
   if (nrow(data) != 0){
   data <- data%>%
-    mutate(Date = as.Date(Date, tz = "Australia/Brisbane"))}
+    mutate(Date = as.Date(Date, tz = "Australia/Brisbane"))
 
+  if(is.null(start)) {}
+  else{if(is.null(end)){data <- data %>% filter(between(as.Date(Date, tz = "Australia/Brisbane"),start,Sys.Date()))}
+    else{data <- data %>% filter(between(as.Date(Date, tz = "Australia/Brisbane"),start,end))}}
+  }
 
   return(data)
 }
