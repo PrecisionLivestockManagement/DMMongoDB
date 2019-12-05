@@ -18,7 +18,7 @@ ALMSuse <- function(property, start = NULL, username = NULL, password = NULL){
 
 
 
-  days <- Sys.Date()-start
+  days <- as.numeric(difftime(Sys.Date(), as.Date(start), unit = "days"))
 
   seconds <- days * 60 * 60 * 24
 
