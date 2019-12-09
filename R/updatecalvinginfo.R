@@ -92,7 +92,10 @@ updatecalvinginfo <- function(MTag, calfMTag, property, birthDate=NULL, username
         if (length(matchdate) == 0){
 
           RFIDI <- sprintf('{"$set":{"calfhist.date.%s":{"$date":"%s"}, "calfhist.ID.%s":"%s"}}', arrpos, paste0(substr(birthDate[i],1,10),"T","00:00:00","+1000"), arrpos, calfid)
+          RFIDIlast <- sprintf('{"$set":{"properties.calvingdate":{"$date":"%s"}}}', paste0(substr(birthDate[i],1,10),"T","00:00:00","+1000"))
+
           cattle$update(IDS, RFIDI)
+          cattle$update(IDS, RFIDIlast)
 
           }}
 
