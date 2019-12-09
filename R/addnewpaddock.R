@@ -59,7 +59,9 @@ addnewpaddock <- function(property, filetype, filedir=NULL, paddockname=NULL, fi
 
       if(is.null(filename)){filename <- list.files(path = filedir, pattern = ".kmz")}
 
-      if(paddockname == "filename"){paddockname <- sub("\\..*","",filename)}
+      if(!is.null(paddockname)){
+
+        if(paddockname == "filename"){paddockname <- sub("\\..*","",filename)}}
 
       for (i in 1:length(filename)){
 
@@ -100,7 +102,9 @@ addnewpaddock <- function(property, filetype, filedir=NULL, paddockname=NULL, fi
 
       if(is.null(filename)){filename <- list.files(path = filedir, pattern = ".kml")}
 
-      if(paddockname == "filename"){paddockname <- sub("\\..*","",filename)}
+      if(!is.null(paddockname)){
+
+      if(paddockname == "filename"){paddockname <- sub("\\..*","",filename)}}
 
       for (i in 1:length(filename)){
 
