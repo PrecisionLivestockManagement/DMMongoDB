@@ -14,7 +14,17 @@
 #' @export
 
 
-ALMSuse <- function(property, start = NULL, end=NULL, username = NULL, password = NULL){
+ALMSuse <- function(property, start = NULL, username = NULL, password = NULL){
+
+
+
+  days <- as.numeric(difftime(Sys.Date(), as.Date(start), unit = "days"))
+
+  seconds <- days * 60 * 60 * 24
+
+  Time <- Sys.time() - seconds
+
+  trumpper <- strftime(Time, format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT")
 
   if(is.null(username)||is.null(password)){
   username = keyring::key_list("DMMongoDB")[1,2]
@@ -25,19 +35,16 @@ ALMSuse <- function(property, start = NULL, end=NULL, username = NULL, password 
   almsuse <- mongo(collection = "ALMSUse", db = "DataMuster", url = pass, verbose = T)
 
   property <- paste(unlist(property), collapse = '", "' )
-
-  filterdata <- sprintf('{"Property":{"$in":["%s"]}}', property)
+if (is.null(start)){filterdata <- sprintf('{"Property":{"$in":["%s"]}', property)} else {
+  filterdata <- sprintf('{"Property":{"$in":["%s"]},"Date": { "$gte" : { "$date" : "%s" }}}', property, trumpper)}
 
   data <- almsuse$find(query = filterdata, fields = '{"_id":false}')
 
   if (nrow(data) != 0){
   data <- data%>%
-    mutate(Date = as.Date(Date, tz = "Australia/Brisbane"))
+    mutate(Date = as.Date(Date, tz = "Australia/Brisbane"))}
 
-  if(is.null(start)) {}
-  else{if(is.null(end)){data <- data %>% filter(between(as.Date(Date, tz = "Australia/Brisbane"),start,Sys.Date()))}
-    else{data <- data %>% filter(between(as.Date(Date, tz = "Australia/Brisbane"),start,end))}}
-  }
+
 
   return(data)
 }
