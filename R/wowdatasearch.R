@@ -46,10 +46,11 @@ wowdatasearch <- function(start=NULL, end=NULL, location=NULL, remove.telemetry=
       filter(Location %in% location)
   }
 
-  if(remove.telemetry == "TRUE"){
+  if(is.null(remove.telemetry)){}else{
+    if(remove.telemetry == "TRUE"){
     data <- data%>%
       filter(RFID != "942 _telemetry")
-  }
+  }}
 
   return(data)
 
