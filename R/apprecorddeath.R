@@ -29,9 +29,9 @@ apprecorddeath <- function(RFID, MTag, date, cause, property, username=NULL, pas
 
   for (i in 1:length(RFID)){
 
-    if(RFID[i] != "xxx xxxxxxxx"){
+    if(RFID[i] != "xxx xxxxxxxxxxxx"){
       IDS <- sprintf('{"RFID":"%s"}', RFID[i])}else{
-      IDS <- sprintf('{"stationname":"%s", "properties.management":"%s"}', property, MTag[i])}
+      IDS <- sprintf('{"stationname":"%s", "properties.Management":"%s"}', property, MTag[i])}
 
     banger <- cattle$find(query = IDS, fields= sprintf('{"RFID":true,"pdkhist.dateOUT":true,"almshist.dateOFF":true, "_id":false}'))
     arrpos1 <- length(banger$pdkhist$dateOUT[[1]])
@@ -43,8 +43,9 @@ apprecorddeath <- function(RFID, MTag, date, cause, property, username=NULL, pas
 
     IDL <- sprintf('{"$set":{"pdkhist.dateOUT.%s":{"$date":"%s"}}}', arrpos1, paste0(date,"T","00:00:00","+1000"))
 
+    cattle$update(IDS, IDL) # Have to do this one first before stationname changes to "xxxxxx
     cattle$update(IDS, IDI)
-    cattle$update(IDS, IDL)
+
 
     }
 
