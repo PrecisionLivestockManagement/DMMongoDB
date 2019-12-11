@@ -30,7 +30,7 @@ appremovecattle <- function(RFID, MTag, property, date, username=NULL, password=
 
     if(RFID[i] != "xxx xxxxxxxxxxxx"){
     IDS <- sprintf('{"RFID":"%s"}', RFID[i])}else{
-    IDS <- sprintf('{"stationname":"%s", "properties.management":"%s"}', property, MTag[i])}
+    IDS <- sprintf('{"stationname":"%s", "properties.Management":"%s"}', property, MTag[i])}
 
     banger <- cattle$find(query = IDS, fields ='{"pdkhist.dateOUT":true, "_id":false}')
     arrpos <- length(banger$pdkhist$dateOUT[[1]])
