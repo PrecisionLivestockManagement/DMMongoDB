@@ -68,7 +68,7 @@ appcalvingupload <- function(calfID, cowID, date, weight, sex, brand, udder, fro
 
     if (length(problemcowtags) != 0){ #Indicates they are not in the database
 
-      stop("The following Cow ID number/s cannot be found in the database: ", paste(unlist(problemcowtags), collapse='     '))}else{ #Indicates there may be duplicated tags, need to check for twins
+      stop("The following Cow ID number/s cannot be found in the database: ", paste(unlist(problemcowtags), collapse='     '))}}else{ #Indicates there may be duplicated tags, need to check for twins
 
       #   duplicatedcowtags <- as.character(checkIDS[which(duplicated(checkIDS))])
       #
@@ -94,6 +94,6 @@ appcalvingupload <- function(calfID, cowID, date, weight, sex, brand, udder, fro
   data <- sprintf('{"Date":{"$date":"%s"}, "Calf ID":"%s", "Weight":%s, "Sex":"%s", "Cow ID":"%s", "Brand":"%s", "Udder":"%s", "Front teats":"%s", "Rear teats":"%s", "Comment":"%s", "Paddock":"%s", "stationname":"%s", "createdAt":{"$date":"%s"}}',
                   paste0(substr(date,1,10),"T","00:00:00","+1000"), calfID, weight, sex, cowID, brand, udder, frontteats, rearteats, comment, paddock, property, paste0(substr(Sys.time(),1,10),"T",substr(Sys.time(),12,19),"+1000"))
 
-  calvingdata$insert(data)}}
+  calvingdata$insert(data)}
 
 }
