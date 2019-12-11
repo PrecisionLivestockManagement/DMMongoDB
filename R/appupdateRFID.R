@@ -45,14 +45,14 @@ appupdateRFID <- function(RFID, MTag, property, newRFID, date, username=NULL, pa
 
     if(RFID[i] != "xxx xxxxxxxx"){
       IDS <- sprintf('{"RFID":"%s"}', RFID[i])}else{
-        IDS <- sprintf('{"stationname":"%s", "properties.management":"%s"}', property, MTag[i])}
+        IDS <- sprintf('{"stationname":"%s", "properties.Management":"%s"}', property, MTag[i])}
 
           banger <- cattle$find(query = IDS, fields='{"RFIDhist.date":true, "_id":false}')
           arrpos <- length(banger$RFIDhist$date[[1]])
           IDIlast <- sprintf('{"$set":{"RFID":"%s"}}', newRFID[i])
           IDI <- sprintf('{"$set":{"RFIDhist.date.%s":{"$date":"%s"}, "RFIDhist.ID.%s":"%s"}}', arrpos, paste0(date,"T","00:00:00","+1000"), arrpos, newRFID[i])
 
-      cattle$update(IDS, IDI) # Has to update RFIDI first otherwise won't update RFIDhist
+      cattle$update(IDS, IDI) # Have to do this one first before RFID changes
       cattle$update(IDS, IDIlast)
 
   }
