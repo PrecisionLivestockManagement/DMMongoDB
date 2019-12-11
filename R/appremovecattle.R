@@ -15,7 +15,7 @@
 #' @export
 
 
-appremovecattle <- function(RFID=NULL, MTag=NULL, property, date, username=NULL, password=NULL){
+appremovecattle <- function(RFID, MTag, property, date, username=NULL, password=NULL){
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]
@@ -25,9 +25,6 @@ appremovecattle <- function(RFID=NULL, MTag=NULL, property, date, username=NULL,
   pass <- sprintf("mongodb://%s:%s@datamuster-shard-00-00-8mplm.mongodb.net:27017,datamuster-shard-00-01-8mplm.mongodb.net:27017,datamuster-shard-00-02-8mplm.mongodb.net:27017/test?ssl=true&replicaSet=DataMuster-shard-0&authSource=admin", username, password)
 
   cattle <- mongo(collection = "Cattle", db = "DataMuster", url = pass, verbose = T)
-
-  date <- rep(date, length = length(RFID))
-
 
   for (i in 1:length(RFID)){
 
