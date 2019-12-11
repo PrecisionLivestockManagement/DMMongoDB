@@ -41,8 +41,9 @@ appremovecattle <- function(RFID, MTag, property, date, username=NULL, password=
 
     IDL <- sprintf('{"$set":{"pdkhist.dateOUT.%s":{"$date":"%s"}}}', arrpos, paste0(date,"T","00:00:00","+1000"))
 
+    cattle$update(IDS, IDL) # Have to do this one first before stationname changes to "xxxxxx"
     cattle$update(IDS, IDI)
-    cattle$update(IDS, IDL)
+
     }
 
 
