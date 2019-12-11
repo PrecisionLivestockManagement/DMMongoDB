@@ -28,7 +28,7 @@ appremovecattle <- function(RFID, MTag, property, date, username=NULL, password=
 
   for (i in 1:length(RFID)){
 
-    if(RFID[i] != "xxx xxxxxxxx"){
+    if(RFID[i] != "xxx xxxxxxxxxxxx"){
     IDS <- sprintf('{"RFID":"%s"}', RFID[i])}else{
     IDS <- sprintf('{"stationname":"%s", "properties.management":"%s"}', property, MTag[i])}
 
