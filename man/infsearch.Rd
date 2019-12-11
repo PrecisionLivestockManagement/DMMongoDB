@@ -4,8 +4,13 @@
 \alias{infsearch}
 \title{Package with functions to enable easier code to access to DataMuster MongoDB Atlas servers}
 \usage{
-infsearch(property = NULL, active = NULL, infstype = NULL,
-  username = NULL, password = NULL)
+infsearch(
+  property = NULL,
+  active = NULL,
+  infstype = NULL,
+  username = NULL,
+  password = NULL
+)
 }
 \arguments{
 \item{property}{the name of the property to search the DataMuster MongoDB Atlas server}

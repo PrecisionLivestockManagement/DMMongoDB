@@ -4,8 +4,17 @@
 \alias{addnewstation}
 \title{Add a new station to the DataMuster database}
 \usage{
-addnewstation(stationname, stationshortname, long, lat, area = NULL,
-  PIC = NULL, timezone = NULL, username = NULL, password = NULL)
+addnewstation(
+  stationname,
+  stationshortname,
+  long,
+  lat,
+  area = NULL,
+  PIC = NULL,
+  timezone = NULL,
+  username = NULL,
+  password = NULL
+)
 }
 \arguments{
 \item{stationname}{the name of the property}

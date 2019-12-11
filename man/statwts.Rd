@@ -4,8 +4,14 @@
 \alias{statwts}
 \title{Cattle static weights}
 \usage{
-statwts(RFID, start = NULL, end = NULL, values = NULL,
-  username = NULL, password = NULL)
+statwts(
+  RFID,
+  start = NULL,
+  end = NULL,
+  values = NULL,
+  username = NULL,
+  password = NULL
+)
 }
 \arguments{
 \item{RFID}{this is a list of cattle RFID numbers}

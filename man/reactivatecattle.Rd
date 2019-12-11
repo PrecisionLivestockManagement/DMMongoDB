@@ -4,8 +4,15 @@
 \alias{reactivatecattle}
 \title{Reactivate cattle on a station}
 \usage{
-reactivatecattle(RFID, property, paddock, date = NULL,
-  replacevalues = NULL, username = NULL, password = NULL)
+reactivatecattle(
+  RFID,
+  property,
+  paddock,
+  date = NULL,
+  replacevalues = NULL,
+  username = NULL,
+  password = NULL
+)
 }
 \arguments{
 \item{RFID}{this is a list of cattle RFID numbers}

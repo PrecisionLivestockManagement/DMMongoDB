@@ -4,8 +4,13 @@
 \alias{appalmsusenew}
 \title{Upload ALMS use data}
 \usage{
-appalmsusenew(property, start = NULL, end = NULL, username = NULL,
-  password = NULL)
+appalmsusenew(
+  property,
+  start = NULL,
+  end = NULL,
+  username = NULL,
+  password = NULL
+)
 }
 \arguments{
 \item{property}{the name of the property to search the DataMuster MongoDB Atlas server}

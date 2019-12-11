@@ -4,8 +4,7 @@
 \alias{updatepregtest}
 \title{Update pregnancy diagnosis results}
 \usage{
-updatepregtest(RFID, foetalage, date = NULL, username = NULL,
-  password = NULL)
+updatepregtest(RFID, foetalage, date = NULL, username = NULL, password = NULL)
 }
 \arguments{
 \item{RFID}{this is a list of the cattle RFID numbers}

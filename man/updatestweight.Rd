@@ -4,8 +4,7 @@
 \alias{updatestweight}
 \title{Update static weight}
 \usage{
-updatestweight(RFID, weight, date = NULL, username = NULL,
-  password = NULL)
+updatestweight(RFID, weight, date = NULL, username = NULL, password = NULL)
 }
 \arguments{
 \item{RFID}{this is a list of the cattle RFID numbers}

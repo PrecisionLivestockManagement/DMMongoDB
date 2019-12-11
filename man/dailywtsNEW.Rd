@@ -4,8 +4,14 @@
 \alias{dailywtsNEW}
 \title{Retrieve data on cattle ALMS daily weights from the DataMuster database}
 \usage{
-dailywtsNEW(RFID, start = NULL, end = NULL, values = NULL,
-  username = NULL, password = NULL)
+dailywtsNEW(
+  RFID,
+  start = NULL,
+  end = NULL,
+  values = NULL,
+  username = NULL,
+  password = NULL
+)
 }
 \arguments{
 \item{RFID}{a list of cattle RFID numbers}

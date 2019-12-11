@@ -4,9 +4,19 @@
 \alias{addnewinfs}
 \title{Add infrastructure to the DataMuster database}
 \usage{
-addnewinfs(property, paddock, infstype, assetID, fileout = NULL,
-  active = NULL, training = NULL, telemetry = NULL, date = NULL,
-  username = NULL, password = NULL)
+addnewinfs(
+  property,
+  paddock,
+  infstype,
+  assetID,
+  fileout = NULL,
+  active = NULL,
+  training = NULL,
+  telemetry = NULL,
+  date = NULL,
+  username = NULL,
+  password = NULL
+)
 }
 \arguments{
 \item{property}{the name of the property to add the infrastructure}

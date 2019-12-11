@@ -4,8 +4,7 @@
 \alias{getacceldata}
 \title{Retrieve accelerometer data from the DataMuster MongoDB database}
 \usage{
-getacceldata(start = NULL, end = NULL, sample = NULL, username,
-  password)
+getacceldata(start = NULL, end = NULL, sample = NULL, username, password)
 }
 \arguments{
 \item{start}{provide a start date and time to be returned, this has to be in datetime format.}

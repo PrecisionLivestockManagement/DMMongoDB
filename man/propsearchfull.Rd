@@ -4,8 +4,13 @@
 \alias{propsearchfull}
 \title{Package with functions to enable easier code to access to DataMuster MongoDB Atlas servers}
 \usage{
-propsearchfull(property, paddock = NULL, archives = NULL,
-  username = NULL, password = NULL)
+propsearchfull(
+  property,
+  paddock = NULL,
+  archives = NULL,
+  username = NULL,
+  password = NULL
+)
 }
 \arguments{
 \item{property}{the name of the property to search the DataMuster MongoDB Atlas server}
