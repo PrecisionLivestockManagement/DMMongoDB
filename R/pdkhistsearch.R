@@ -25,7 +25,7 @@ pdkhistsearch <- function(property, paddock=NULL, start=NULL, end=NULL, username
   password =  keyring::key_get("DMMongoDB", username)
   }
 
-  if(is.null(start)){start <- as.Date("1970-01-01")}
+  if(is.null(start)){start <- as.Date("2014-01-01")}
   if(is.null(end)){end <- Sys.Date()}
 
   pass <- sprintf("mongodb://%s:%s@datamuster-shard-00-00-8mplm.mongodb.net:27017,datamuster-shard-00-01-8mplm.mongodb.net:27017,datamuster-shard-00-02-8mplm.mongodb.net:27017/test?ssl=true&replicaSet=DataMuster-shard-0&authSource=admin", username, password)
@@ -35,7 +35,7 @@ pdkhistsearch <- function(property, paddock=NULL, start=NULL, end=NULL, username
   #filterstation1 <- sprintf('{"stationname":{"$in":["%s"]}}', property)
   filterstation2 <- sprintf('{"$or": [{"exstation":"%s"}, {"stationname":"%s"}]}', property, property)
 
-  lookfor <- sprintf('{"RFID":true, "stationname":true, "pdkhist.name":true, "pdkhist.dateIN":true, "pdkhist.dateOUT":true, "_id":false}')
+  lookfor <- sprintf('{"RFID":true, "properties.Management":true, "stationname":true, "pdkhist.name":true, "pdkhist.dateIN":true, "pdkhist.dateOUT":true, "_id":false}')
 
     jan2 <- cattle$find(query = filterstation2, fields=lookfor)
 
