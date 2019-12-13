@@ -180,6 +180,7 @@ for (i in 1:length(optfields)){
       temppad <- pad[which(pad$paddname == paddock[p]),]
       template$properties$Paddock<-paddock[p]
       template$properties$PaddockID<- temppad$`_id`
+      template$properties$PaddockdateIN<- as.POSIXct(date[p])
       template$pdkhist$name <- list(paddock[p])
       template$pdkhist$ID <- list(temppad$`_id`)
       template$pdkhist$dateIN <- list(as.POSIXct(date[p]))
