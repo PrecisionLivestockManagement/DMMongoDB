@@ -85,7 +85,7 @@ appupdatepaddock <- function(RFID, MTag, property, paddock, date=NULL, username=
 
           temppad <- pad[which(pad$paddname == paddock[i]),]
 
-          RFIDIlast <- sprintf('{"$set":{"properties.Paddock":"%s", "properties.PaddockID":"%s"}}', paddock[i], temppad$`_id`)
+          RFIDIlast <- sprintf('{"$set":{"properties.PaddockdateIN":{"$date":"%s"}, "properties.Paddock":"%s", "properties.PaddockID":"%s"}}', paste0(substr(date[i],1,10),"T","00:00:00","+1000"), paddock[i], temppad$`_id`)
           RFIDI <- sprintf('{"$set":{"pdkhist.dateOUT.%s":{"$date":"%s"}, "pdkhist.dateIN.%s":{"$date":"%s"}, "pdkhist.name.%s":"%s", "pdkhist.ID.%s":"%s"}}', arrpos1, paste0(substr(date[i],1,10),"T","00:00:00","+1000"), arrpos, paste0(substr(date[i],1,10),"T","00:00:00","+1000"), arrpos, paddock[i], arrpos, temppad$`_id`)
 
       cattle$update(RFIDS, RFIDI)
