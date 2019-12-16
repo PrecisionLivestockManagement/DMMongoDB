@@ -31,6 +31,7 @@ addnewuser <- function(user, email, access, property=NULL, username=NULL, passwo
     template$username <- user
     template$loginemail <- email
     template$accesslevel <- access
+    template$stations[[1]] <- list()
 
     if (template$accesslevel == "user") {
       template$stations <- list(property)}
