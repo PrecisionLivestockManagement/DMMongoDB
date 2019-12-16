@@ -2,24 +2,23 @@
 % Please edit documentation in R/stationinfo.R
 \name{stationinfo}
 \alias{stationinfo}
-\title{Package with functions to enable easier code to access to DataMuster MongoDB Atlas servers}
+\title{Retreive property information from the DataMuster database}
 \usage{
 stationinfo(property = NULL, username = NULL, password = NULL)
 }
 \arguments{
-\item{property}{the name of the property to search the DataMuster MongoDB Atlas server}
+\item{property}{the name of the property to search the database}
 
-\item{username}{if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring}
+\item{username}{a username to access the DataMuster database, contact Lauren O'Connor for database access}
 
-\item{password}{if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access}
+\item{password}{a password to access the DataMuster database}
 }
 \value{
-a dataframe showing the information associated with the property used to search
+a dataframe showing information associated with the property
 }
 \description{
-This function provides a list of cattle
-for a property from MongoDB. Inputs need to be a list of one or more property names and if only one property a paddock name can be included
+This function allows property information to be retreived from the DataMuster database via the DataMuster website
 }
 \author{
-Dave Swain \email{dave.swain@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@datamuster.net.au}
+Dave Swain \email{d.swain@cqu.edu.au} and Lauren O'Connor \email{l.r.oconnor@cqu.edu.au}
 }
