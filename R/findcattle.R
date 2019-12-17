@@ -36,7 +36,7 @@ cattle <- mongo(collection = "Cattle", db = "DataMuster", url = pass, verbose = 
 
 
 cattlesearch <-paste0("{", property, gender, paddock, status,"}")
-if(nchar(cattlesearch==2)){}else{
+if(nchar(cattlesearch)==2){}else{
 cattlesearch <- substr(cattlesearch, 1 , nchar(cattlesearch)-2)
 cattlesearch <- paste0(cattlesearch, "}")}
 
