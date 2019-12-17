@@ -4,7 +4,8 @@
 \alias{appwowupload}
 \title{Upload DataMuster WoW data to the DataMuster database}
 \usage{
-appwowupload(RFID, datetime, weight, ALMS, username = NULL, password = NULL)
+appwowupload(RFID, datetime, weight, ALMS, username = NULL,
+  password = NULL)
 }
 \arguments{
 \item{RFID}{a list of the cattle RFID numbers}

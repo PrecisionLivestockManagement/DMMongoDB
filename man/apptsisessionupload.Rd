@@ -4,19 +4,9 @@
 \alias{apptsisessionupload}
 \title{Upload Gallagher TSi session data to the DataMuster database}
 \usage{
-apptsisessionupload(
-  Tag,
-  EID,
-  date,
-  liveweight,
-  property,
-  NLIS = NULL,
-  pdkfrom = NULL,
-  pdkto = NULL,
-  notes = NULL,
-  username = NULL,
-  password = NULL
-)
+apptsisessionupload(Tag, EID, date, liveweight, property, NLIS = NULL,
+  pdkfrom = NULL, pdkto = NULL, notes = NULL, username = NULL,
+  password = NULL)
 }
 \arguments{
 \item{Tag}{a list of cattle management tag numbers}

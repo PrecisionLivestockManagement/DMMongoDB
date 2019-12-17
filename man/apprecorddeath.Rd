@@ -4,15 +4,8 @@
 \alias{apprecorddeath}
 \title{Record a cattle death via the DataMuster website app}
 \usage{
-apprecorddeath(
-  RFID,
-  MTag,
-  date,
-  cause,
-  property,
-  username = NULL,
-  password = NULL
-)
+apprecorddeath(RFID, MTag, date, cause, property, username = NULL,
+  password = NULL)
 }
 \arguments{
 \item{RFID}{this is a list of cattle RFID numbers}

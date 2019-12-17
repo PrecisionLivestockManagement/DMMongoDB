@@ -5,16 +5,11 @@
 \alias{updatealms}
 \title{Update cattle allocations to alms units}
 \usage{
-updatealms(RFID, property, alms, date = NULL, username = NULL, password = NULL)
+updatealms(RFID, property, alms, date = NULL, username = NULL,
+  password = NULL)
 
-updatepaddock(
-  RFID,
-  property,
-  paddock,
-  date = NULL,
-  username = NULL,
-  password = NULL
-)
+updatepaddock(RFID, property, paddock, date = NULL, username = NULL,
+  password = NULL)
 }
 \arguments{
 \item{RFID}{this is a list of cattle RFID numbers}
@@ -29,7 +24,17 @@ updatepaddock(
 
 \item{almsid}{this is the asset_id of the alms unti the cattle are to be allocated.}
 
+\item{RFID}{this is a list of cattle RFID numbers}
+
+\item{property}{the name of the property to search the DataMuster MongoDB Atlas server}
+
+\item{date}{provide the date that the new paddock allocation was applied, this has to be in date format. Default is today's date.}
+
 \item{addtoherd}{this indicates whether or not there are cattle already allocated to the paddock. use addtoherd = TRUE to ignore.}
+
+\item{username}{if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring}
+
+\item{password}{if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access}
 }
 \value{
 a message that indicates the RFID tag number has been successfully updated

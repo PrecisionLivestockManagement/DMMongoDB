@@ -4,13 +4,8 @@
 \alias{infsearch}
 \title{Retrieves infrastructure information from the DataMuster database}
 \usage{
-infsearch(
-  property = NULL,
-  active = NULL,
-  infstype = NULL,
-  username = NULL,
-  password = NULL
-)
+infsearch(property = NULL, active = NULL, infstype = NULL,
+  username = NULL, password = NULL)
 }
 \arguments{
 \item{property}{the name of the property to search the database}

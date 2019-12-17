@@ -4,16 +4,8 @@
 \alias{addnewpaddock}
 \title{Add paddocks to the DataMuster database}
 \usage{
-addnewpaddock(
-  property,
-  filetype,
-  filedir = NULL,
-  paddockname = NULL,
-  filename = NULL,
-  coords = NULL,
-  username = NULL,
-  password = NULL
-)
+addnewpaddock(property, filetype, filedir = NULL, paddockname = NULL,
+  filename = NULL, coords = NULL, username = NULL, password = NULL)
 }
 \arguments{
 \item{property}{the name of the property to add the paddocks}

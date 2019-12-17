@@ -4,7 +4,8 @@
 \alias{propcattlecheck}
 \title{Check cattle access to ALMS accross whole property}
 \usage{
-propcattlecheck(property, days = NULL, username = NULL, password = NULL)
+propcattlecheck(property, days = NULL, username = NULL,
+  password = NULL)
 }
 \arguments{
 \item{property}{this is a list or single property name as a character entry}

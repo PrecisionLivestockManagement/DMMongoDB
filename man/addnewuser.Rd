@@ -4,14 +4,8 @@
 \alias{addnewuser}
 \title{Add new user}
 \usage{
-addnewuser(
-  user,
-  email,
-  access,
-  property = NULL,
-  username = NULL,
-  password = NULL
-)
+addnewuser(user, email, access, property = NULL, username = NULL,
+  password = NULL)
 }
 \arguments{
 \item{user}{the name of the user to be added to the DataMuster MongoDB Altas server, preferably without a space between the first and last name}

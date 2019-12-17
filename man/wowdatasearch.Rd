@@ -4,14 +4,8 @@
 \alias{wowdatasearch}
 \title{Retrieve data from the DataMuster MongoDB database}
 \usage{
-wowdatasearch(
-  start = NULL,
-  end = NULL,
-  location = NULL,
-  remove.telemetry = NULL,
-  username = NULL,
-  password = NULL
-)
+wowdatasearch(start = NULL, end = NULL, location = NULL,
+  remove.telemetry = NULL, username = NULL, password = NULL)
 }
 \arguments{
 \item{start}{provide a start date and time to be returned, in date format.}

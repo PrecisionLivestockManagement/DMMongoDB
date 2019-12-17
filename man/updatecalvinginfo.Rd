@@ -4,14 +4,8 @@
 \alias{updatecalvinginfo}
 \title{Update cow calving information to DataMuster database}
 \usage{
-updatecalvinginfo(
-  MTag,
-  calfMTag,
-  property,
-  birthDate = NULL,
-  username = NULL,
-  password = NULL
-)
+updatecalvinginfo(MTag, calfMTag, property, birthDate = NULL,
+  username = NULL, password = NULL)
 }
 \arguments{
 \item{MTag}{this is a list of the cow management tag numbers}

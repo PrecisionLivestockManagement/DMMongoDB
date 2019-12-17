@@ -4,14 +4,8 @@
 \alias{almshistsearch}
 \title{Retrieve data on cattle allocations to ALMS units from the DataMuster database}
 \usage{
-almshistsearch(
-  property = NULL,
-  alms = NULL,
-  start = NULL,
-  end = NULL,
-  username = NULL,
-  password = NULL
-)
+almshistsearch(property = NULL, alms = NULL, start = NULL,
+  end = NULL, username = NULL, password = NULL)
 }
 \arguments{
 \item{property}{the name of the property to query}

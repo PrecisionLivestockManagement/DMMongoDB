@@ -4,22 +4,9 @@
 \alias{appcalvingupload}
 \title{Upload calving data to the DataMuster database}
 \usage{
-appcalvingupload(
-  calfID,
-  cowID,
-  date,
-  weight,
-  sex,
-  brand,
-  udder,
-  frontteats,
-  rearteats,
-  comment,
-  paddock,
-  property,
-  username = NULL,
-  password = NULL
-)
+appcalvingupload(calfID, cowID, date, weight, sex, brand, udder,
+  frontteats, rearteats, comment, paddock, property, username = NULL,
+  password = NULL)
 }
 \arguments{
 \item{calfID}{a list of calf management tag number/s}

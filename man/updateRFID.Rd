@@ -4,7 +4,8 @@
 \alias{updateRFID}
 \title{Update RFID tag number}
 \usage{
-updateRFID(RFID, newRFID, date = NULL, username = NULL, password = NULL)
+updateRFID(RFID, newRFID, date = NULL, username = NULL,
+  password = NULL)
 }
 \arguments{
 \item{RFID}{this is a list of the previous cattle RFID numbers}
