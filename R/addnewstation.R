@@ -3,12 +3,10 @@
 #' This function adds a new station to the DataMuster database. You can only access this function if you have read and write permission
 #' @name addnewstation
 #' @param stationname the name of the property
-#' @param stationshortname a shortened stationname
 #' @param lat the latitude of a coordinate point to locate the property
 #' @param long the longitude of a coordinate point to locate the property
 #' @param area the area of the staion in hectares, default is 100 ha
 #' @param PIC the Property Identification Code
-#' @param timezone the local timezone, default is Australia/Brisbane
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
 #' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
 #' @return message to say the station has been successfully added
@@ -18,7 +16,7 @@
 #' @export
 
 
-addnewstation <- function(stationname, stationshortname, long, lat, area=NULL, PIC=NULL, timezone=NULL, username=NULL, password=NULL){
+addnewstation <- function(stationname, long, lat, area=NULL, PIC=NULL, username=NULL, password=NULL){
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]
@@ -37,16 +35,13 @@ addnewstation <- function(stationname, stationshortname, long, lat, area=NULL, P
 
     if(is.null(area)){area <- 100}
     if(is.null(PIC)){PIC <- "xxxxxx"}
-    if(is.null(timezone)){timezone <- "Australia/Brisbane"}
 
     #Input new station details into a template dataframe and insert into database --------
 
     template$name<- stationname
-    template$shortname <- stationshortname
     template$longitude<-long
     template$latitude<- lat
     template$PIC <- PIC
-    template$timezone <- timezone
     template$hectares <- area
 
     rownames(template)<-c()
