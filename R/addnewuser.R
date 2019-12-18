@@ -4,7 +4,8 @@
 #' @name addnewuser
 #' @param user the name of the user to be added to the DataMuster MongoDB Altas server, preferably without a space between the first and last name
 #' @param email the email address of the user that was used to register via the DataMuster website
-#' @param access the MongoDB user access level, either "user" or "admin"
+#' @param accesslevel the MongoDB user access level, either "user" or "admin"
+#' @param writeaccess the MongoDB user write access level, either "1" for write access or "0" for no write access
 #' @param property a list of the properties the user will be able to access in MongoDB. If access is "admin", the user will be provided access to all existing properties in the database
 #' @return This function writes directly to the database. A message will appear to indicate the number of documents that have been successfully added to the MongoDB database
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
@@ -16,7 +17,7 @@
 #' @export
 
 
-addnewuser <- function(user, email, access, property=NULL, username=NULL, password=NULL){
+addnewuser <- function(user, email, accesslevel, writeaccess, property=NULL, username=NULL, password=NULL){
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]
@@ -30,7 +31,8 @@ addnewuser <- function(user, email, access, property=NULL, username=NULL, passwo
 
     template$username <- user
     template$loginemail <- email
-    template$accesslevel <- access
+    template$accesslevel <- accesslevel
+    template$writeaccess <- writeaccess
     template$stations[[1]] <- list()
 
     if (template$accesslevel == "user") {
