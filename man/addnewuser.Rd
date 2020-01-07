@@ -2,7 +2,7 @@
 % Please edit documentation in R/addnewuser.R
 \name{addnewuser}
 \alias{addnewuser}
-\title{Add new user}
+\title{Add a user to the DataMuster database}
 \usage{
 addnewuser(
   user,
@@ -35,7 +35,7 @@ This function writes directly to the database. A message will appear to indicate
 message to say the user has been successfully added
 }
 \description{
-This function adds a new user to the MongoDB database. You can only access this function if you have read and write permission
+This function adds a user to the MongoDB database. You can only access this function if you have read and write permission
 }
 \author{
 Lauren O'Connor \email{lauren.oconnor@datamuster.net.au}

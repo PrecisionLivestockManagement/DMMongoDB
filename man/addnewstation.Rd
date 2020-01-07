@@ -2,7 +2,7 @@
 % Please edit documentation in R/addnewstation.R
 \name{addnewstation}
 \alias{addnewstation}
-\title{Add a new station to the DataMuster database}
+\title{Add a station to the DataMuster database}
 \usage{
 addnewstation(
   stationname,
@@ -33,7 +33,7 @@ addnewstation(
 message to say the station has been successfully added
 }
 \description{
-This function adds a new station to the DataMuster database. You can only access this function if you have read and write permission
+This function adds a station to the DataMuster database. You can only access this function if you have read and write permission
 }
 \author{
 Dave Swain \email{dave.swain@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@datamuster.net.au}
