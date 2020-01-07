@@ -1,6 +1,6 @@
-#' Add a new station to the DataMuster database
+#' Add a station to the DataMuster database
 #'
-#' This function adds a new station to the DataMuster database. You can only access this function if you have read and write permission
+#' This function adds a station to the DataMuster database. You can only access this function if you have read and write permission
 #' @name addnewstation
 #' @param stationname the name of the property
 #' @param lat the latitude of a coordinate point to locate the property

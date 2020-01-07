@@ -1,6 +1,6 @@
-#' Add new user
+#' Add a user to the DataMuster database
 #'
-#' This function adds a new user to the MongoDB database. You can only access this function if you have read and write permission
+#' This function adds a user to the MongoDB database. You can only access this function if you have read and write permission
 #' @name addnewuser
 #' @param user the name of the user to be added to the DataMuster MongoDB Altas server, preferably without a space between the first and last name
 #' @param email the email address of the user that was used to register via the DataMuster website
