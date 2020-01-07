@@ -4,13 +4,18 @@
 \alias{addnewstation}
 \title{Add a new station to the DataMuster database}
 \usage{
-addnewstation(stationname, stationshortname, long, lat, area = NULL,
-  PIC = NULL, timezone = NULL, username = NULL, password = NULL)
+addnewstation(
+  stationname,
+  long,
+  lat,
+  area = NULL,
+  PIC = NULL,
+  username = NULL,
+  password = NULL
+)
 }
 \arguments{
 \item{stationname}{the name of the property}
-
-\item{stationshortname}{a shortened stationname}
 
 \item{long}{the longitude of a coordinate point to locate the property}
 
@@ -19,8 +24,6 @@ addnewstation(stationname, stationshortname, long, lat, area = NULL,
 \item{area}{the area of the staion in hectares, default is 100 ha}
 
 \item{PIC}{the Property Identification Code}
-
-\item{timezone}{the local timezone, default is Australia/Brisbane}
 
 \item{username}{if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring}
 

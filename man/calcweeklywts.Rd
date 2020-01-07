@@ -4,9 +4,16 @@
 \alias{calcweeklywts}
 \title{Retrieve data on cattle ALMS weekly weights from the DataMuster database}
 \usage{
-calcweeklywts(RFID, start = NULL, end = NULL, values = NULL,
-  s.d = NULL, remove.duplicates = NULL, username = NULL,
-  password = NULL)
+calcweeklywts(
+  RFID,
+  start = NULL,
+  end = NULL,
+  values = NULL,
+  s.d = NULL,
+  remove.duplicates = NULL,
+  username = NULL,
+  password = NULL
+)
 }
 \arguments{
 \item{RFID}{a list of cattle RFID numbers}

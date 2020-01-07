@@ -4,8 +4,15 @@
 \alias{appupdateRFID}
 \title{Update RFID tag number via the DataMuster website app}
 \usage{
-appupdateRFID(RFID, MTag, property, newRFID, date, username = NULL,
-  password = NULL)
+appupdateRFID(
+  RFID,
+  MTag,
+  property,
+  newRFID,
+  date,
+  username = NULL,
+  password = NULL
+)
 }
 \arguments{
 \item{RFID}{this is a list of the previous cattle RFID numbers}

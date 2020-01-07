@@ -4,15 +4,24 @@
 \alias{addnewuser}
 \title{Add new user}
 \usage{
-addnewuser(user, email, access, property = NULL, username = NULL,
-  password = NULL)
+addnewuser(
+  user,
+  email,
+  accesslevel,
+  writeaccess,
+  property = NULL,
+  username = NULL,
+  password = NULL
+)
 }
 \arguments{
 \item{user}{the name of the user to be added to the DataMuster MongoDB Altas server, preferably without a space between the first and last name}
 
 \item{email}{the email address of the user that was used to register via the DataMuster website}
 
-\item{access}{the MongoDB user access level, either "user" or "admin"}
+\item{accesslevel}{the MongoDB user access level, either "user" or "admin"}
+
+\item{writeaccess}{the MongoDB user write access level, either "1" for write access or "0" for no write access}
 
 \item{property}{a list of the properties the user will be able to access in MongoDB. If access is "admin", the user will be provided access to all existing properties in the database}
 

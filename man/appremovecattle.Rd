@@ -4,8 +4,7 @@
 \alias{appremovecattle}
 \title{Remove cattle from a station via the DataMuster website app}
 \usage{
-appremovecattle(RFID, MTag, property, date, username = NULL,
-  password = NULL)
+appremovecattle(RFID, MTag, property, date, username = NULL, password = NULL)
 }
 \arguments{
 \item{RFID}{this is a list of cattle RFID numbers}

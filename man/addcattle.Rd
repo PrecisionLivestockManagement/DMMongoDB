@@ -4,11 +4,30 @@
 \alias{addcattle}
 \title{Add cattle to the DataMuster database}
 \usage{
-addcattle(RFID, MTag, category, property, paddock, weaned, date = NULL,
-  breed = NULL, brand = NULL, horn = NULL, colour = NULL,
-  sex = NULL, desexed = NULL, DOB = NULL, birthWeight = NULL,
-  damRFID = NULL, damMTag = NULL, sireRFID = NULL, sireMTag = NULL,
-  animalID = NULL, username = NULL, password = NULL)
+addcattle(
+  RFID,
+  MTag,
+  category,
+  property,
+  paddock,
+  weaned,
+  date = NULL,
+  breed = NULL,
+  brand = NULL,
+  horn = NULL,
+  colour = NULL,
+  sex = NULL,
+  desexed = NULL,
+  DOB = NULL,
+  birthWeight = NULL,
+  damRFID = NULL,
+  damMTag = NULL,
+  sireRFID = NULL,
+  sireMTag = NULL,
+  animalID = NULL,
+  username = NULL,
+  password = NULL
+)
 }
 \arguments{
 \item{RFID}{a list of the RFID number/s}

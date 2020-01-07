@@ -4,8 +4,14 @@
 \alias{weeklywts}
 \title{Cattle weekly weights}
 \usage{
-weeklywts(RFID, start = NULL, end = NULL, values = NULL,
-  username = NULL, password = NULL)
+weeklywts(
+  RFID,
+  start = NULL,
+  end = NULL,
+  values = NULL,
+  username = NULL,
+  password = NULL
+)
 }
 \arguments{
 \item{RFID}{this is a list of cattle RFID numbers}

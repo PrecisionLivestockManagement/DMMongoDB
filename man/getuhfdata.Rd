@@ -4,8 +4,7 @@
 \alias{getuhfdata}
 \title{Retrieve UHF data from the DataMuster MongoDB database}
 \usage{
-getuhfdata(start = NULL, end = NULL, username = NULL,
-  password = NULL)
+getuhfdata(start = NULL, end = NULL, username = NULL, password = NULL)
 }
 \arguments{
 \item{start}{provide a start date and time to be returned, this has to be in datetime format.}

@@ -4,8 +4,15 @@
 \alias{findcattle}
 \title{Retrieve cattle information}
 \usage{
-findcattle(property = NULL, gender = NULL, paddock = NULL,
-  status = NULL, values = NULL, username = NULL, password = NULL)
+findcattle(
+  property = NULL,
+  gender = NULL,
+  paddock = NULL,
+  status = NULL,
+  values = NULL,
+  username = NULL,
+  password = NULL
+)
 }
 \arguments{
 \item{property}{property to search for}

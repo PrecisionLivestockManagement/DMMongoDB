@@ -3,7 +3,6 @@
 \docType{package}
 \name{DMMongoDB}
 \alias{DMMongoDB}
-\alias{DMMongoDB-package}
 \title{DMMongoDB: A package to access DataMuster}
 \description{
 The DMMongoDB package provides important functions to more easily access and process DataMuster data. This package is designed to help researchers,
