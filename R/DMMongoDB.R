@@ -9,7 +9,7 @@
 #' The weeklywts function to enable to access individual or groups of cattle daily weaights from the Automated Livestock Management Systems
 #' The propsearch function to identify IDs of cattle from indivudal or groups of cattle properties and filter for individual paddocks.
 #'
-#' @author Dave Swain \email{dave.swain@@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@@datamuster.net.au}
+#' @author Dave Swain \email{d.swain@@cqu.edu.au} and Lauren O'Connor \email{l.r.oconnor@@cqu.edu.au}
 #'
 #' @docType package
 #' @name DMMongoDB
