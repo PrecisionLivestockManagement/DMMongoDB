@@ -33,7 +33,7 @@ propsearchfull <- function(property, paddock=NULL, archives=NULL, username=NULL,
   filterstation2 <- sprintf('{"$or": [{"exstation":{"$in":["%s"]}}, {"stationname":{"$in":["%s"]}}]}', property, property)
 
   lookfor <- sprintf('{"RFID":true, "properties.Management":true, "properties.Paddock":true, "properties.PaddockdateIN":true, "properties.sex":true,
-                     "properties.birthDate":true, "properties.damRFID":true, "properties.sireRFID":true, "properties.stwtdate":true, "properties.stweight":true,
+                     "properties.birthDate":true, "properties.damRFID":true, "properties.damMTag":true, "properties.sireRFID":true, "properties.stwtdate":true, "properties.stweight":true,
                      "properties.breed":true, "properties.colour":true, "properties.brand":true, "properties.entryDate":true, "properties.exitDate":true, "properties.deathDate":true,
                      "properties.horn":true, "properties.category":true, "properties.weaned":true, "properties.ALMS":true, "properties.ALMSasset_id":true, "properties.wkweight":true,
                      "properties.wkwtdate":true, "properties.birthWeight":true, "properties.calvingdate":true, "_id":false}')
