@@ -18,7 +18,7 @@
 #' @export
 
 
-updatecalvinginfo <- function(MTag, calfMTag, property, birthDate=NULL, username=NULL, password=NULL){
+updatecalvinginfo <- function(MTag, calfMTag, property, birthDate, username=NULL, password=NULL){
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]
