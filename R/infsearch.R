@@ -13,7 +13,7 @@
 #' @export
 
 
-infsearch <- function(property=NULL, active=NULL, infstype=NULL, username=NULL, password=NULL){
+infsearch <- function(property=NULL, active=NULL, infstype=NULL, unitname=NULL, username=NULL, password=NULL){
 
   if(is.null(username)||is.null(password)){
   username = keyring::key_list("DMMongoDB")[1,2]
@@ -24,7 +24,7 @@ infsearch <- function(property=NULL, active=NULL, infstype=NULL, username=NULL, 
   infrastructure <- mongo(collection = "Infrastructure", db = "DataMuster", url = pass, verbose = T)
 
   if(is.null(property)){
-  property <- appstationinfo(username = username, password = password)
+  property <- stationinfo(username = username, password = password)
   property <- property$Name}
 
   property <- paste(unlist(property), collapse = '", "' )
@@ -34,14 +34,15 @@ infsearch <- function(property=NULL, active=NULL, infstype=NULL, username=NULL, 
   filterstation <- sprintf('{"stationname":{"$in":["%s"]}, "properties.datarecording":"%s"}', property, "TRUE")}
 
   lookfor <- sprintf('{"stationname":true, "properties.asset_id":true, "properties.Paddock":true, "properties.datarecording":true, "properties.type":true,
-                       "properties.telemetry_out":true, "properties.lastsignal":true, "properties.usenum":true, "properties.filename":true,
-                       "properties.statdate":true, "properties.statEID":true, "properties.statweight":true, "_id":false}')
+                       "properties.telemetry_out":true, "properties.lastsignal":true, "properties.filename":true, "properties.usenum":true, "properties.filename":true,
+                       "properties.statdate":true, "properties.statEID":true, "properties.statweight":true, "_id":true}')
 
   infsinfo <- infrastructure$find(query = filterstation, fields = lookfor)
 
   if (nrow(infsinfo) == 0){infsinfo <- infrastructure$find(query = '{"stationname":"xxxxxx"}', fields = lookfor)}
 
   infsinfo$properties["stationname"] <- infsinfo$stationname
+  infsinfo$properties["id"] <- infsinfo$`_id`
 
   infsinfo <- infsinfo$properties
 
@@ -50,6 +51,10 @@ infsearch <- function(property=NULL, active=NULL, infstype=NULL, username=NULL, 
   if(is.null(infstype)){}else{
   infsinfo <- infsinfo%>%
               filter(type %in% infstype)}
+
+  if(is.null(unitname)){}else{
+    infsinfo <- infsinfo%>%
+      filter(filename %in% unitname)}
 
   return(infsinfo)
 

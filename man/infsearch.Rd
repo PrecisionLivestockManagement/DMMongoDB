@@ -8,6 +8,7 @@ infsearch(
   property = NULL,
   active = NULL,
   infstype = NULL,
+  unitname = NULL,
   username = NULL,
   password = NULL
 )
