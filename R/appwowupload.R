@@ -29,7 +29,7 @@ appwowupload <- function(RFID, datetime, weight, ALMS, username=NULL, password=N
   RFID[is.na(RFID)] <- ""
 
   data <- sprintf('{"RFID":"%s", "datetime":{"$date":"%s"}, "Wt":%s, "Location": "%s" , "createdAt":{"$date":"%s"}}',
-                  RFID, paste0(substr(datetime,1,10),"T",substr(datetime,12,19),"+1000"), weight, ALMS, paste0(substr(Sys.time(),1,10),"T",substr(Sys.time(),12,19),"+1000"))
+                  RFID, paste0(substr(datetime,1,10),"T",substr(datetime,12,19),"+1000"), as.numeric(weight), ALMS, paste0(substr(Sys.time(),1,10),"T",substr(Sys.time(),12,19),"+1000"))
 
   appwow$insert(data)
 
