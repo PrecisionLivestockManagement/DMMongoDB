@@ -9,6 +9,7 @@ dailywtsNEW(
   start = NULL,
   end = NULL,
   values = NULL,
+  unit = NULL,
   username = NULL,
   password = NULL
 )
@@ -21,6 +22,8 @@ dailywtsNEW(
 \item{end}{an end date to be returned in date format}
 
 \item{values}{the minimum number of weight values required, default is 1}
+
+\item{unit}{the filename of a specific ALMS unit to search}
 
 \item{username}{if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring}
 

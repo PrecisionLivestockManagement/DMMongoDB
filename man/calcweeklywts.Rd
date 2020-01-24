@@ -11,6 +11,7 @@ calcweeklywts(
   values = NULL,
   s.d = NULL,
   remove.duplicates = NULL,
+  unit = NULL,
   username = NULL,
   password = NULL
 )
@@ -27,6 +28,8 @@ calcweeklywts(
 \item{s.d}{the minimin standard deviation between daily weight values required to calculate an average weekly weight, default is 25}
 
 \item{remove.duplicates}{TRUE if duplicate date time values are to removed from the weekly weight calculation or FALSE if all values are to be included, default is TRUE}
+
+\item{unit}{the filename of the ALMS unit to search for}
 
 \item{username}{if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring}
 
