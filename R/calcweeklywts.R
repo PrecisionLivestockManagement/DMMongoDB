@@ -8,6 +8,7 @@
 #' @param values the minimum number of daily weight values required to calculate an average weekly weight, default is 4
 #' @param s.d the minimin standard deviation between daily weight values required to calculate an average weekly weight, default is 25
 #' @param remove.duplicates TRUE if duplicate date time values are to removed from the weekly weight calculation or FALSE if all values are to be included, default is TRUE
+#' @param unit the filename of the ALMS unit to search for
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
 #' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
 #' @return a dataframe of cattle RFID numbers and weekly weight statistics
@@ -19,7 +20,7 @@
 #' @export
 
 
-calcweeklywts <- function(RFID, start=NULL, end=NULL, values=NULL, s.d=NULL, remove.duplicates=NULL, username=NULL, password=NULL){
+calcweeklywts <- function(RFID, start=NULL, end=NULL, values=NULL, s.d=NULL, remove.duplicates=NULL, unit=NULL, username=NULL, password=NULL){
 
 
   if(is.null(username) || is.null(password)){
@@ -42,7 +43,7 @@ calcweeklywts <- function(RFID, start=NULL, end=NULL, values=NULL, s.d=NULL, rem
 
   RFID <- paste(unlist(RFID), collapse = '", "' )
 
-  tempwts <- dailywtsNEW(RFID, start, end)
+  tempwts <- dailywtsNEW(RFID, start, end, unit = unit, username = username, password = password)
 
   filterstation <- sprintf('{"RFID":{"$in":["%s"]}}', RFID)
   jan <- cattle$find(query = filterstation, fields='{"RFID":true, "stationname":true, "pdkhist.dateIN":true, "pdkhist.name":true, "_id":false}')
@@ -54,7 +55,7 @@ calcweeklywts <- function(RFID, start=NULL, end=NULL, values=NULL, s.d=NULL, rem
 
       for(k in 1:length(tempwts$RFID)){
 
-      newdata <- setNames(data.frame(matrix(nrow = 0, ncol = 5)), c("Date", "avweight", "sdweights", "numweights","paddock"))
+      newdata <- setNames(data.frame(matrix(nrow = 0, ncol = 5)), c("Date", "Weight", "sdweights", "numweights","paddock"))
       pdhist <- jan$pdkhist[jan$RFID == tempwts$RFID[k],]
 
         for (l in 1:length(getMondays)){
@@ -64,13 +65,13 @@ calcweeklywts <- function(RFID, start=NULL, end=NULL, values=NULL, s.d=NULL, rem
 
           if (end1 < end) {
 
-        wts <- tempwts$DailyWeights[[k]] %>% filter(between(as.Date(datetime, tz = "Australia/Brisbane"), start1, end1))
+        wts <- tempwts$DailyWeights[[k]] %>% filter(between(as.Date(Date, tz = "Australia/Brisbane"), start1, end1))
 
         wts <- wts%>%
-               filter(Wt != 0)
+               filter(Weight != 0)
 
-        if(remove.duplicates == "FALSE") {stuck <- wts$Wt} else {
-          stuck <- wts$Wt[!duplicated(wts$datetime)]}
+        if(remove.duplicates == "FALSE") {stuck <- wts$Weight} else {
+          stuck <- wts$Weight[!duplicated(wts$Date)]}
 
         for(i in 1:length(stuck)){if(length(stuck) < values){break}else{
           if(sd(stuck) > s.d){stuck <- rm.outlier(stuck)}else
@@ -80,7 +81,7 @@ calcweeklywts <- function(RFID, start=NULL, end=NULL, values=NULL, s.d=NULL, rem
               tup3 <- length(stuck)}}}
         if(exists("tup1")){
 
-          data <- data.frame(Date = as.character(end1), avweight = round(tup2,1), sdweights = round(tup1,1), numweights = tup3)
+          data <- data.frame(Date = as.character(end1), Weight = round(tup2,1), sdweights = round(tup1,1), numweights = tup3)
 
           n <- tail(which(as.Date(pdhist$dateIN[[1]]) < as.Date(data$Date)),1)
           data$paddock <- ifelse(length(n) ==1, pdhist$name[[1]][n], NA)
@@ -93,12 +94,13 @@ calcweeklywts <- function(RFID, start=NULL, end=NULL, values=NULL, s.d=NULL, rem
 
           }}
 
-      cattleinfo[[tempwts$RFID[k]]] <- as.data.frame(newdata)
+      if(nrow(newdata)<values){tempwts$RFID[[k]] <- "xxxx"}else{
+      cattleinfo[[tempwts$RFID[k]]] <- as.data.frame(newdata)}
 
     }
     }
 
-  cattleinfo <- list(RFID=tempwts$RFID, Property = tempwts$Property, Paddock = tempwts$Paddock, Weeklyweights=cattleinfo)
+  cattleinfo <- list(RFID=tempwts$RFID[tempwts$RFID != "xxxx"], Property = tempwts$Property[tempwts$RFID != "xxxx"], Paddock = tempwts$Paddock[tempwts$RFID != "xxxx"], WeeklyWeights=cattleinfo)
 
   return(cattleinfo)
 
