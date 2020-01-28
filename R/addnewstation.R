@@ -6,6 +6,7 @@
 #' @param lat the latitude of a coordinate point to locate the property
 #' @param long the longitude of a coordinate point to locate the property
 #' @param area the area of the staion in hectares, default is 100 ha
+#' @param timezone the local timezone of the property, see https://en.wikipedia.org/wiki/List_of_tz_database_time_zones for the list of accepted timezones
 #' @param PIC the Property Identification Code
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
 #' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
@@ -43,6 +44,7 @@ addnewstation <- function(stationname, long, lat, area=NULL, PIC=NULL, username=
     template$latitude<- lat
     template$PIC <- PIC
     template$hectares <- area
+    template$timezone <- timezone
 
     rownames(template)<-c()
     rownames(template$geometry)<-c()
