@@ -33,9 +33,13 @@ dailywtsNEW <- function(RFID, start=NULL, end=NULL, values=NULL, unit=NULL, user
 
   RFID <- paste(unlist(RFID), collapse = '", "' )
   filtercattle <- sprintf('{"RFID":{"$in":["%s"]}}', RFID)
-  lookfor <- sprintf('{"RFID":true, "stationname":true, "properties.Paddock":true, "RFIDhist.ID":true, "_id":false}')
+  lookfor <- sprintf('{"RFID":true, "stationname":true, "exstation":true, "properties.Paddock":true, "RFIDhist.ID":true, "_id":false}')
 
   cows <- cattle$find(query = filtercattle, fields= lookfor)
+
+  stations <- unique(cows$stationname)
+
+  stationsinfo <- stationinfo(property = stations, username = username, password = password)
 
   cattleinfo <- list()
 
@@ -48,8 +52,16 @@ dailywtsNEW <- function(RFID, start=NULL, end=NULL, values=NULL, unit=NULL, user
 
   wts <- dailywts$find(query = filterwts, fields= '{"RFID":true, "Wt":true, "datetime":true, "Location":true, "_id":false}')
 
-  if(is.null(start)){}else{if(is.null(end)){wts <- wts %>% filter(between(as.Date(datetime, tz = "Australia/Brisbane"),start,Sys.Date()))}
-      else{wts <- wts %>% filter(between(as.Date(datetime, tz = "Australia/Brisbane"),start,end))}}
+  station <- c(cows$stationname[cows$RFID == cows$RFID[i]], cows$exstation[cows$RFID == cows$RFID[i]])
+  station <- station[!grepl("xxxxxx", station)]
+  timezone <- stationsinfo$Timezone[stationsinfo$Name == station]
+
+
+  attributes(wts$datetime)$tzone <- timezone
+
+
+  if(is.null(start)){}else{if(is.null(end)){wts <- wts %>% filter(between(as.Date(datetime, tz = timezone),start,Sys.Date()))}
+      else{wts <- wts %>% filter(between(as.Date(datetime, tz = timezone),start,end))}}
 
   if(is.null(unit)){}else{wts <- wts %>% filter(Location %in% unit)}
 
@@ -57,7 +69,8 @@ dailywtsNEW <- function(RFID, start=NULL, end=NULL, values=NULL, unit=NULL, user
 
    if(nrow(cattlewts)<values){cows$RFID[i] <- "xxxx"}else{
 
-    cattlewts$Date <- as.POSIXct(strptime(wts$datetime, format = "%Y-%m-%d %H:%M:%S", tz = "Australia/Brisbane"))
+    #cattlewts$Date <- as.POSIXct(strptime(wts$datetime, format = "%Y-%m-%d %H:%M:%S", tz = timezone))
+    cattlewts$Date <- wts$datetime
     cattlewts$Weight <- wts$Wt
 
     cattlewts <- cattlewts[order(cattlewts$Date),]
