@@ -24,16 +24,16 @@ stationinfo <- function(property=NULL, username=NULL, password=NULL){
   station <- mongo(collection = "Stations", db = "DataMuster", url = pass, verbose = T)
 
 
-  lookfor <- sprintf('{"name":true, "PIC":true, "timezone":true, "longitude":true, "latitude":true, "_id":true}')
+  lookfor <- sprintf('{"stationname":true, "PIC":true, "timezone":true, "longitude":true, "latitude":true, "reports.name":true, "reports.email":true, "_id":true}')
 
   if (is.null(property)){
     propertyinfo <- station$find(query = '{}', fields=lookfor)}else{
     property <- paste(unlist(property), collapse = '", "' )
-    filterstation <- sprintf('{"name":{"$in":["%s"]}}', property)
+    filterstation <- sprintf('{"stationname":{"$in":["%s"]}}', property)
     propertyinfo <- station$find(query = filterstation, fields=lookfor)}
 
   propertyinfo <- propertyinfo %>%
-    rename(Name = "name", Timezone = "timezone")
+    rename(Name = "stationname", Timezone = "timezone")
   return(propertyinfo)
 
 }
