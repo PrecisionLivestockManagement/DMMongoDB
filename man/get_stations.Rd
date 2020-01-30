@@ -4,7 +4,13 @@
 \alias{get_stations}
 \title{Retrieve cattle information via the DataMuster website app}
 \usage{
-get_stations(report = NULL, fields = NULL, username = NULL, password = NULL)
+get_stations(
+  stationname = NULL,
+  report = NULL,
+  fields = NULL,
+  username = NULL,
+  password = NULL
+)
 }
 \arguments{
 \item{fields}{a list of MongoDB cattle collection headers that you want returned}

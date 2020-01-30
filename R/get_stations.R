@@ -20,13 +20,13 @@
 #' @export
 
 
-get_stations <- function(report = NULL, fields = NULL, username = NULL, password = NULL){
+get_stations <- function(stationname = NULL, report = NULL, fields = NULL, username = NULL, password = NULL){
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]
     password =  keyring::key_get("DMMongoDB", username)
   }
-
+  if(is.null(stationname)){}else{stationname <- sprintf('"stationname":"%s",', stationname)}
   if(is.null(report)){}else{report <- sprintf('"reports.name":"%s",', report)}
 
 pass <- sprintf("mongodb://%s:%s@datamuster-shard-00-00-8mplm.mongodb.net:27017,datamuster-shard-00-01-8mplm.mongodb.net:27017,datamuster-shard-00-02-8mplm.mongodb.net:27017/test?ssl=true&replicaSet=DataMuster-shard-0&authSource=admin", username, password)
@@ -35,7 +35,7 @@ stations <- mongo(collection = "Stations", db = "DataMuster", url = pass, verbos
 
 # Set up find query
 
-search <-paste0("{", report,"}")
+search <-paste0("{", stationname, report,"}")
 
   if(nchar(search)==2){}else{
     search <- substr(search, 1 , nchar(search)-2)
@@ -51,7 +51,9 @@ snappy <- sprintf('{%s, "_id":false}', te)
 
 data <- stations$find(query = search, fields = snappy)
 
-dataf <- cbind(data[-1], data$reports)
+if(length(data) >1){
+dataf <- cbind(data[-1], data$reports)}else{
+  dataf <- data}
 
 #collist <- colnames(stationdataf)
 
