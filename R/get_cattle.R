@@ -20,7 +20,7 @@
 #' @export
 
 
-get_cattle <- function(property = NULL, sex = NULL, category = NULL, paddock = NULL, alms = NULL, weaned = NULL, almsasset_id = NULL, timezone = NULL, fields = NULL, username = NULL, password = NULL){
+get_cattle <- function(RFID = NULL, property = NULL, sex = NULL, category = NULL, paddock = NULL, alms = NULL, weaned = NULL, almsasset_id = NULL, timezone = NULL, fields = NULL, username = NULL, password = NULL){
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]
@@ -39,10 +39,13 @@ get_cattle <- function(property = NULL, sex = NULL, category = NULL, paddock = N
   if(is.null(alms)){} else {alms <- sprintf('"properties.ALMS":"%s",', alms)}
   if(is.null(weaned)){} else {weaned <- sprintf('"properties.weaned":"%s",', weaned)}
 
-
   if(is.null(almsasset_id)){} else {
     almsasset_id <- paste(unlist(almsasset_id), collapse = '", "' )
     almsasset_id <- sprintf('"properties.ALMSasset_id":{"$in":["%s"]},', almsasset_id)}
+
+  if(is.null(RFID)){} else {
+    RFID <- paste(unlist(RFID), collapse = '", "' )
+    RFID <- sprintf('"RFID":{"$in":["%s"]},', RFID)}
 
 pass <- sprintf("mongodb://%s:%s@datamuster-shard-00-00-8mplm.mongodb.net:27017,datamuster-shard-00-01-8mplm.mongodb.net:27017,datamuster-shard-00-02-8mplm.mongodb.net:27017/test?ssl=true&replicaSet=DataMuster-shard-0&authSource=admin", username, password)
 
@@ -51,7 +54,7 @@ cattle <- mongo(collection = "Cattle", db = "DataMuster", url = pass, verbose = 
 
 # Set up find query
 
-search <-paste0("{", property, sex, paddock, category, alms, weaned, almsasset_id,"}")
+search <-paste0("{", property, sex, paddock, category, alms, weaned, almsasset_id, RFID,"}")
 
 if(nchar(search)==2){}else{
 search <- substr(search, 1 , nchar(search)-2)
@@ -92,9 +95,10 @@ for(i in 1:length(collist)){
 #                filter(RFID != "xxxxxx")
 # }
 
-
-# if(!exists("cattledataf") | exists("cattledataf") && nrow(cattledataf) == 0){
-# cattledataf <- setNames(data.frame(matrix(ncol = 5, nrow = 0)), c("RFID", "Tag", "Sex", "Category", "Paddock"))}
+if(!exists("dataf") | exists("dataf") && nrow(dataf) == 0){
+  dataf <- setNames(data.frame(matrix(ncol = length(fields), nrow = 0)), gsub(".*\\.","", fields))%>%
+           mutate_all(funs(as.character(.)))
+  }
 
 dataf
 

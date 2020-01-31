@@ -5,6 +5,7 @@
 \title{Retrieve cattle information via the DataMuster website app}
 \usage{
 get_cattle(
+  RFID = NULL,
   property = NULL,
   sex = NULL,
   category = NULL,
