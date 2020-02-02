@@ -56,7 +56,23 @@ pdkhistsearch <- function(property, paddock=NULL, start=NULL, end=NULL, username
           dailywts$dateOUT <- row}else{
       dailywts$dateOUT <- as.Date(jan2$pdkhist$dateOUT[[i]], tz = "Australia/Brisbane")}}}
 
-    if(is.null(paddock)){}else{
+    if(is.null(paddock)){
+
+      if (nrow(dailywts) != 0){
+
+        for (p in 1:nrow(dailywts)){
+          if (is.na(as.Date(dailywts$dateOUT[p]))){
+            dates <- seq(as.Date(dailywts$dateIN[p]), Sys.Date(), by = "days")
+            dates<-dates[between(dates, as.Date(start), as.Date(end))]
+          }else{
+            dates <- seq(as.Date(dailywts$dateIN[p]), as.Date(dailywts$dateOUT[p]), by = "days")
+            dates<-dates[between(dates, as.Date(start), as.Date(end))]}
+
+          if (length(dates) == 0){dailywts$name[p] <- ""}}
+
+      dailywts <- dailywts %>% filter(name != "")}
+
+    }else{
 
     n <- which(dailywts$name == paddock)
 
