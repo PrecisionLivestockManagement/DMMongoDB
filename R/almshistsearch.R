@@ -33,7 +33,7 @@ almshistsearch <- function(property=NULL, alms=NULL, start=NULL, end=NULL, usern
   #filterstation1 <- sprintf('{"stationname":{"$in":["%s"]}}', property)
   #filterstation2 <- sprintf('{"$or": [{"exstation":"%s"}, {"stationname":"%s"}]}', property, property)
 
-  lookfor <- sprintf('{"RFID":true, "stationname":true, "exstation":true, "almshist.asset_id":true, "almshist.dateON":true, "almshist.dateOFF":true, "_id":false}')
+  lookfor <- sprintf('{"RFID":true, "properties.Management":true, "stationname":true, "exstation":true, "almshist.asset_id":true, "almshist.dateON":true, "almshist.dateOFF":true, "_id":false}')
 
   #jan2 <- cattle$find(query = filterstation2, fields=lookfor)
   jan2 <- cattle$find(query = '{}', fields=lookfor)
