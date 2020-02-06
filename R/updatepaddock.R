@@ -15,7 +15,7 @@
 #' @export
 
 
-updatepaddock <- function(RFID, property, paddock, date=NULL, username=NULL, password=NULL){
+updatepaddock <- function(RFID, property, paddock, MTag = NULL, date=NULL, username=NULL, password=NULL){
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]
@@ -44,8 +44,8 @@ updatepaddock <- function(RFID, property, paddock, date=NULL, username=NULL, pas
   filtercattle <- sprintf('{"RFID":{"$in":["%s"]}}', checkcows)
   check <- cattle$count(query = filtercattle)
 
-  if (check != length(RFID)) {
-      stop("One or more of the RFID numbers cannot be found in the database. Please check that the RFID numbers are correct and try again")}
+  #if (check != length(RFID)) {
+  #    stop("One or more of the RFID numbers cannot be found in the database. Please check that the RFID numbers are correct and try again")}
 
   # Check that the paddocks exist in the database
 
@@ -67,7 +67,11 @@ updatepaddock <- function(RFID, property, paddock, date=NULL, username=NULL, pas
 
   for (i in 1:length(RFID)){
 
-    RFIDS <- sprintf('{"RFID":"%s"}', RFID[i])
+    if (RFID[i] != "xxx xxxxxxxxxxxx"){
+
+      RFIDS <- sprintf('{"RFID":"%s"}', RFID[i])}else{
+
+        RFIDS <- sprintf('{"stationname":"%s", "properties.Management":"%s"}', property, MTag[i])}
 
           banger <- cattle$find(query= RFIDS, fields='{"properties.Paddock":true,"properties.ALMS":true,"properties.ALMSID":true,"pdkhist.name":true, "pdkhist.dateIN":true, "pdkhist.dateOUT":true, "almshist.dateON":true, "almshist.dateOFF":true, "_id":false}')
           arrpos <- length(banger$pdkhist$dateIN[[1]])
