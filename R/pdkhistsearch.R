@@ -94,12 +94,12 @@ pdkhistsearch <- function(property, paddock=NULL, start=NULL, end=NULL, username
     #This is the section where we can apply further filters based on breed, class, etc.
 
     if (nrow(dailywts) != 0){
-      cattleinfo[[jan2$RFID[i]]] <- as.data.frame(dailywts)}else{
-        jan2$RFID[[i]] <- "xxxx"}
+      cattleinfo[[jan2$properties$Management[i]]] <- as.data.frame(dailywts)}else{
+        jan2$properties$Management[[i]] <- "xxxx"}
   }
 
-  RFID <- jan2[which(jan2$RFID!="xxxx"),]
-  cattleinfo <- list(RFID=RFID$RFID, PaddockHistory=cattleinfo)
+  RFID <- jan2[which(jan2$properties$Management!="xxxx"),]
+  cattleinfo <- list(Management=RFID$properties$Management, RFID=RFID$RFID, PaddockHistory=cattleinfo)
 
   return(cattleinfo)
 
