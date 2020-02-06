@@ -118,7 +118,7 @@ for (i in 1:length(optfields)){
 
     # Check that the property is registered in the database ---------------------------------------------------------------------
 
-    filterstation <- sprintf('{"name":"%s"}', property)
+    filterstation <- sprintf('{"stationname":"%s"}', property)
     station <- stations$find(query = filterstation, fields = '{"_id":true}')
 
     if(nrow(station) == 0) {
