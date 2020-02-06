@@ -28,7 +28,8 @@ get_newusers <- function(start = NULL, fields = NULL, username = NULL, password 
   }
 
   if(is.null(start)){}else{
-  start <- as.POSIXct(start)
+
+  start <- as.POSIXct(paste0(start, "00:00:00"))
 
   trumpper <- strftime(start, format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT")
 
