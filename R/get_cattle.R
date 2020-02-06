@@ -20,7 +20,9 @@
 #' @export
 
 
-get_cattle <- function(RFID = NULL, property = NULL, sex = NULL, category = NULL, paddock = NULL, alms = NULL, weaned = NULL, almsasset_id = NULL, timezone = NULL, fields = NULL, username = NULL, password = NULL){
+get_cattle <- function(RFID = NULL, property = NULL, sex = NULL, category = NULL, paddock = NULL, alms = NULL, weaned = NULL, almsasset_id = NULL,
+                       exstation = NULL, exitdate = NULL, entrydate = NULL, deathdate = NULL, timezone = NULL, prevpaddock = NULL, active = NULL,
+                       fields = NULL, username = NULL, password = NULL){
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]
@@ -38,6 +40,12 @@ get_cattle <- function(RFID = NULL, property = NULL, sex = NULL, category = NULL
   if(is.null(paddock)){}else{paddock <- sprintf('"properties.Paddock":"%s",', paddock)}
   if(is.null(alms)){} else {alms <- sprintf('"properties.ALMS":"%s",', alms)}
   if(is.null(weaned)){} else {weaned <- sprintf('"properties.weaned":"%s",', weaned)}
+  if(is.null(exstation)){} else {exstation <- sprintf('"exstation":"%s",', exstation)}
+  if(is.null(prevpaddock)){} else {prevpaddock <- sprintf('"properties.PrevPaddock":"%s",', prevpaddock)}
+  if(is.null(active)){} else {active <- sprintf('"active":"%s",', active)}
+  if(is.null(exitdate)){} else {exitdate <- sprintf('"properties.exitDate":{"$gte":{"$date":"%s"}},', strftime(paste0(exitdate, "00:00:00"), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"))}
+  if(is.null(entrydate)){} else {entrydate <- sprintf('"properties.entryDate":{"$gte":{"$date":"%s"}},', strftime(paste0(entrydate, "00:00:00"), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"))}
+  if(is.null(deathdate)){} else {deathdate <- sprintf('"properties.deathDate":{"$gte":{"$date":"%s"}},', strftime(paste0(deathdate, "00:00:00"), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"))}
 
   if(is.null(almsasset_id)){} else {
     almsasset_id <- paste(unlist(almsasset_id), collapse = '", "' )
@@ -54,7 +62,7 @@ cattle <- mongo(collection = "Cattle", db = "DataMuster", url = pass, verbose = 
 
 # Set up find query
 
-search <-paste0("{", property, sex, paddock, category, alms, weaned, almsasset_id, RFID,"}")
+search <-paste0("{", property, sex, paddock, category, alms, weaned, almsasset_id, exstation, exitdate, entrydate, deathdate, RFID, prevpaddock, active,"}")
 
 if(nchar(search)==2){}else{
 search <- substr(search, 1 , nchar(search)-2)
@@ -70,7 +78,10 @@ snappy <- sprintf('{%s, "_id":false}', te)
 
 data <- cattle$find(query = search, fields = snappy)
 
-dataf <- cbind(data[-1], data$properties)
+if(length(data) > 1){
+dataf <- cbind(data[-1], data$properties)}else{
+  dataf <- data
+}
 
 collist <- colnames(dataf)
 
