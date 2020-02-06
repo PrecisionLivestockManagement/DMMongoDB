@@ -80,14 +80,15 @@ data <- cattle$find(query = search, fields = snappy)
 
 if(length(data) > 1){
 dataf <- cbind(data[-1], data$properties)}else{
-  dataf <- data
+dataf <- data
 }
 
 collist <- colnames(dataf)
 
+if(nrow(data) !=0){
 for(i in 1:length(collist)){
   if("POSIXt" %in% class(dataf[,i])){
-    attributes(dataf[,i])$tzone <- timezone}}
+    attributes(dataf[,i])$tzone <- timezone}}}
 
 # s <- Sys.time()
 # attr(s,"tzone") <- timezone
