@@ -31,7 +31,7 @@ get_loadrampdata <- function(location = NULL, start = NULL, timezone = NULL, fie
 
   if(is.null(start)){}else{
 
-    start <- as.POSIXct(start)
+    start <- as.POSIXct(paste0(start, "00:00:00"))
 
     trumpper <- strftime(start, format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT")
 
