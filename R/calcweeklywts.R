@@ -20,8 +20,7 @@
 #' @export
 
 
-calcweeklywts <- function(RFID, start=NULL, end=NULL, values=NULL, s.d=NULL, remove.duplicates=NULL, unit=NULL, username=NULL, password=NULL){
-
+calcweeklywts <- function(RFID, start=NULL, end=NULL, values=NULL, s.d=NULL, unit=NULL, username=NULL, password=NULL){
 
   if(is.null(username) || is.null(password)){
   username = keyring::key_list("DMMongoDB")[1,2]
@@ -32,46 +31,39 @@ calcweeklywts <- function(RFID, start=NULL, end=NULL, values=NULL, s.d=NULL, rem
 
   if(is.null(values)){values <- 4}
   if(is.null(s.d)){s.d <- 25}
-  if(is.null(remove.duplicates)){remove.duplicates <- "TRUE"}
-  if(is.null(start)) {start <- as.Date("2015-01-01")}
+  if(is.null(start)) {start <- as.Date("2014-01-01")}
   if(is.null(end)) {end <- Sys.Date()}
 
   getdates <- seq(as.Date(paste0(start)), as.Date(paste0(end)), by = "day")
   getMondays <- getdates[weekdays(getdates) == "Monday"]
 
-  cattle <- mongo(collection = "Cattle", db = "DataMuster", url = pass, verbose = T)
-
-  RFID <- paste(unlist(RFID), collapse = '", "' )
-
-  tempwts <- dailywtsNEW(RFID, start, end, unit = unit, username = username, password = password)
-
-  filterstation <- sprintf('{"RFID":{"$in":["%s"]}}', RFID)
-  jan <- cattle$find(query = filterstation, fields='{"RFID":true, "stationname":true, "pdkhist.dateIN":true, "pdkhist.name":true, "_id":false}')
-
+  tempwts <- get_dailywts(RFID, start = start, end = end, location = unit,
+                          fields = c("RFID", "Wt", "datetime", "Location"),
+                          username = username, password = password)
 
   cattleinfo <- list()
 
-    if(length(tempwts$RFID) == 0) {} else{
+    if(nrow(tempwts) == 0) {} else{
 
-      for(k in 1:length(tempwts$RFID)){
+      for(k in 1:length(RFID)){
+
+        rfid <- RFID[k]
 
       newdata <- setNames(data.frame(matrix(nrow = 0, ncol = 5)), c("Date", "Weight", "sdweights", "numweights","paddock"))
-      pdhist <- jan$pdkhist[jan$RFID == tempwts$RFID[k],]
 
         for (l in 1:length(getMondays)){
 
           start1 <- getMondays[l]
           end1 <- start1 + 6
 
-          if (end1 < end) {
+          if (end1 <= end) {
 
-        wts <- tempwts$DailyWeights[[k]] %>% filter(between(as.Date(Date, tz = "Australia/Brisbane"), start1, end1))
+          wts <- tempwts %>%
+                 filter(RFID == rfid,
+                        Weight != 0,
+                 between(as.Date(Date, tz = "Australia/Brisbane"), start1, end1))
 
-        wts <- wts%>%
-               filter(Weight != 0)
-
-        if(remove.duplicates == "FALSE") {stuck <- wts$Weight} else {
-          stuck <- wts$Weight[!duplicated(wts$Date)]}
+        stuck <- wts$Weight
 
         for(i in 1:length(stuck)){if(length(stuck) < values){break}else{
           if(sd(stuck) > s.d){stuck <- rm.outlier(stuck)}else
@@ -79,13 +71,10 @@ calcweeklywts <- function(RFID, start=NULL, end=NULL, values=NULL, s.d=NULL, rem
               tup1 <- sd(stuck)
               tup2 <- mean(stuck)
               tup3 <- length(stuck)}}}
+
         if(exists("tup1")){
 
           data <- data.frame(Date = as.character(end1), Weight = round(tup2,1), sdweights = round(tup1,1), numweights = tup3)
-
-          n <- tail(which(as.Date(pdhist$dateIN[[1]]) < as.Date(data$Date)),1)
-          data$paddock <- ifelse(length(n) ==1, pdhist$name[[1]][n], NA)
-          #data$paddock <- pdhist$name[[1]][n]
 
           newdata <- rbind(newdata,data)
 
@@ -94,13 +83,13 @@ calcweeklywts <- function(RFID, start=NULL, end=NULL, values=NULL, s.d=NULL, rem
 
           }}
 
-      if(nrow(newdata)<values){tempwts$RFID[[k]] <- "xxxx"}else{
-      cattleinfo[[tempwts$RFID[k]]] <- as.data.frame(newdata)}
+      if(nrow(newdata) == 0){RFID[k] <- "xxxx"}else{
+      cattleinfo[[RFID[k]]] <- as.data.frame(newdata)}
 
     }
     }
 
-  cattleinfo <- list(RFID=tempwts$RFID[tempwts$RFID != "xxxx"], Property = tempwts$Property[tempwts$RFID != "xxxx"], Paddock = tempwts$Paddock[tempwts$RFID != "xxxx"], WeeklyWeights=cattleinfo)
+  cattleinfo <- list(RFID=RFID[RFID != "xxxx"], WeeklyWeights=cattleinfo)
 
   return(cattleinfo)
 
