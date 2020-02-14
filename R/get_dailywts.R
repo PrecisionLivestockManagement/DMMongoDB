@@ -20,28 +20,26 @@
 #' @export
 
 
-get_dailywts <- function(RFID = NULL, location = NULL, start = NULL, timezone = NULL, fields = NULL, username = NULL, password = NULL){
+get_dailywts <- function(RFID = NULL, location = NULL, start = NULL, end = NULL, timezone = NULL, fields = NULL, username = NULL, password = NULL){
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]
     password =  keyring::key_get("DMMongoDB", username)
   }
 
-  if(is.null(timezone)){timezone <- "AUstralia/Brisbane"} else {}
+  #if(is.null(timezone)){timezone <- "Australia/Brisbane"} else {}
 
   if(is.null(RFID)){}else{RFID <- paste(unlist(RFID), collapse = '", "' )
                           RFID <- sprintf('"RFID":{"$in":["%s"]},', RFID)}
 
   if(is.null(location)){}else{location <- paste(unlist(location), collapse = '", "' )
-  location <- sprintf('"location":{"$in":["%s"]},', location)}
+  location <- sprintf('"Location":{"$in":["%s"]},', location)}
 
   if(is.null(start)){}else{
+    start <- sprintf('"datetime":{"$gte":{"$date":"%s"}},', strftime(as.POSIXct(paste0(start, "00:00:00")), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"))}
 
-    start <- as.POSIXct(paste0(start, "00:00:00"))
-
-    trumpper <- strftime(start, format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT")
-
-    start <- sprintf('"datetime":{"$gte":{"$date":"%s"}},', trumpper)}
+  if(is.null(end)){}else{
+    end <- sprintf('"datetime":{"$lt":{"$date":"%s"}},', strftime(as.POSIXct(paste0(end+1, "00:00:00")), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"))}
 
 pass <- sprintf("mongodb://%s:%s@datamuster-shard-00-00-8mplm.mongodb.net:27017,datamuster-shard-00-01-8mplm.mongodb.net:27017,datamuster-shard-00-02-8mplm.mongodb.net:27017/test?ssl=true&replicaSet=DataMuster-shard-0&authSource=admin", username, password)
 
@@ -49,7 +47,7 @@ dailywts <- mongo(collection = "DailyWts", db = "DataMuster", url = pass, verbos
 
 # Set up find query
 
-search <-paste0("{", RFID, location, start,"}")
+search <-paste0("{", RFID, location, start, end,"}")
 
 if(nchar(search)==2){}else{
 search <- substr(search, 1 , nchar(search)-2)
