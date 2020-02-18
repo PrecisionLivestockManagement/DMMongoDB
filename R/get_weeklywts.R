@@ -72,9 +72,9 @@ if(nrow(dataf) != 0){
 # attr(s,"tzone") <- timezone
 
 if(nrow(dataf) != 0){
-# dataf <- dataf%>%
+ dataf <- dataf%>%
 #                 rename_all(recode, datetime = "Date", Wt = "Weight")
-#                mutate_at(vars(ends_with("Date")), as.character, format = "%b %d %Y")%>%
+                 mutate_at(vars(ends_with("Date")), as.Date, tz = "Australia/Brisbane")#%>%
 #                mutate_at(vars(ends_with("Date")), funs(ifelse(. == "Jan 01 1970" | . == "Dec 31 1969", "", .)))%>%
 #                mutate_at(vars(starts_with("Weight")), funs(round(as.numeric(.), 0)))%>%
 #                mutate_at(vars(starts_with("Weight")), funs(ifelse(. == 0, as.character(""), as.character(.))))%>%

@@ -5,7 +5,7 @@
 \title{Retrieve data on cattle ALMS weekly weights from the DataMuster database}
 \usage{
 calcweeklywts(
-  RFID,
+  RFID = NULL,
   start = NULL,
   end = NULL,
   values = NULL,
@@ -34,8 +34,6 @@ calcweeklywts(
 \item{username}{if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring}
 
 \item{password}{if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access}
-
-\item{remove.duplicates}{TRUE if duplicate date time values are to removed from the weekly weight calculation or FALSE if all values are to be included, default is TRUE}
 }
 \value{
 a dataframe of cattle RFID numbers and weekly weight statistics
