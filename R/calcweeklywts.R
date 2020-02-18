@@ -8,7 +8,6 @@
 #' @param values the minimum number of daily weight values required to calculate an average weekly weight, default is 4
 #' @param s.d the minimin standard deviation between daily weight values required to calculate an average weekly weight, default is 25
 #' @param minwt the minimum daily weight (kg) required to be included to calculate an average weekly weight, default is 10
-#' @param remove.duplicates TRUE if duplicate date time values are to removed from the weekly weight calculation or FALSE if all values are to be included, default is TRUE
 #' @param unit the filename of the ALMS unit to search for
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
 #' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
@@ -21,31 +20,40 @@
 #' @export
 
 
-calcweeklywts <- function(RFID, start=NULL, end=NULL, values=NULL, s.d=NULL, minwt = NULL, unit=NULL, username=NULL, password=NULL){
+calcweeklywts <- function(RFID=NULL, start=NULL, end=NULL, values=NULL, s.d=NULL, minwt = NULL, unit=NULL, username=NULL, password=NULL){
 
   if(is.null(username) || is.null(password)){
   username = keyring::key_list("DMMongoDB")[1,2]
   password =  keyring::key_get("DMMongoDB", username)
   }
 
-  pass <- sprintf("mongodb://%s:%s@datamuster-shard-00-00-8mplm.mongodb.net:27017,datamuster-shard-00-01-8mplm.mongodb.net:27017,datamuster-shard-00-02-8mplm.mongodb.net:27017/test?ssl=true&replicaSet=DataMuster-shard-0&authSource=admin", username, password)
-
   if(is.null(values)){values <- 4}
   if(is.null(s.d)){s.d <- 25}
   if(is.null(minwt)){minwt <- 10}
-  if(is.null(start)) {start <- as.Date("2014-01-01")}
+
+  if(is.null(start)) {start <- as.Date("2000-01-01")}
   if(is.null(end)) {end <- Sys.Date()}
+
+  # This section ensures that all daily weights during the first week are retreived
+
+  if(as.numeric(difftime(end, start)) < 7){
+    start <- end-7}
 
   getdates <- seq(as.Date(paste0(start)), as.Date(paste0(end)), by = "day")
   getMondays <- getdates[weekdays(getdates) == "Monday"]
 
-  tempwts <- get_dailywts(RFID, start = start, end = end, location = unit,
+  start <- getMondays[1]-7
+
+
+  tempwts <- get_dailywts(RFID = RFID, start = start, end = end, location = unit,
                           fields = c("RFID", "Wt", "datetime", "Location"),
                           username = username, password = password)
 
   cattleinfo <- list()
 
     if(nrow(tempwts) == 0) {} else{
+
+      if(is.null(RFID)){RFID <- unique(tempwts$RFID)}
 
       for(k in 1:length(RFID)){
 
