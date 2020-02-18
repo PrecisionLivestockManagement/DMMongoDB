@@ -7,6 +7,7 @@
 #' @param end an end date to be returned in date format.
 #' @param values the minimum number of daily weight values required to calculate an average weekly weight, default is 4
 #' @param s.d the minimin standard deviation between daily weight values required to calculate an average weekly weight, default is 25
+#' @param minwt the minimum daily weight (kg) required to be included to calculate an average weekly weight, default is 10
 #' @param remove.duplicates TRUE if duplicate date time values are to removed from the weekly weight calculation or FALSE if all values are to be included, default is TRUE
 #' @param unit the filename of the ALMS unit to search for
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
@@ -20,7 +21,7 @@
 #' @export
 
 
-calcweeklywts <- function(RFID, start=NULL, end=NULL, values=NULL, s.d=NULL, unit=NULL, username=NULL, password=NULL){
+calcweeklywts <- function(RFID, start=NULL, end=NULL, values=NULL, s.d=NULL, minwt = NULL, unit=NULL, username=NULL, password=NULL){
 
   if(is.null(username) || is.null(password)){
   username = keyring::key_list("DMMongoDB")[1,2]
@@ -31,6 +32,7 @@ calcweeklywts <- function(RFID, start=NULL, end=NULL, values=NULL, s.d=NULL, uni
 
   if(is.null(values)){values <- 4}
   if(is.null(s.d)){s.d <- 25}
+  if(is.null(minwt)){minwt <- 10}
   if(is.null(start)) {start <- as.Date("2014-01-01")}
   if(is.null(end)) {end <- Sys.Date()}
 
@@ -60,7 +62,7 @@ calcweeklywts <- function(RFID, start=NULL, end=NULL, values=NULL, s.d=NULL, uni
 
           wts <- tempwts %>%
                  filter(RFID == rfid,
-                        Weight != 0,
+                        Weight >= minwt,
                  between(as.Date(Date, tz = "Australia/Brisbane"), start1, end1))
 
         stuck <- wts$Weight
@@ -84,6 +86,10 @@ calcweeklywts <- function(RFID, start=NULL, end=NULL, values=NULL, s.d=NULL, uni
           }}
 
       if(nrow(newdata) == 0){RFID[k] <- "xxxx"}else{
+
+        newdata <- newdata%>%
+                   mutate(Date = as.Date(Date, tz = "Australia/Brisbane"))
+
       cattleinfo[[RFID[k]]] <- as.data.frame(newdata)}
 
     }
