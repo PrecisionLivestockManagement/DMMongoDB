@@ -42,12 +42,19 @@ calcweeklywts <- function(RFID=NULL, start=NULL, end=NULL, values=NULL, s.d=NULL
   getdates <- seq(as.Date(paste0(start)), as.Date(paste0(end)), by = "day")
   getMondays <- getdates[weekdays(getdates) == "Monday"]
 
-  start <- getMondays[1]-7
+  if(start != getMondays[1]){
 
+    start <- getMondays[1]-7
+
+    getMondays <- c(start, getMondays)}
+
+  # Retreive the daily weights from the dailywts collection
 
   tempwts <- get_dailywts(RFID = RFID, start = start, end = end, location = unit,
                           fields = c("RFID", "Wt", "datetime", "Location"),
                           username = username, password = password)
+
+  # Calculate the weekly weights from the daily weights
 
   cattleinfo <- list()
 
