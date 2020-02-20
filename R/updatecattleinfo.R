@@ -31,7 +31,7 @@
 #' @export
 
 
-updatecattleinfo <- function(RFID, MTag=NULL, category=NULL, weaned=NULL, breed=NULL, brand=NULL,
+updatecattleinfo <- function(RFID, MTag=NULL, category=NULL, weaned=NULL, breed=NULL, brand=NULL, rego=NULL,
                       horn=NULL, colour=NULL, sex=NULL, desexed=NULL,  origin=NULL, DOB=NULL, birthWeight=NULL,
                       damRFID=NULL, damMTag=NULL, sireRFID=NULL, sireMTag=NULL, username=NULL, password=NULL){
 
@@ -49,7 +49,7 @@ updatecattleinfo <- function(RFID, MTag=NULL, category=NULL, weaned=NULL, breed=
 
     #  Create template dataframes --------------------------
 
-fields <- c("MTag","category","weaned","breed", "brand","horn","colour","sex","desexed","origin","DOB","birthWeight","damRFID",
+fields <- c("MTag","category","weaned","breed", "brand", "rego","horn","colour","sex","desexed","origin","DOB","birthWeight","damRFID",
                 "damMTag","sireRFID","sireMTag") #excluding RFID & property
 
 i<-1
@@ -119,6 +119,12 @@ if (check != length(RFID)) {
         if (brand[p] != ""){
           RFIDI <- sprintf('{"$set":{"properties.brand":"%s"}}', brand[p])
           cattle$update(RFIDS, RFIDI)}}}
+      #Rego
+      if (!(is.null(rego))){
+        if (!(is.na(rego[p]))){
+          if (rego[p] != ""){
+            RFIDI <- sprintf('{"$set":{"properties.rego":"%s"}}', rego[p])
+            cattle$update(RFIDS, RFIDI)}}}
       #Horn
       if (!(is.null(horn))){
         if (!(is.na(horn[p]))){
