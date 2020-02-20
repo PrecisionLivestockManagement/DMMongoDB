@@ -11,6 +11,7 @@ updatecattleinfo(
   weaned = NULL,
   breed = NULL,
   brand = NULL,
+  rego = NULL,
   horn = NULL,
   colour = NULL,
   sex = NULL,

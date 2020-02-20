@@ -12,6 +12,7 @@ get_cattle(
   paddock = NULL,
   alms = NULL,
   weaned = NULL,
+  id = NULL,
   almsasset_id = NULL,
   exstation = NULL,
   exitdate = NULL,
