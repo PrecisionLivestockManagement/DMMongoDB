@@ -20,7 +20,7 @@
 #' @export
 
 
-get_dailywts <- function(RFID = NULL, location = NULL, start = NULL, end = NULL, timezone = NULL, fields = NULL, username = NULL, password = NULL){
+get_dailywts <- function(RFID = NULL, location = NULL, start = NULL, end = NULL, minwt = NULL, timezone = NULL, fields = NULL, username = NULL, password = NULL){
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]
@@ -41,13 +41,15 @@ get_dailywts <- function(RFID = NULL, location = NULL, start = NULL, end = NULL,
   if(is.null(end)){}else{
     end <- sprintf('"datetime":{"$lt":{"$date":"%s"}},', strftime(as.POSIXct(paste0(end+1, "00:00:00")), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"))}
 
+  if(is.null(minwt)){}else{minwt <- sprintf('"Wt":{"$gte":%s},', minwt)}
+
 pass <- sprintf("mongodb://%s:%s@datamuster-shard-00-00-8mplm.mongodb.net:27017,datamuster-shard-00-01-8mplm.mongodb.net:27017,datamuster-shard-00-02-8mplm.mongodb.net:27017/test?ssl=true&replicaSet=DataMuster-shard-0&authSource=admin", username, password)
 
 dailywts <- mongo(collection = "DailyWts", db = "DataMuster", url = pass, verbose = T)
 
 # Set up find query
 
-search <-paste0("{", RFID, location, start, end,"}")
+search <-paste0("{", RFID, location, start, end, minwt,"}")
 
 if(nchar(search)==2){}else{
 search <- substr(search, 1 , nchar(search)-2)
