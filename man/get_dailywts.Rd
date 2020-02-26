@@ -9,6 +9,7 @@ get_dailywts(
   location = NULL,
   start = NULL,
   end = NULL,
+  minwt = NULL,
   timezone = NULL,
   fields = NULL,
   username = NULL,
