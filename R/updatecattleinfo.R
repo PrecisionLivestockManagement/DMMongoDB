@@ -22,6 +22,9 @@
 #' @param damMTag the dam's management tag number
 #' @param sireRFID the sire's RFID number
 #' @param sireMTag the sire's management tag number
+#' @param rego the animal's Breedplan registration number
+#' @param preghistDate the animal's last preg test date
+#' @param foetalage the animal's foetal age estimate at last preg test
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
 #' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
 #' @return a message that indicates the RFID tag number has been successfully updated
@@ -33,7 +36,8 @@
 
 updatecattleinfo <- function(RFID, MTag=NULL, category=NULL, weaned=NULL, breed=NULL, brand=NULL, rego=NULL,
                       horn=NULL, colour=NULL, sex=NULL, desexed=NULL,  origin=NULL, DOB=NULL, birthWeight=NULL,
-                      damRFID=NULL, damMTag=NULL, sireRFID=NULL, sireMTag=NULL, username=NULL, password=NULL){
+                      damRFID=NULL, damMTag=NULL, sireRFID=NULL, sireMTag=NULL, preghistDate=NULL, foetalage=NULL,
+                      username=NULL, password=NULL){
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]
@@ -50,7 +54,7 @@ updatecattleinfo <- function(RFID, MTag=NULL, category=NULL, weaned=NULL, breed=
     #  Create template dataframes --------------------------
 
 fields <- c("MTag","category","weaned","breed", "brand", "rego","horn","colour","sex","desexed","origin","DOB","birthWeight","damRFID",
-                "damMTag","sireRFID","sireMTag") #excluding RFID & property
+                "damMTag","sireRFID","sireMTag", "preghistDate", "foetalage") #excluding RFID & property
 
 i<-1
 for (i in 1:length(fields)){
@@ -167,6 +171,18 @@ if (check != length(RFID)) {
         if (birthWeight[p] != ""){
           RFIDI <- sprintf('{"$set":{"properties.birthWeight":"%s"}}', birthWeight[p])
           cattle$update(RFIDS, RFIDI)}}}
+      #preghistDate
+      if (!(is.null(preghistDate))){
+        if (!(is.na(preghistDate[p]))){
+          if (as.character(preghistDate[p]) != ""){
+            RFIDI <- sprintf('{"$set":{"properties.preghistDate":{"$date":"%s"}}}', paste0(substr(preghistDate[p],1,10),"T","00:00:00","+1000"))
+            cattle$update(RFIDS, RFIDI)}}}
+      #foetalage
+      if (!(is.null(foetalage))){
+        if (!(is.na(foetalage[p]))){
+          if (foetalage[p] != ""){
+            RFIDI <- sprintf('{"$set":{"properties.foetalage":"%s"}}', foetalage[p])
+            cattle$update(RFIDS, RFIDI)}}}
 
 #Dam RFID
 if (!(is.null(damRFID))){

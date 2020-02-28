@@ -23,6 +23,8 @@ updatecattleinfo(
   damMTag = NULL,
   sireRFID = NULL,
   sireMTag = NULL,
+  preghistDate = NULL,
+  foetalage = NULL,
   username = NULL,
   password = NULL
 )
@@ -39,6 +41,8 @@ updatecattleinfo(
 \item{breed}{the animal's breed}
 
 \item{brand}{the animal's brand}
+
+\item{rego}{the animal's Breedplan registration number}
 
 \item{horn}{the animal's horn status}
 
@@ -61,6 +65,10 @@ updatecattleinfo(
 \item{sireRFID}{the sire's RFID number}
 
 \item{sireMTag}{the sire's management tag number}
+
+\item{preghistDate}{the animal's last preg test date}
+
+\item{foetalage}{the animal's foetal age estimate at last preg test}
 
 \item{username}{if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring}
 
