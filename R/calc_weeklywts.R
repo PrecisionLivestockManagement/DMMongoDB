@@ -84,13 +84,16 @@ calc_weeklywts <- function(RFID=NULL, start=NULL, end=NULL, values=NULL, s.d=NUL
 
             if(length(loc) > 1){
 
-              selectunits <- units%>%filter(filename %in% loc)
+              dualunits <- units%>%filter(filename %in% loc,
+                                          dual_unit == "TRUE")
+
+              cnames <- paste(unlist(dualunits), collapse='/')
 
               cat(paste0(rfid, " ", loc," ")) #This line is just for testing so I know when two locations have been picked up
 
               if("TRUE" %in% selectunits$dual_unit){
 
-                loc <- paste(unlist(loc), collapse='/')
+                loc <- paste(unlist(selectunits), collapse='/')
 
                 wts$Location <- loc}}
 
