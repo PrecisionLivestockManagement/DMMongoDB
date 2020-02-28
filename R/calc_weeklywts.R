@@ -31,7 +31,7 @@ calc_weeklywts <- function(RFID=NULL, start=NULL, end=NULL, values=NULL, s.d=NUL
   if(is.null(s.d)){s.d <- 25}
   if(is.null(minwt)){minwt <- 10}
 
-  if(is.null(start)) {start <- as.Date("2000-01-01")}
+  if(is.null(start)) {start <- as.Date("2014-01-01")}
   if(is.null(end)) {end <- Sys.Date()}
 
   # The weekly weights are calculated each Sunday AEST and uses data from the previous Monday.
@@ -80,43 +80,41 @@ calc_weeklywts <- function(RFID=NULL, start=NULL, end=NULL, values=NULL, s.d=NUL
 
             loc <- unique(wts$Location)
 
-            #If there has only been weights from one unit recorded no need to split data
+            #If there are records for more than one unit, the code below checks whether or not to split or merge the data between the units
 
             if(length(loc) > 1){
 
-              dualunits <- units%>%filter(filename %in% loc,
-                                          dual_unit == "TRUE")
+              dualunits <- units%>%
+                           filter(filename %in% loc,
+                                  dual_unit == "TRUE")%>%
+                           select(filename)
 
               cnames <- paste(unlist(dualunits), collapse='/')
 
-              cat(paste0(rfid, " ", loc," ")) #This line is just for testing so I know when two locations have been picked up
+              wts <- wts%>%
+                     mutate(Location = ifelse(Location %in% dualunits$filename, cnames, Location))
 
-              if("TRUE" %in% selectunits$dual_unit){
+              loc <- unique(wts$Location)}
 
-                loc <- paste(unlist(selectunits), collapse='/')
+                for(p in 1:length(loc)){
 
-                wts$Location <- loc}}
+                  stuck <- wts$Weight[wts$Location == loc[p]]
 
+                  for(i in 1:length(stuck)){if(length(stuck) < values){break}else{
+                    if(sd(stuck) > s.d){stuck <- rm.outlier(stuck)}else
+                      if(length(stuck) < values){break}else{
+                        tup1 <- sd(stuck)
+                        tup2 <- mean(stuck)
+                        tup3 <- length(stuck)}}}
 
-                  for(p in 1:length(loc)){
+                  if(exists("tup1")){
 
-                    stuck <- wts$Weight[wts$Location == loc[p]]
+                    data <- data.frame(Date = as.Date(end1), Weight = round(tup2,1), sdweights = round(tup1,1), numweights = tup3, location = loc[p], stringsAsFactors = F)
 
-                    for(i in 1:length(stuck)){if(length(stuck) < values){break}else{
-                      if(sd(stuck) > s.d){stuck <- rm.outlier(stuck)}else
-                        if(length(stuck) < values){break}else{
-                          tup1 <- sd(stuck)
-                          tup2 <- mean(stuck)
-                          tup3 <- length(stuck)}}}
+                    newdata <- rbind(newdata, data)
 
-                    if(exists("tup1")){
-
-                      data <- data.frame(Date = as.Date(end1), Weight = round(tup2,1), sdweights = round(tup1,1), numweights = tup3, location = loc[p], stringsAsFactors = F)
-
-                      newdata <- rbind(newdata, data)
-
-                      rm(tup1, tup2, tup3)}
-                  }}}
+                    rm(tup1, tup2, tup3)}
+                }}}
 
       if(nrow(newdata) == 0){RFID[k] <- "xxxx"}else{
 
