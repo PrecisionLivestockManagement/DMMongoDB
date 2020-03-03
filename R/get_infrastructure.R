@@ -30,7 +30,9 @@ get_infrastructure <- function(property = NULL, type = NULL, active = NULL, trai
   if(is.null(property)){}else{property <- paste(unlist(property), collapse = '", "' )
                               property <- sprintf('"stationname":{"$in":["%s"]},', property)}
 
-  if(is.null(type)){}else{type <- sprintf('"properties.type":"%s",', type)}
+  if(is.null(type)){}else{type <- paste(unlist(type), collapse = '", "' )
+  type <- sprintf('"properties.type":{"$in":["%s"]},', type)}
+
   if(is.null(active)){}else{active <- sprintf('"properties.datarecording":"%s",', active)}
   if(is.null(training)){}else{training <- sprintf('"properties.training":"%s",', training)}
 
