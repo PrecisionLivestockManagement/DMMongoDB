@@ -30,16 +30,16 @@ addnewstation <- function(stationname, long, lat, area=NULL, PIC=NULL, username=
 
     prop <- stations$find(query = '{}', fields = '{"_id":false}')
 
-    if(stationname %in% prop$name) {stop("Warning: Matching station detected")}
+    if(stationname %in% prop$stationname) {stop("Warning: Matching station detected")}
 
-    template <- prop[prop$name == "Tremere", ]
+    template <- prop[prop$stationname == "Tremere", ]
 
     if(is.null(area)){area <- 100}
     if(is.null(PIC)){PIC <- "xxxxxx"}
 
     #Input new station details into a template dataframe and insert into database --------
 
-    template$name<- stationname
+    template$stationname<- stationname
     template$longitude<-long
     template$latitude<- lat
     template$PIC <- PIC
@@ -70,7 +70,7 @@ addnewstation <- function(stationname, long, lat, area=NULL, PIC=NULL, username=
     coords <- paste0("[",c1long,",",c1lat,"],[",c2long,",",c2lat,"],[",c3long,",",c3lat,"],[",c4long,",",c4lat,"],[",c5long,",",c5lat,"]")
 
     stations <- mongo(collection = "Stations", db = "DataMuster", url = pass, verbose = T)
-    IDI <- sprintf('{"name":"%s"}', stationname)
+    IDI <- sprintf('{"stationname":"%s"}', stationname)
     IDS <- sprintf('{"$set":{"geometry.coordinates":[[%s]]}}', coords)
     stations$update(IDI, IDS)
 
