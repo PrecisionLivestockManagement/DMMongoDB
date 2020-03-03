@@ -10,6 +10,7 @@ addnewstation(
   lat,
   area = NULL,
   PIC = NULL,
+  timezone = NULL,
   username = NULL,
   password = NULL
 )
@@ -25,11 +26,11 @@ addnewstation(
 
 \item{PIC}{the Property Identification Code}
 
+\item{timezone}{the local timezone of the property, see https://en.wikipedia.org/wiki/List_of_tz_database_time_zones for the list of accepted timezones}
+
 \item{username}{if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring}
 
 \item{password}{if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access}
-
-\item{timezone}{the local timezone of the property, see https://en.wikipedia.org/wiki/List_of_tz_database_time_zones for the list of accepted timezones}
 }
 \value{
 message to say the station has been successfully added

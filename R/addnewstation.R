@@ -17,7 +17,7 @@
 #' @export
 
 
-addnewstation <- function(stationname, long, lat, area=NULL, PIC=NULL, username=NULL, password=NULL){
+addnewstation <- function(stationname, long, lat,area=NULL, PIC=NULL,  timezone=NULL, username=NULL, password=NULL){
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]
@@ -36,6 +36,7 @@ addnewstation <- function(stationname, long, lat, area=NULL, PIC=NULL, username=
 
     if(is.null(area)){area <- 100}
     if(is.null(PIC)){PIC <- "xxxxxx"}
+    if(is.null(timezone)){timezone <- "Australia/Brisbane"}
 
     #Input new station details into a template dataframe and insert into database --------
 
