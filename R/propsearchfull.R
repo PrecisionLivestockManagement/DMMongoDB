@@ -47,6 +47,8 @@ propsearchfull <- function(property, paddock=NULL, archives=NULL, username=NULL,
 
   propertyinfo <- propertyinfo$properties
 
+  if(nrow(propertyinfo) != 0){
+
   propertyinfo$birthDate <- as.Date(propertyinfo$birthDate, tz = "Australia/Brisbane")
   propertyinfo$wkwtdate <- as.Date(propertyinfo$wkwtdate, tz = "Australia/Brisbane")
   propertyinfo$entryDate <- as.Date(propertyinfo$entryDate, tz = "Australia/Brisbane")
@@ -57,6 +59,7 @@ propsearchfull <- function(property, paddock=NULL, archives=NULL, username=NULL,
 
   if(is.null(paddock)){}else{
     propertyinfo <- propertyinfo %>% filter(Paddock %in% paddock)}
+  }
 
   return(propertyinfo)
 
