@@ -43,11 +43,11 @@ propsearchfull <- function(property, paddock=NULL, archives=NULL, username=NULL,
     propertyinfo <- cattle$find(query = filterstation1, fields=lookfor)}else{
       propertyinfo <- cattle$find(query = filterstation2, fields=lookfor)}
 
+  if(nrow(propertyinfo) != 0){
+
   propertyinfo$properties["RFID"] <- propertyinfo$RFID
 
   propertyinfo <- propertyinfo$properties
-
-  if(nrow(propertyinfo) != 0){
 
   propertyinfo$birthDate <- as.Date(propertyinfo$birthDate, tz = "Australia/Brisbane")
   propertyinfo$wkwtdate <- as.Date(propertyinfo$wkwtdate, tz = "Australia/Brisbane")
