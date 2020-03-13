@@ -1,7 +1,7 @@
-#' Retrieve data on calving from the DataMuster database
+#' Retrieve cattle pregnancy history from the DataMuster MongoDB database
 #'
-#' This function pulls in foetal age data for individual or groups of cattle. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
-#' @name get_ftlagehist
+#' This function pulls in pregnancy history data for individual or groups of cattle. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
+#' @name get_cattlepreghist
 #' @param RFID a list of cattle RFID numbers
 #' @param values the minimum number of calving date values required, default 1
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
@@ -13,7 +13,10 @@
 #' @import dplyr
 #' @export
 
-get_ftlagehist <- function(RFID, values = NULL, username = NULL, password = NULL){
+get_cattlepreghist <- function(RFID,
+                               values = NULL,
+                               username = NULL,
+                               password = NULL){
 
   if(is.null(values)|| values < 1 ){values <- 1}
   if(is.null(username)||is.null(password)){

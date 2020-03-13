@@ -1,8 +1,7 @@
-#' Package with functions to enable easier code to access to DataMuster MongoDB Atlas servers
+#' Update a paddock's coordinates
 #'
-#' This function provides a list of cattle
-#' for a property from MongoDB. Inputs need to be a list of one or more property names
-#' @name movecattle
+#' This function updates paddock coordinates. Inputs need to be a list of one or more property names
+#' @name update_cattlecoords
 #' @param property the name of the property to search the DataMuster MongoDB Atlas server
 #' @param paddock the name of the paddocks to search the DataMuster MongoDB Atlas server
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
@@ -18,7 +17,10 @@
 #' @export
 
 
-movecattle <- function(property, paddock=NULL, username=NULL, password=NULL){
+update_cattlecoords <- function(property,
+                                paddock=NULL,
+                                username=NULL,
+                                password=NULL){
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]

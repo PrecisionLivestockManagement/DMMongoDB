@@ -1,7 +1,7 @@
-#' Upload GPS data to the DataMuster database
+#' Add GPS data to the DataMuster MongoDB database
 #'
-#' This function allows GPS data to be added to the DataMuster database
-#' @name cowGPS
+#' This function allows GPS data to be added to the DataMuster MongoDB database
+#' @name add_gps
 #' @param RFID a list of cattle RFID numbers
 #' @param DateTime a list of timestamps in POSIXct format
 #' @param lat the latitude of a coordinate point
@@ -15,7 +15,13 @@
 #' @export
 
 
-cowGPS <- function(RFID, DateTime, lat, long, voltage, username, password){
+add_gps <- function(RFID,
+                    DateTime,
+                    lat,
+                    long,
+                    voltage,
+                    username,
+                    password){
 
 
   pass <- sprintf("mongodb://%s:%s@datamuster-shard-00-00-8mplm.mongodb.net:27017,datamuster-shard-00-01-8mplm.mongodb.net:27017,datamuster-shard-00-02-8mplm.mongodb.net:27017/test?ssl=true&replicaSet=DataMuster-shard-0&authSource=admin", username, password)

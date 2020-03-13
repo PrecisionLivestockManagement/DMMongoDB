@@ -1,7 +1,7 @@
-#' Add a user to the DataMuster database
+#' Add a user to the DataMuster MongoDB database
 #'
-#' This function adds a user to the MongoDB database. You can only access this function if you have read and write permission
-#' @name addnewuser
+#' This function adds a user to the DataMuster MongoDB database. You can only access this function if you have read and write permission
+#' @name add_users
 #' @param user the name of the user to be added to the DataMuster MongoDB Altas server, preferably without a space between the first and last name
 #' @param email the email address of the user that was used to register via the DataMuster website
 #' @param accesslevel the MongoDB user access level, either "user" or "admin"
@@ -17,7 +17,7 @@
 #' @export
 
 
-addnewuser <- function(user, email, accesslevel, writeaccess, property=NULL, username=NULL, password=NULL){
+add_users <- function(user, email, accesslevel, writeaccess, property=NULL, username=NULL, password=NULL){
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]

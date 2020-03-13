@@ -1,7 +1,7 @@
-#' Add infrastructure to the DataMuster database
+#' Add infrastructure to the DataMuster MongoDB database
 #'
-#' This function adds infrastructure to the DataMuster database. You can only access this function if you have read and write permission
-#' @name addnewinfs
+#' This function adds infrastructure to the DataMuster MongoDB database. You can only access this function if you have read and write permission
+#' @name add_infrastructure
 #' @param property the name of the property to add the infrastructure
 #' @param paddock the name of the paddock to add the infrastructure
 #' @param infstype the infrastructure type (e.g. Walk-over-Weighing Unit, EID Reader, Water sensor)
@@ -20,7 +20,8 @@
 #' @export
 
 
-addnewinfs <- function(property, paddock, infstype, assetID, fileout=NULL, active=NULL, training=NULL, telemetry=NULL, date=NULL, username=NULL, password=NULL){
+add_infrastructure <- function(property, paddock, infstype, assetID, fileout=NULL, active=NULL,
+                               training=NULL, telemetry=NULL, date=NULL, username=NULL, password=NULL){
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]

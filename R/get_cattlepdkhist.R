@@ -1,8 +1,8 @@
-#' Package with functions to enable easier code to access to DataMuster MongoDB Atlas servers
+#' Retrieve cattle paddock history from the DataMuster MongoDB database
 #'
-#' This function provides a list of cattle
-#' for a property from MongoDB including life data. Inputs need to be a list of one or more property names and if only one property a paddock name can be included
-#' @name pdkhistsearch
+#' This function provides a list of cattle paddock history
+#' for a property from DataMuster MongoDB. Inputs need to be a list of one or more property names and if only one property a paddock name can be included
+#' @name get_cattlepdkhist
 #' @param property the name of the property to search the DataMuster MongoDB Atlas server
 #' @param paddock this is the name of a paddock or list of paddocks as character entries, if no value is entered then all paddocks are loaded
 #' @param archives if true, the list of animals returned will include those that are no longer on the property
@@ -18,7 +18,7 @@
 #' @export
 
 
-pdkhistsearch <- function(property, paddock=NULL, start=NULL, end=NULL, username=NULL, password=NULL){
+get_cattlepdkhist <- function(property, paddock=NULL, achives=NULL, start=NULL, end=NULL, username=NULL, password=NULL){
 
   if(is.null(username)||is.null(password)){
   username = keyring::key_list("DMMongoDB")[1,2]

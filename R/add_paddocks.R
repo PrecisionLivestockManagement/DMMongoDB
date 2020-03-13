@@ -1,12 +1,13 @@
-#' Add paddocks to the DataMuster database
+#' Add paddocks to the DataMuster MongoDB database
 #'
-#' This function adds individual or groups of paddocks to the DataMuster database. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
-#' @name addnewpaddock
+#' This function adds individual or groups of paddocks to the DataMuster MongoDB database. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
+#' @name add_paddocks
 #' @param property the name of the property to add the paddocks
 #' @param paddockname the name of the paddock/s, if NULL the paddock will be assigned a numeric name, if "filename" the name of the file will be assigned
 #' @param filedir the location of the spatial file containing the paddock coordinates
 #' @param filename the name of the spatial file, if NULL all spatial files in the directory will be read and added as paddocks
 #' @param filetype the type of spatial file (e.g. shp, kmz, coords), if inputting raw coordinates they must be listed in pairs with long first then lat, if in decimal degrees minutes they must be in the format "35d9'58.12\"S"  "66d40'42.74\"W"
+#' @param coords the coordinates of the paddock, if inputting raw coordinates they must be listed in pairs with long first then lat, if in decimal degrees minutes they must be in the format "35d9'58.12\"S"  "66d40'42.74\"W"
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
 #' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
 #' @return a message that indicates the paddock/s have been successfully added
@@ -17,7 +18,7 @@
 #' @import leafletR
 #' @export
 
-addnewpaddock <- function(property, filetype, filedir=NULL, paddockname=NULL, filename=NULL, coords=NULL, username=NULL, password=NULL){
+add_paddocks <- function(property, paddockname=NULL, filedir=NULL,filename=NULL, filetype, coords=NULL, username=NULL, password=NULL){
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]

@@ -1,7 +1,7 @@
-#' Add a station to the DataMuster database
+#' Add a station to the DataMuster MongoDB database
 #'
-#' This function adds a station to the DataMuster database. You can only access this function if you have read and write permission
-#' @name addnewstation
+#' This function adds a station to the DataMuster MongoDB database. You can only access this function if you have read and write permission
+#' @name add_stations
 #' @param stationname the name of the property
 #' @param lat the latitude of a coordinate point to locate the property
 #' @param long the longitude of a coordinate point to locate the property
@@ -17,7 +17,7 @@
 #' @export
 
 
-addnewstation <- function(stationname, long, lat,area=NULL, PIC=NULL,  timezone=NULL, username=NULL, password=NULL){
+add_stations <- function(stationname, lat, long, area=NULL, timezone=NULL, PIC=NULL,  username=NULL, password=NULL){
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]

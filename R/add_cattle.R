@@ -1,7 +1,7 @@
-#' Add cattle to the DataMuster database
+#' Add cattle to the DataMuster MongoDB database
 #'
-#' This function adds individual or groups of cattle to the DataMuster database. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
-#' @name addcattle
+#' This function adds individual or groups of cattle to the DataMuster MongoDB database. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
+#' @name add_cattle
 #' @param RFID a list of the RFID number/s
 #' @param MTag a list of the management tag number/s
 #' @param category the class of animal (breeding or growing)
@@ -31,7 +31,7 @@
 #' @export
 
 
-addcattle <- function(RFID, MTag, category, property, paddock, weaned, date=NULL, breed=NULL, brand=NULL,
+add_cattle <- function(RFID, MTag, category, property, paddock, weaned, date=NULL, breed=NULL, brand=NULL,
                       horn=NULL, colour=NULL, sex=NULL, desexed=NULL,  DOB=NULL, birthWeight=NULL,
                       damRFID=NULL, damMTag=NULL, sireRFID=NULL, sireMTag=NULL, animalID=NULL, username=NULL, password=NULL){
 
