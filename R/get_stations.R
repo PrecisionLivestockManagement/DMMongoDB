@@ -51,9 +51,11 @@ snappy <- sprintf('{%s, "_id":false}', te)
 
 data <- stations$find(query = search, fields = snappy)
 
-if(length(data) >1){
-dataf <- cbind(data[-1], data$reports)}else{
-  dataf <- data}
+if("reports.name" %in% names(data)){
+
+  dataf <- cbind(data[-1], data$properties)}else{
+    dataf <- data
+  }
 
 #collist <- colnames(stationdataf)
 

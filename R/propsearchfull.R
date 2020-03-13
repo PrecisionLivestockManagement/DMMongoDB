@@ -43,6 +43,8 @@ propsearchfull <- function(property, paddock=NULL, archives=NULL, username=NULL,
     propertyinfo <- cattle$find(query = filterstation1, fields=lookfor)}else{
       propertyinfo <- cattle$find(query = filterstation2, fields=lookfor)}
 
+  if(nrow(propertyinfo) != 0){
+
   propertyinfo$properties["RFID"] <- propertyinfo$RFID
 
   propertyinfo <- propertyinfo$properties
@@ -57,6 +59,7 @@ propsearchfull <- function(property, paddock=NULL, archives=NULL, username=NULL,
 
   if(is.null(paddock)){}else{
     propertyinfo <- propertyinfo %>% filter(Paddock %in% paddock)}
+  }
 
   return(propertyinfo)
 

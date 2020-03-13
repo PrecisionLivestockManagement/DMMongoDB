@@ -36,10 +36,18 @@ get_dailywts <- function(RFID = NULL, location = NULL, start = NULL, end = NULL,
   location <- sprintf('"Location":{"$in":["%s"]},', location)}
 
   if(is.null(start)){}else{
-    start <- sprintf('"datetime":{"$gte":{"$date":"%s"}},', strftime(as.POSIXct(paste0(start, "00:00:00")), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"))}
+    if(timezone == "Australia/Brisbane"){
+    start <- sprintf('"datetime":{"$gte":{"$date":"%s"}},', strftime(as.POSIXct(paste0(start, "00:00:00")), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"))}else{
+      if(timezone == "America/Argentina/Buenos_Aires"){
+        start <- sprintf('"datetime":{"$gte":{"$date":"%s"}},', strftime(as.POSIXct(paste0(start, "13:00:00")), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"))}}
+    }
 
   if(is.null(end)){}else{
-    end <- sprintf('"datetime":{"$lt":{"$date":"%s"}},', strftime(as.POSIXct(paste0(end+1, "00:00:00")), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"))}
+    if(timezone == "Australia/Brisbane"){
+    end <- sprintf('"datetime":{"$lt":{"$date":"%s"}},', strftime(as.POSIXct(paste0(end+1, "00:00:00")), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"))}else{
+      if(timezone == "America/Argentina/Buenos_Aires"){
+        end <- sprintf('"datetime":{"$lt":{"$date":"%s"}},', strftime(as.POSIXct(paste0(end+1, "13:00:00")), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"))}}
+    }
 
   if(is.null(minwt)){}else{minwt <- sprintf('"Wt":{"$gte":%s},', minwt)}
 

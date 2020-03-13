@@ -15,7 +15,7 @@
 #' @export
 
 
-calcalmsuse <- function(property, start=NULL, end=NULL, username = NULL, password = NULL){
+calcalmsuse <- function(property, timezone, start=NULL, end=NULL, username = NULL, password = NULL){
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]
@@ -27,26 +27,34 @@ calcalmsuse <- function(property, start=NULL, end=NULL, username = NULL, passwor
   inf <- mongo(collection = "Infrastructure", db = "DataMuster", url = pass, verbose = T)
 
   if(is.null(start)){start <- as.Date("2014-09-01")}
-  if(is.null(end)){end <- Sys.Date()}
+  if(is.null(end)){end <- Sys.time()
+                   attr(end,"tzone") <- timezone
+                   end <- as.Date(end)}
 
   wowunits <- infsearch(property, infstype = "Walk-over-Weighing Unit", username = username, password = password)
+
+  if(nrow(wowunits) == 0) {cattleinfo <- data.frame()}else{
 
   cows <- propsearchfull(property, archives = TRUE, username = username, password = password)
 
   cows <- cows%>%
           filter(RFID != "xxx xxxxxxxxxxxx")
 
-  cattlehistory <- almshistsearch(property, start = start, end = end, username = username, password = password)
+  cattlehistory <- almshistsearch(property, start = start, end = end, timezone = timezone, username = username, password = password)
+
+  if(length(cattlehistory$RFID) == 0){cattleinfo <- data.frame()}else{
 
   cattlehistory <- bind_rows(cattlehistory$ALMSHistory, .id = "RFID")%>%
     filter(RFID != "xxx xxxxxxxxxxxx")%>%
     mutate(dateOFF = as.character(dateOFF),
-           dateOFF = ifelse(is.na(dateOFF), as.character(Sys.Date()), dateOFF))
+           dateOFF = ifelse(is.na(dateOFF), as.character(end), dateOFF))
 
-  cattleweights <- dailywtsNEW(cows$RFID, start = start, end = end, username = username, password = password)
+  cattleweights <- get_dailywts(RFID = cows$RFID, start = start, end = end, timezone = timezone,
+                                fields = c("RFID","datetime"),
+                                username = username, password = password)
 
-  cattleweights <- bind_rows(cattleweights$DailyWeights, .id = "RFID")%>%
-    mutate(Date = as.Date(Date, tz = "Australia/Brisbane"))%>%
+  cattleweights <- cattleweights%>%
+    mutate(Date = as.Date(Date, tz = timezone))%>%
     select(RFID, Date)%>%
     distinct()
 
@@ -69,11 +77,13 @@ calcalmsuse <- function(property, start=NULL, end=NULL, username = NULL, passwor
         usehistory <- rbind(usehistory, tempdf)
       }}
 
-    usehistory$Count <- ifelse(paste0(usehistory$RFID, usehistory$Date) %in% paste0(cattleweights$RFID, cattleweights$Date), 1, 0)
+    usehistory$Count <- ifelse(paste0(usehistory$RFID, usehistory$Date) %in% paste0(cattleweights$RFID, cattleweights$Date), "1", "0")
 
     cattleinfo <- left_join(usehistory, cows, by = "RFID")%>%
       select(Date, Property, ALMS.x, RFID, Management, category, sex, Count)%>%
       rename(ALMS = "ALMS.x", Category = "category", Sex = "sex")
+  }
+  }
   }
 
   return(cattleinfo)
