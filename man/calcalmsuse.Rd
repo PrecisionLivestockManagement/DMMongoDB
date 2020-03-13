@@ -6,6 +6,7 @@
 \usage{
 calcalmsuse(
   property,
+  timezone,
   start = NULL,
   end = NULL,
   username = NULL,
