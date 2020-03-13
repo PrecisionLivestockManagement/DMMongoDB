@@ -51,11 +51,13 @@ snappy <- sprintf('{%s, "_id":false}', te)
 
 data <- stations$find(query = search, fields = snappy)
 
-if("reports.name" %in% names(data)){
+for(i in 1:ncol(data)){
+  n <- length(data[,i])
+  if(n > 1){
+  data <- cbind(data, data[,i])
+  data <- data[,-i]}
+}
 
-  dataf <- cbind(data[-1], data$properties)}else{
-    dataf <- data
-  }
 
 #collist <- colnames(stationdataf)
 
@@ -66,8 +68,8 @@ if("reports.name" %in% names(data)){
 # s <- Sys.time()
 # attr(s,"tzone") <- timezone
 
-if(nrow(dataf) != 0){
- dataf <- dataf%>%
+if(nrow(data) != 0){
+ dataf <- data%>%
                  rename_all(recode, stationname = "Stationname", name = "Report name", email = "Report email")
 #                mutate_at(vars(ends_with("Date")), as.character, format = "%b %d %Y")%>%
 #                mutate_at(vars(ends_with("Date")), funs(ifelse(. == "Jan 01 1970" | . == "Dec 31 1969", "", .)))%>%
