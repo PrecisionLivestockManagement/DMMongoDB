@@ -41,7 +41,8 @@ reactivatecattle <- function(RFID, property, paddock, date=NULL, replacevalues=N
   if (nrow(cows) != length(RFID)) {
       stop("One or more of the RFID numbers cannot be found in the database. Please check that the RFID numbers are correct and try again")}
 
-  stationinfo <- stationinfo(property, username = username, password = password)
+  stationinfo <- get_stations(property, username = username, password = password,
+                              fields = c("_id", "longitude", "latitude", "reports", "PIC", "timezone", "stationname"))
 
 
   for (i in 1:length(cows$RFID)){

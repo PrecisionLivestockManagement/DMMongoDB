@@ -24,8 +24,9 @@ infsearch <- function(property=NULL, active=NULL, infstype=NULL, unitname=NULL, 
   infrastructure <- mongo(collection = "Infrastructure", db = "DataMuster", url = pass, verbose = T)
 
   if(is.null(property)){
-  property <- stationinfo(username = username, password = password)
-  property <- property$Name}
+  property <- get_stations(username = username, password = password,
+                           fields = c("_id", "longitude", "latitude", "reports", "PIC", "timezone", "stationname"))
+  property <- property$Stationname}
 
   property <- paste(unlist(property), collapse = '", "' )
 

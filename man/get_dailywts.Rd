@@ -10,7 +10,7 @@ get_dailywts(
   start = NULL,
   end = NULL,
   minwt = NULL,
-  timezone = NULL,
+  timezone,
   fields = NULL,
   username = NULL,
   password = NULL

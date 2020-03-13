@@ -77,7 +77,8 @@ add_stations <- function(stationname, lat, long, area=NULL, timezone=NULL, PIC=N
 
     #Create a temporary paddock in the Paddocks collection using the polygon coordinates. This will be removed if other paddocks are added.
 
-    propertyinfo <- stationinfo(stationname, username = username, password = password)
+    propertyinfo <- get_stations(stationname, username = username, password = password,
+                                 fields = c("_id", "longitude", "latitude", "reports", "PIC", "timezone", "stationname"))
     propertyid <- propertyinfo$`_id`
 
     template <- paddocks$find(query = '{"stationname":"xxxxxx"}', fields = '{"_id":false}')

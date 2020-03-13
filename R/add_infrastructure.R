@@ -33,7 +33,7 @@ add_infrastructure <- function(property, paddock, infstype, assetID, fileout=NUL
     paddocks <- mongo(collection = "Paddocks", db = "DataMuster", url = pass, verbose = T)
     infrastructure <- mongo(collection = "Infrastructure", db = "DataMuster", url = pass, verbose = T)
 
-    propertyinfo <- stationinfo(property)
+    propertyinfo <- get_stations(property, fields = c("_id", "longitude", "latitude", "reports", "PIC", "timezone", "stationname"))
 
     template <- infrastructure$find(query = '{"stationname": "xxxxxx"}', fields='{"_id":false}')
 

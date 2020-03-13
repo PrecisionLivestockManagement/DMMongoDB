@@ -9,6 +9,7 @@ almshistsearch(
   alms = NULL,
   start = NULL,
   end = NULL,
+  timezone,
   username = NULL,
   password = NULL
 )

@@ -28,7 +28,7 @@ add_paddocks <- function(property, paddockname=NULL, filedir=NULL,filename=NULL,
     pass <- sprintf("mongodb://%s:%s@datamuster-shard-00-00-8mplm.mongodb.net:27017,datamuster-shard-00-01-8mplm.mongodb.net:27017,datamuster-shard-00-02-8mplm.mongodb.net:27017/test?ssl=true&replicaSet=DataMuster-shard-0&authSource=admin", username, password)
     paddocks <- mongo(collection = "Paddocks", db = "DataMuster", url = pass, verbose = T)
 
-    propertyinfo <- stationinfo(property)
+    propertyinfo <- get_stations(property, fields = c("_id", "longitude", "latitude", "reports", "PIC", "timezone", "stationname"))
     propertyid <- propertyinfo$`_id`
 
     #Remove existing stationpolygon if exists --------
