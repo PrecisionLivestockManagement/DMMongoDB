@@ -39,7 +39,8 @@ dailywtsNEW <- function(RFID, start=NULL, end=NULL, values=NULL, unit=NULL, user
 
   stations <- unique(cows$stationname)
 
-  stationsinfo <- stationinfo(property = stations, username = username, password = password)
+  #stationsinfo <- stationinfo(property = stations, username = username, password = password)
+  stationsinfo <- get_stations(stationname = stations, fields = c("stationname","timezone"), username = username, password = password)
 
   cattleinfo <- list()
 
@@ -54,8 +55,8 @@ dailywtsNEW <- function(RFID, start=NULL, end=NULL, values=NULL, unit=NULL, user
 
   station <- c(cows$stationname[cows$RFID == cows$RFID[i]], cows$exstation[cows$RFID == cows$RFID[i]])
   station <- station[!grepl("xxxxxx", station)]
-  timezone <- stationsinfo$Timezone[stationsinfo$Name == station]
-
+  #timezone <- stationsinfo$Timezone[stationsinfo$Name == station]
+  timezone <- stationsinfo$timezone[stationsinfo$Stationname == station]
 
   attributes(wts$datetime)$tzone <- timezone
 
