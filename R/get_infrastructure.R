@@ -59,7 +59,15 @@ snappy <- sprintf('{%s, "_id":false}', te)
 
 data <- infrastructure$find(query = search, fields = snappy)
 
-dataf <- cbind(data[-1], data$properties)
+# This bit of code unlists dataframes within the dataframe
+
+for(i in 1:ncol(data)){
+  n <- length(data[,i])
+  if(n > 1){
+    data <- cbind(data, data[,i])
+    data <- data[,-i]}
+}
+
 
 #collist <- colnames(stationdataf)
 
@@ -70,8 +78,8 @@ dataf <- cbind(data[-1], data$properties)
 # s <- Sys.time()
 # attr(s,"tzone") <- timezone
 
-if(nrow(dataf) != 0){
- dataf <- dataf%>%
+if(nrow(data) != 0){
+ dataf <- data%>%
                  rename_all(recode, stationname = "Stationname", asset_id = "Asset_id", type = "Type")
 #                mutate_at(vars(ends_with("Date")), as.character, format = "%b %d %Y")%>%
 #                mutate_at(vars(ends_with("Date")), funs(ifelse(. == "Jan 01 1970" | . == "Dec 31 1969", "", .)))%>%

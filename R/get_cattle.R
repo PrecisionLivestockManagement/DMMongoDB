@@ -80,10 +80,13 @@ snappy <- sprintf('{%s, "_id":false}', te)
 
 data <- cattle$find(query = search, fields = snappy)
 
-if("properties" %in% names(data)){
+# This bit of code unlists dataframes within the dataframe
 
-dataf <- cbind(data[-1], data$properties)}else{
-dataf <- data
+for(i in 1:ncol(data)){
+  n <- length(data[,i])
+  if(n > 1){
+    data <- cbind(data, data[,i])
+    data <- data[,-i]}
 }
 
 # #collist <- colnames(dataf)
@@ -96,8 +99,8 @@ dataf <- data
 # s <- Sys.time()
 # attr(s,"tzone") <- timezone
 
- if(nrow(dataf) != 0){
- dataf <- dataf%>%
+ if(nrow(data) != 0){
+ dataf <- data%>%
               #  rename_all(recode, Management = "Tag", sex = "Sex", category = "Category", stwtdate = "Last Crush Weight Date",
               #                     stweight = "Weight (kg)", recordedtime = "Hours since last ALMS record", wkwtdate = "Last Average ALMS Weight Date", wkweight = "Weight (kg)")%>%
                 #mutate_at(vars(ends_with("Date")), as.Date)#%>%

@@ -50,11 +50,14 @@ get_paddocks <- function(property = NULL, fields = NULL, username = NULL, passwo
 
   data <- cattle$find(query = search, fields = snappy)
 
-  if("properties" %in% names(data)){
+  # This bit of code unlists dataframes within the dataframe
 
-    dataf <- cbind(data[-1], data$properties)}else{
-      dataf <- data
-    }
+  for(i in 1:ncol(data)){
+    n <- length(data[,i])
+    if(n > 1){
+      data <- cbind(data, data[,i])
+      data <- data[,-i]}
+  }
 
   # #collist <- colnames(dataf)
   #
@@ -82,12 +85,12 @@ get_paddocks <- function(property = NULL, fields = NULL, username = NULL, passwo
 #     #  filter(RFID != "xxxxxx")
 #   }
 
-  if(!exists("dataf") | exists("dataf") && nrow(dataf) == 0){
-    dataf <- setNames(data.frame(matrix(ncol = length(fields), nrow = 0)), gsub(".*\\.","", fields))%>%
+  if(!exists("data") | exists("data") && nrow(data) == 0){
+    data <- setNames(data.frame(matrix(ncol = length(fields), nrow = 0)), gsub(".*\\.","", fields))%>%
       mutate_all(funs(as.character(.)))
   }
 
-  dataf
+  data
 
 }
 
