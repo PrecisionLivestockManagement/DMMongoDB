@@ -16,7 +16,7 @@
 #' @export
 
 
-almshistsearch <- function(property=NULL, alms=NULL, start=NULL, end=NULL, username=NULL, password=NULL){
+almshistsearch <- function(property=NULL, alms=NULL, start=NULL, end=NULL, timezone, username=NULL, password=NULL){
 
   if(is.null(username)||is.null(password)){
   username = keyring::key_list("DMMongoDB")[1,2]
@@ -44,6 +44,8 @@ almshistsearch <- function(property=NULL, alms=NULL, start=NULL, end=NULL, usern
 
   cattleinfo <- list()
 
+  if(nrow(jan2) != 0){
+
   for(i in 1:length(jan2$RFID)){
 
     dailywts <- setNames(data.frame(matrix(ncol = 4, nrow = length(jan2$almshist$asset_id[[i]]))), c("Property","ALMS", "dateON", "dateOFF"))
@@ -56,9 +58,9 @@ almshistsearch <- function(property=NULL, alms=NULL, start=NULL, end=NULL, usern
         if (length(jan2$almshist$dateOFF[[i]]) != nrow(dailywts)){
           if(length(jan2$almshist$dateOFF[[i]]) == 0) {
             row <- NA}else{
-            row <- c(as.Date(jan2$almshist$dateOFF[[i]], tz = "Australia/Brisbane"), NA)}
+            row <- c(as.Date(jan2$almshist$dateOFF[[i]], tz = timezone), NA)}
           dailywts$dateOFF <- row}else{
-      dailywts$dateOFF <- as.Date(jan2$almshist$dateOFF[[i]], tz = "Australia/Brisbane")}}
+      dailywts$dateOFF <- as.Date(jan2$almshist$dateOFF[[i]], tz = timezone)}}
 
     if(is.null(alms)){
       n <- c(1:length(dailywts$ALMS))}else{
@@ -94,6 +96,8 @@ almshistsearch <- function(property=NULL, alms=NULL, start=NULL, end=NULL, usern
   RFID <- jan2[which(jan2$RFID!="xxxx"),]
   #RFID$Property <- ifelse(RFID$stationname == "xxxxxx", RFID$exstation, RFID$stationname)
   cattleinfo <- list(RFID=RFID$RFID, Property=RFID$Property, ALMSHistory=cattleinfo)
+
+  }
 
   return(cattleinfo)
 
