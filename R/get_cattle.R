@@ -83,8 +83,8 @@ data <- cattle$find(query = search, fields = snappy)
 # This bit of code unlists dataframes within the dataframe
 
 for(i in 1:ncol(data)){
-  n <- length(data[,i])
-  if(n > 1){
+  class <- class(data[,i])
+  if(class == "data.frame"){
     data <- cbind(data, data[,i])
     data <- data[,-i]}
 }
