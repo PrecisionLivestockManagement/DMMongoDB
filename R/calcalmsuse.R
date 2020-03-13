@@ -29,7 +29,7 @@ calcalmsuse <- function(property, timezone, start=NULL, end=NULL, username = NUL
   if(is.null(start)){start <- as.Date("2014-09-01")}
   if(is.null(end)){end <- Sys.time()
                    attr(end,"tzone") <- timezone
-                   end <- as.Date(end)}
+                   end <- as.Date(end, tz = timezone)}
 
   wowunits <- infsearch(property, infstype = "Walk-over-Weighing Unit", username = username, password = password)
 
