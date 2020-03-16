@@ -26,7 +26,11 @@ get_stations <- function(stationname = NULL, report = NULL, fields = NULL, usern
     username = keyring::key_list("DMMongoDB")[1,2]
     password =  keyring::key_get("DMMongoDB", username)
   }
-  if(is.null(stationname)){}else{stationname <- sprintf('"stationname":"%s",', stationname)}
+
+  if(is.null(stationname)){} else {
+    stationname <- paste(unlist(stationname), collapse = '", "' )
+    stationname <- sprintf('"stationname":{"$in":["%s"]},', stationname)}
+
   if(is.null(report)){}else{report <- sprintf('"reports.name":"%s",', report)}
 
 pass <- sprintf("mongodb://%s:%s@datamuster-shard-00-00-8mplm.mongodb.net:27017,datamuster-shard-00-01-8mplm.mongodb.net:27017,datamuster-shard-00-02-8mplm.mongodb.net:27017/test?ssl=true&replicaSet=DataMuster-shard-0&authSource=admin", username, password)
