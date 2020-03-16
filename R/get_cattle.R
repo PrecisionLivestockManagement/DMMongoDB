@@ -82,6 +82,8 @@ data <- cattle$find(query = search, fields = snappy)
 
 # This bit of code unlists dataframes within the dataframe
 
+if(nrow(data) != 0){
+
 for(i in 1:ncol(data)){
   class <- class(data[,i])
   if(class == "data.frame"){
@@ -99,7 +101,7 @@ for(i in 1:ncol(data)){
 # s <- Sys.time()
 # attr(s,"tzone") <- timezone
 
- if(nrow(data) != 0){
+
  dataf <- data%>%
               #  rename_all(recode, Management = "Tag", sex = "Sex", category = "Category", stwtdate = "Last Crush Weight Date",
               #                     stweight = "Weight (kg)", recordedtime = "Hours since last ALMS record", wkwtdate = "Last Average ALMS Weight Date", wkweight = "Weight (kg)")%>%
