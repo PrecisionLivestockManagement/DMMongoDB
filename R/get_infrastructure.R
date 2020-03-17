@@ -59,41 +59,23 @@ snappy <- sprintf('{%s, "_id":false}', te)
 
 data <- infrastructure$find(query = search, fields = snappy)
 
-# This bit of code unlists dataframes within the dataframe
+# If no data is returned an empty dataframe is created
+
+if(nrow(data) == 0){
+    dataf <- setNames(data.frame(matrix(ncol = length(fields), nrow = 0)), gsub(".*\\.","", fields))%>%
+    mutate_all(funs(as.character(.)))}else{
+
+# Brings all data up to the same level
 
 for(i in 1:ncol(data)){
   class <- class(data[,i])
   if(class == "data.frame"){
     data <- cbind(data, data[,i])
-    data <- data[,-i]}
-}
+    data <- data[,-i]}}
 
-
-#collist <- colnames(stationdataf)
-
-# for(i in 1:length(collist)){
-#   if("POSIXt" %in% class(cattledataf[,i])){
-#     attributes(cattledataf[,i])$tzone <- timezone}}
-
-# s <- Sys.time()
-# attr(s,"tzone") <- timezone
-
-if(nrow(data) != 0){
  dataf <- data%>%
-                 rename_all(recode, stationname = "Stationname", asset_id = "Asset_id", type = "Type")
-#                mutate_at(vars(ends_with("Date")), as.character, format = "%b %d %Y")%>%
-#                mutate_at(vars(ends_with("Date")), funs(ifelse(. == "Jan 01 1970" | . == "Dec 31 1969", "", .)))%>%
-#                mutate_at(vars(starts_with("Weight")), funs(round(as.numeric(.), 0)))%>%
-#                mutate_at(vars(starts_with("Weight")), funs(ifelse(. == 0, as.character(""), as.character(.))))%>%
-#                mutate_at(vars(starts_with("Hours")), funs(round(as.numeric(difftime(s, ., units = "hours")),0)))%>%
-#                mutate_at(vars(starts_with("Hours")), funs(ifelse(. > 1000, NA, .)))%>%
-#                select(RFID, Tag, Sex, Category, Paddock, everything())%>%
-#                filter(RFID != "xxxxxx")
+          rename_all(recode, stationname = "Stationname", asset_id = "Asset_id", type = "Type")
 }
-
-
-# if(!exists("cattledataf") | exists("cattledataf") && nrow(cattledataf) == 0){
-# cattledataf <- setNames(data.frame(matrix(ncol = 5, nrow = 0)), c("RFID", "Tag", "Sex", "Category", "Paddock"))}
 
 dataf
 

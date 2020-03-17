@@ -73,31 +73,22 @@ snappy <- sprintf('{%s, "_id":false}', te)
 
 data <- dailywts$find(query = search, fields = snappy)
 
-dataf <- data
+# If no data is returned an empty dataframe is created
 
-collist <- colnames(dataf)
+if(nrow(data) == 0){
+  dataf <- setNames(data.frame(matrix(ncol = length(fields), nrow = 0)), gsub(".*\\.","", fields))%>%
+    mutate_all(funs(as.character(.)))}else{
 
-if(nrow(dataf) != 0){
+collist <- colnames(data)
+
  for(i in 1:length(collist)){
-   if("POSIXt" %in% class(dataf[,i])){
-     attributes(dataf[,i])$tzone <- timezone}}
-}
+   if("POSIXt" %in% class(data[,i])){
+     attributes(data[,i])$tzone <- timezone}}
 
-# s <- Sys.time()
-# attr(s,"tzone") <- timezone
 
-if(nrow(dataf) != 0){
- dataf <- dataf%>%
-                 rename_all(recode, datetime = "Date", Wt = "Weight")
-#                mutate_at(vars(ends_with("Date")), as.character, format = "%b %d %Y")%>%
-#                mutate_at(vars(ends_with("Date")), funs(ifelse(. == "Jan 01 1970" | . == "Dec 31 1969", "", .)))%>%
-#                mutate_at(vars(starts_with("Weight")), funs(round(as.numeric(.), 0)))%>%
-#                mutate_at(vars(starts_with("Weight")), funs(ifelse(. == 0, as.character(""), as.character(.))))%>%
-#                mutate_at(vars(starts_with("Hours")), funs(round(as.numeric(difftime(s, ., units = "hours")),0)))%>%
-#                mutate_at(vars(starts_with("Hours")), funs(ifelse(. > 1000, NA, .)))%>%
-#                select(RFID, Tag, Sex, Category, Paddock, everything())%>%
-#                filter(RFID != "xxxxxx")
-}
+ dataf <- data%>%
+          rename_all(recode, datetime = "Date", Wt = "Weight")
+    }
 
 dataf
 

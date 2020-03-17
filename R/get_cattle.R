@@ -80,9 +80,13 @@ snappy <- sprintf('{%s, "_id":false}', te)
 
 data <- cattle$find(query = search, fields = snappy)
 
-# This bit of code unlists dataframes within the dataframe
+# If no data is returned an empty dataframe is created
 
-if(nrow(data) != 0){
+if(nrow(data) == 0){
+    dataf <- setNames(data.frame(matrix(ncol = length(fields), nrow = 0)), gsub(".*\\.","", fields))%>%
+             mutate_all(funs(as.character(.)))}else{
+
+# Brings all data up to the same level
 
 for(i in 1:ncol(data)){
   class <- class(data[,i])
@@ -91,36 +95,21 @@ for(i in 1:ncol(data)){
     data <- data[,-i]}
 }
 
-# #collist <- colnames(dataf)
-#
-# # if(nrow(data) !=0){
-# # for(i in 1:length(collist)){
-# #   if("POSIXt" %in% class(dataf[,i])){
-# #     attributes(dataf[,i])$tzone <- timezone}}}
+# Formats any date columns with the correct timezone
 
-# s <- Sys.time()
-# attr(s,"tzone") <- timezone
+ collist <- colnames(data)
+
+  for(i in 1:length(collist)){
+    if("POSIXt" %in% class(data[,i])){
+      attributes(data[,i])$tzone <- timezone}}
 
 
  dataf <- data%>%
-              #  rename_all(recode, Management = "Tag", sex = "Sex", category = "Category", stwtdate = "Last Crush Weight Date",
-              #                     stweight = "Weight (kg)", recordedtime = "Hours since last ALMS record", wkwtdate = "Last Average ALMS Weight Date", wkweight = "Weight (kg)")%>%
-                #mutate_at(vars(ends_with("Date")), as.Date)#%>%
-                #mutate_at(vars(ends_with("Date")), funs(as.Date(., tz = timezone)))
-                mutate_at(vars(ends_with("Date")), as.Date, tz = timezone)
-              #  mutate_at(vars(ends_with("Date")), funs(ifelse(. == "Jan 01 1970" | . == "Dec 31 1969", "", .)))%>%
-              #  mutate_at(vars(starts_with("Weight")), funs(round(as.numeric(.), 0)))%>%
-              #  mutate_at(vars(starts_with("Weight")), funs(ifelse(. == 0, as.character(""), as.character(.))))%>%
-              #  mutate_at(vars(starts_with("Hours")), funs(round(as.numeric(difftime(s, ., units = "hours")),0)))%>%
-              #  mutate_at(vars(starts_with("Hours")), funs(ifelse(. > 1000, NA, .)))%>%
-              #  select(RFID, Tag, Sex, Category, Paddock, everything())%>%
-              #  filter(RFID != "xxxxxx")
+          mutate_at(vars(ends_with("Date")), as.Date, tz = timezone)
+
  }
 
-if(!exists("dataf") | exists("dataf") && nrow(dataf) == 0){
-  dataf <- setNames(data.frame(matrix(ncol = length(fields), nrow = 0)), gsub(".*\\.","", fields))%>%
-           mutate_all(funs(as.character(.)))
-  }
+
 
 dataf
 

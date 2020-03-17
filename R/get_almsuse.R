@@ -60,37 +60,32 @@ snif <- sprintf('"%s":true', fields)
 te <- paste0(snif, collapse = ", ")
 snappy <- sprintf('{%s, "_id":false}', te)
 
-#Query database and format for website display
+#Query database and format
 
 data <- almsuse$find(query = search, fields = snappy)
 
+if(nrow(data) == 0){
+  dataf <- setNames(data.frame(matrix(ncol = length(fields), nrow = 0)), gsub(".*\\.","", fields))%>%
+    mutate_all(funs(as.character(.)))}else{
+
+      # Brings all data up to the same level
+
+      # for(i in 1:ncol(data)){
+      #   class <- class(data[,i])
+      #   if(class == "data.frame"){
+      #     data <- cbind(data, data[,i])
+      #     data <- data[,-i]}
+      # }
+
+      # Formats any date columns with the correct timezone
+
+      collist <- colnames(data)
+
+       for(i in 1:length(collist)){
+         if("POSIXt" %in% class(data[,i])){
+           attributes(data[,i])$tzone <- timezone}}}
+
 dataf <- data
-
-collist <- colnames(dataf)
-
-if(nrow(dataf) != 0){
- for(i in 1:length(collist)){
-   if("POSIXt" %in% class(dataf[,i])){
-     attributes(dataf[,i])$tzone <- timezone}}
-}
-
-# s <- Sys.time()
-# attr(s,"tzone") <- timezone
-
-#if(nrow(dataf) != 0){
-# dataf <- dataf%>%
-#                 rename_all(recode, datetime = "Date", Wt = "Weight")
-#                mutate_at(vars(ends_with("Date")), as.character, format = "%b %d %Y")%>%
-#                mutate_at(vars(ends_with("Date")), funs(ifelse(. == "Jan 01 1970" | . == "Dec 31 1969", "", .)))%>%
-#                mutate_at(vars(starts_with("Weight")), funs(round(as.numeric(.), 0)))%>%
-#                mutate_at(vars(starts_with("Weight")), funs(ifelse(. == 0, as.character(""), as.character(.))))%>%
-#                mutate_at(vars(starts_with("Hours")), funs(round(as.numeric(difftime(s, ., units = "hours")),0)))%>%
-#                mutate_at(vars(starts_with("Hours")), funs(ifelse(. > 1000, NA, .)))%>%
-#                select(RFID, Tag, Sex, Category, Paddock, everything())%>%
-#                filter(RFID != "xxxxxx")
-#}
-
-dataf
 
 }
 
