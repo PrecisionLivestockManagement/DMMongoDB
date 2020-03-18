@@ -90,10 +90,9 @@ if(nrow(data) == 0){
 
 for(i in 1:ncol(data)){
   class <- class(data[,i])
-  if(class == "data.frame"){
+  if(length(class) == 1 && class == "data.frame"){
     data <- cbind(data, data[,i])
-    data <- data[,-i]}
-}
+    data <- data[,-i]}}
 
 # Formats any date columns with the correct timezone
 
