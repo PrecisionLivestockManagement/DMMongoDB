@@ -1,7 +1,7 @@
 #' Calculate cattle ALMS use from the DataMuster database
 #'
 #' This function calculates individual or groups of cattle ALMS use from the DataMuster database
-#' @name calcalmsuse
+#' @name calc_almsuse
 #' @param property the name of the property
 #' @param start a start date to be returned in date format, default is "2014-09-01"
 #' @param end an end date to be returned in date format, default is today's date
@@ -15,7 +15,7 @@
 #' @export
 
 
-calcalmsuse <- function(property, timezone, start=NULL, end=NULL, username = NULL, password = NULL){
+calc_almsuse <- function(property, timezone, start=NULL, end=NULL, username = NULL, password = NULL){
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]
