@@ -54,6 +54,7 @@ get_cattle <- function(RFID = NULL, property = NULL, sex = NULL, category = NULL
     almsasset_id <- sprintf('"properties.ALMSasset_id":{"$in":["%s"]},', almsasset_id)}
 
   if(is.null(RFID)){} else {
+    rfid <- RFID
     RFID <- paste(unlist(RFID), collapse = '", "' )
     RFID <- sprintf('"RFID":{"$in":["%s"]},', RFID)}
 
@@ -83,16 +84,45 @@ data <- cattle$find(query = search, fields = snappy)
 # If no data is returned an empty dataframe is created
 
 if(nrow(data) == 0){
-    dataf <- setNames(data.frame(matrix(ncol = length(fields), nrow = 0)), gsub(".*\\.","", fields))%>%
-             mutate_all(funs(as.character(.)))}else{
+  data <- setNames(data.frame(matrix(ncol = length(fields), nrow = 0)), gsub(".*\\.","", fields))%>%
+    mutate_all(funs(as.character(.)))}
 
-# Brings all data up to the same level
+      # Brings all data up to the same level
 
-for(i in 1:ncol(data)){
-  class <- class(data[,i])
-  if(length(class) == 1 && class == "data.frame"){
-    data <- cbind(data, data[,i])
-    data <- data[,-i]}}
+      for(i in 1:ncol(data)){
+        class <- class(data[,i])
+        if(length(class) == 1 && class == "data.frame"){
+          data <- cbind(data, data[,i])
+          data <- data[,-i]}}
+
+# If RFID was used as a search term, this section searches the database for RFID numbers that were not found in the database
+# It looks at the RFID history to try to find the missing RFIDs
+# If an RFID is found it will be added to the returned results with a message notifying the replacement RFID number
+
+if(!is.null(RFID)){
+
+missing <- rfid[!(rfid %in% data$RFID)]
+
+if (length(missing) != 0){
+
+  missingrfids <- paste(unlist(missing), collapse = '", "' )
+
+  for(i in 1:length(missing)){
+    search1 <- sprintf('{"RFIDhist.ID":{"$in":["%s"]}}', missingrfids[i])
+    data1 <- cattle$find(query = search1, fields = snappy)
+
+    if(nrow(data1) == 0){
+      print(paste0("RFID ", missing[i], " cannot be found"))}else{
+        print(paste0("RFID ", missing[i], " has been replaced with ", data1$RFID))
+
+        for(i in 1:ncol(data1)){
+          class <- class(data1[,i])
+          if(length(class) == 1 && class == "data.frame"){
+            data1 <- cbind(data1, data1[,i])
+            data1 <- data1[,-i]}}
+
+              data <- rbind(data, data1)}}}
+}
 
 # Formats any date columns with the correct timezone
 
@@ -106,11 +136,8 @@ for(i in 1:ncol(data)){
  dataf <- data%>%
           mutate_at(vars(ends_with("Date")), as.Date, tz = timezone)
 
- }
 
-
-
-dataf
+return(dataf)
 
 }
 
