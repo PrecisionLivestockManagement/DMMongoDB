@@ -47,7 +47,7 @@ calc_weeklywts <- function(RFID=NULL, start=NULL, end=NULL, values=NULL, s.d=NUL
 
   # Retreive the daily weights from the dailywts collection using the new start and end dates
 
-  tempwts <- get_dailywts(RFID = RFID, start = newstart, end = newend, minwt = minwt, location = location,
+  tempwts <- get_dailywts(RFID = RFID, start = newstart, end = newend, minwt = minwt, location = location, timezone = "Australia/Brisbane",
                           fields = c("RFID", "Wt", "datetime", "Location"),
                           username = username, password = password)
 
