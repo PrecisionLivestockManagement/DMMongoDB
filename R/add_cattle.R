@@ -279,7 +279,7 @@ for (i in 1:length(optfields)){
 
     }}
 
-movecattle(property = property, paddock = unique(paddock), username = username, password = password)
+update_cattlecoords(property = property, paddock = unique(paddock), username = username, password = password)
 
     }
 
