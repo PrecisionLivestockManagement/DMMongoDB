@@ -50,7 +50,7 @@ update_cattlecoords <- function(property,
   cattleinfospatial@data["property"] <- cattleinfo$stationname
   cattleinfospatial@data["ID"] <- cattleinfo$`_id`
 
-  pad <- apppaddocks(property, username = username, password = password)
+  pad <- get_paddockcoords(property, username = username, password = password)
   cat <- cattleinfospatial
 
   kipper <- lapply(1:nrow(cat), function(x) {
