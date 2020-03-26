@@ -8,7 +8,7 @@
 #' @param user this is the username as a text string that you have been allocated to all access to the DataMuster MongoDB Atlas server
 #' @param password you will be prompted to provide your password to be able to acces the MongoDB
 #' @return this establishes username and password credentials on the local machine and avoids having to enter them everytime you use the DMMongoDB functions
-#' @author Dave Swain \email{dave.swain@@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@@datamuster.net.au}
+#' @author Dave Swain \email{d.swain@@cqu.edu.au} and Lauren O'Connor \email{l.r.oconnor@@cqu.edu.au}
 #' @import keyring
 #' @export
 

@@ -1,14 +1,14 @@
-#' Update cattle information to DataMuster database
+#' Update cattle information in the DataMuster MongoDB database.
 #'
-#' This function updates individual or groups of cattle information to the DataMuster database. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
-#' @name updatecattleinfo
-#' @param RFID this is a list of the cattle RFID numbers
-#' @param MTag this is a list of the cattle management tag numbers
+#' This function updates information for individual or groups of cattle in the DataMuster MongoDB database. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
+#' @name update_cattleinfo
+#' @param RFID a list of the cattle RFID number/s
+#' @param MTag a list of the cattle management tag numbers
 #' @param category the class of animal (breeding or growing)
 #' @param property the name of the property to add the cattle
 #' @param paddock the name of the paddock to add the cattle
 #' @param weaned the weaned status of the animal. TRUE if cattle are weaned and FALSE if cattle are not weaned
-#' @param date provide the date that the animals were added, this has to be in date format. Default is today's date
+#' @param date the date the animals were added in date format, default is today's date
 #' @param breed the animal's breed
 #' @param brand the animal's brand
 #' @param horn the animal's horn status
@@ -27,14 +27,14 @@
 #' @param foetalage the animal's foetal age estimate at last preg test
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
 #' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
-#' @return a message that indicates the RFID tag number has been successfully updated
-#' @author Dave Swain \email{dave.swain@@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@@datamuster.net.au}
+#' @return a message that indicates that the cattle information has been successfully updated
+#' @author Dave Swain \email{d.swain@@cqu.edu.au} and Lauren O'Connor \email{l.r.oconnor@@cqu.edu.au}
 #' @import mongolite
 #' @import keyring
 #' @export
 
 
-updatecattleinfo <- function(RFID, MTag=NULL, category=NULL, weaned=NULL, breed=NULL, brand=NULL, rego=NULL,
+update_cattleinfo <- function(RFID, MTag=NULL, category=NULL, weaned=NULL, breed=NULL, brand=NULL, rego=NULL,
                       horn=NULL, colour=NULL, sex=NULL, desexed=NULL,  origin=NULL, DOB=NULL, birthWeight=NULL,
                       damRFID=NULL, damMTag=NULL, sireRFID=NULL, sireMTag=NULL, preghistDate=NULL, foetalage=NULL,
                       username=NULL, password=NULL){

@@ -2,25 +2,25 @@
 % Please edit documentation in R/get_intawow.R
 \name{get_intawow}
 \alias{get_intawow}
-\title{Retrieve WoW data from the DataMuster MongoDB database}
+\title{Retrieve WoW information from the DataMuster MongoDB database.}
 \usage{
 get_intawow(start = NULL, end = NULL, username, password)
 }
 \arguments{
-\item{start}{provide a start date and time to be returned, this has to be in datetime format.}
+\item{start}{a start date and time to be returned in datetime format}
 
-\item{end}{provide a end date and time to be returned, this has to be in datetime format.}
+\item{end}{an end date and time to be returned in datetime format}
 
 \item{username}{required for access. Please email \email{info@datamuster.net.au} to acquire a username.}
 
 \item{password}{required for access. Please email \email{info@datamuster.net.au} to acquire a password.}
 }
 \value{
-a dataframe of WoW weights that have been recorded during specified time periods.
+a dataframe of cattle RFID numbers and associated WoW information
 }
 \description{
-This function pulls in WoW weights for specified time periods. If you need assistance please email \email{info@datamuster.net.au} to seek help or suggest improvements.
+This function provides a search tool to retrieve WoW information from the INTAWoW collection in the DataMuster MongoDB database. If you need assistance please email \email{info@datamuster.net.au} to seek help or suggest improvements.
 }
 \author{
-Dave Swain \email{dave.swain@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@datamuster.net.au}
+Dave Swain \email{d.swain@cqu.edu.au} and Lauren O'Connor \email{l.r.oconnor@cqu.edu.au}
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/add_cattle.R
 \name{add_cattle}
 \alias{add_cattle}
-\title{Add cattle to the DataMuster MongoDB database}
+\title{Add cattle to the DataMuster MongoDB database.}
 \usage{
 add_cattle(
   RFID,
@@ -30,9 +30,9 @@ add_cattle(
 )
 }
 \arguments{
-\item{RFID}{a list of the RFID number/s}
+\item{RFID}{a list of cattle RFID number/s}
 
-\item{MTag}{a list of the management tag number/s}
+\item{MTag}{a list of cattle management tag number/s}
 
 \item{category}{the class of animal (breeding or growing)}
 
@@ -75,11 +75,11 @@ add_cattle(
 \item{password}{if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access}
 }
 \value{
-a message that indicates the cattle have been successfully updated
+a message that indicates the cattle have been successfully added
 }
 \description{
 This function adds individual or groups of cattle to the DataMuster MongoDB database. If you need assistance please email \email{info@datamuster.net.au} to seek help or suggest improvements.
 }
 \author{
-Dave Swain \email{dave.swain@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@datamuster.net.au}
+Dave Swain \email{d.swain@cqu.edu.au} and Lauren O'Connor \email{l.r.oconnor@cqu.edu.au}
 }

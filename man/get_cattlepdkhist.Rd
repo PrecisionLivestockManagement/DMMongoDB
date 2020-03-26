@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_cattlepdkhist.R
 \name{get_cattlepdkhist}
 \alias{get_cattlepdkhist}
-\title{Retrieve cattle paddock history from the DataMuster MongoDB database}
+\title{Retrieve cattle paddock history information from the DataMuster MongoDB database.}
 \usage{
 get_cattlepdkhist(
   property,
@@ -15,27 +15,26 @@ get_cattlepdkhist(
 )
 }
 \arguments{
-\item{property}{the name of the property to search the DataMuster MongoDB Atlas server}
+\item{property}{the name of the property to search for}
 
-\item{paddock}{this is the name of a paddock or list of paddocks as character entries, if no value is entered then all paddocks are loaded}
+\item{paddock}{the name of the paddock/s to search for. If not value is entered, then all paddocks are returned}
 
-\item{start}{provide a start date to be returned, this has to be in date format.}
+\item{start}{a start date to be returned in date format, default is "2014-09-01"}
 
-\item{end}{provide a end date to be returned, this has to be in date format.}
+\item{end}{an end date to be returned in date format, default is today's date}
 
 \item{username}{if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring}
 
 \item{password}{if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access}
 
-\item{archives}{if true, the list of animals returned will include those that are no longer on the property}
+\item{archives}{if TRUE, the list of animals returned will include those that are no longer on the property}
 }
 \value{
-a dataframe with a list of the RFID numbers and paddock history
+a list of cattle RFID numbers and associated cattle paddock history
 }
 \description{
-This function provides a list of cattle paddock history
-for a property from DataMuster MongoDB. Inputs need to be a list of one or more property names and if only one property a paddock name can be included
+This function provides a search tool to retrieve cattle paddock history from the Cattle collection in the DataMuster MongoDB database. If you need assistance please email \email{info@datamuster.net.au} to seek help or suggest improvements.
 }
 \author{
-Dave Swain \email{dave.swain@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@datamuster.net.au}
+Anita Chang \email{a.chang@cqu.edu.au}
 }

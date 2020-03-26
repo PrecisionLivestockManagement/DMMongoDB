@@ -2,7 +2,7 @@
 % Please edit documentation in R/add_stations.R
 \name{add_stations}
 \alias{add_stations}
-\title{Add a station to the DataMuster MongoDB database}
+\title{Add a station to the DataMuster MongoDB database.}
 \usage{
 add_stations(
   stationname,
@@ -24,7 +24,7 @@ add_stations(
 
 \item{area}{the area of the staion in hectares, default is 100 ha}
 
-\item{timezone}{the local timezone of the property, see https://en.wikipedia.org/wiki/List_of_tz_database_time_zones for the list of accepted timezones}
+\item{timezone}{the local timezone of the property, see https://en.wikipedia.org/wiki/List_of_tz_database_time_zones for the list of accepted timezones, default is Australia/Brisbane}
 
 \item{PIC}{the Property Identification Code}
 
@@ -33,11 +33,11 @@ add_stations(
 \item{password}{if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access}
 }
 \value{
-message to say the station has been successfully added
+a message that indicates that the station has been successfully added
 }
 \description{
-This function adds a station to the DataMuster MongoDB database. You can only access this function if you have read and write permission
+This function adds a station to the DataMuster MongoDB database. You can only access this function if you have read and write permissions.
 }
 \author{
-Dave Swain \email{dave.swain@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@datamuster.net.au}
+Dave Swain \email{d.swain@cqu.edu.au} and Lauren O'Connor \email{l.r.oconnor@cqu.edu.au}
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/calc_almsuse.R
 \name{calc_almsuse}
 \alias{calc_almsuse}
-\title{Calculate cattle ALMS use from the DataMuster database}
+\title{Calculate cattle ALMS use from the DataMuster MongoDB database.}
 \usage{
 calc_almsuse(
   property,
@@ -25,11 +25,11 @@ calc_almsuse(
 \item{password}{if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access}
 }
 \value{
-a dataframe with a list of the cattle numbers associated with the ALMS and the number of cattle recorded
+a dataframe with a list of the cattle RFID numbers and ALMS use statistics
 }
 \description{
-This function calculates individual or groups of cattle ALMS use from the DataMuster database
+This function calculates individual or groups of cattle ALMS use using the DataMuster Mongo DB database. If you need assistance please email \email{info@datamuster.net.au} to seek help or suggest improvements.
 }
 \author{
-Dave Swain \email{dave.swain@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@datamuster.net.au}
+Dave Swain \email{d.swain@cqu.edu.au} and Lauren O'Connor \email{l.r.oconnor@cqu.edu.au}
 }

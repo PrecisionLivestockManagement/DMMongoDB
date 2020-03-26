@@ -1,21 +1,21 @@
-#' Update cattle allocations to alms units
+#' Update cattle allocation to ALMS units in the DataMuster MongoDB database.
 #'
-#' This function allocates individual or groups of cattle to alms units. It searches based on a list of RFID values. It is recommended that you use the propsearch function to find a list of cattle RFID numbers for a particular property. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
-#' @name updatepaddock
-#' @param RFID this is a list of cattle RFID numbers
-#' @param property the name of the property to search the DataMuster MongoDB Atlas server
-#' @param date provide the date that the new paddock allocation was applied, this has to be in date format. Default is today's date.
-#' @param almsid this is the asset_id of the alms unti the cattle are to be allocated.
+#' This function updates allocates individual or groups of cattle to ALMS units in the DataMuster MongoDB database. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
+#' @name update_alms
+#' @param RFID a list of cattle RFID number/s
+#' @param property the name of the property to search for
+#' @param date the date that the new paddock allocation was applied in date formate, default is today's date
+#' @param almsid the asset_id of the ALMS unit the cattle are to be allocated
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
 #' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
-#' @return a message that indicates the RFID tag number has been successfully updated
-#' @author Dave Swain \email{dave.swain@@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@@datamuster.net.au}
+#' @return a message that indicates the cattle have been successfully allocated to an ALMS unit
+#' @author Dave Swain \email{d.swain@@cqu.edu.au} and Lauren O'Connor \email{l.r.oconnor@@cqu.edu.au}
 #' @import mongolite
 #' @import keyring
 #' @export
 
 
-updatealms <- function(RFID, property, alms, date=NULL, username=NULL, password=NULL){
+update_alms <- function(RFID, property, alms, date=NULL, username=NULL, password=NULL){
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]

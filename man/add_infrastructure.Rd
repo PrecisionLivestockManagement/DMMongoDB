@@ -2,7 +2,7 @@
 % Please edit documentation in R/add_infrastructure.R
 \name{add_infrastructure}
 \alias{add_infrastructure}
-\title{Add infrastructure to the DataMuster MongoDB database}
+\title{Add infrastructure to the DataMuster MongoDB database.}
 \usage{
 add_infrastructure(
   property,
@@ -27,7 +27,7 @@ add_infrastructure(
 
 \item{assetID}{the asset identification number}
 
-\item{fileout}{TRUE if the data is written to file or FALSE if the data is sent direct to the DataMuster database, default is FALSE}
+\item{fileout}{TRUE if the data is written to file or FALSE if the data is sent direct to the DataMuster MongoDB database, default is FALSE}
 
 \item{active}{TRUE if the infrastructure is actively recording data or FALSE if the infrastructure is not yet recording data, default is TRUE}
 
@@ -42,11 +42,11 @@ add_infrastructure(
 \item{password}{if you include a username you will also need to add a password, contact Lauren O'Connor if you don't have access}
 }
 \value{
-message to say the infrastructure has been successfully added
+a message that indicates that the infrastructure has been successfully added
 }
 \description{
-This function adds infrastructure to the DataMuster MongoDB database. You can only access this function if you have read and write permission
+This function adds infrastructure to the DataMuster MongoDB database. You can only access this function if you have read and write permissions.
 }
 \author{
-Dave Swain \email{dave.swain@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@datamuster.net.au}
+Dave Swain \email{d.swain@cqu.edu.au} and Lauren O'Connor \email{l.r.oconnor@cqu.edu.au}
 }

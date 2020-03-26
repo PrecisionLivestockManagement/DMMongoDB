@@ -1,16 +1,16 @@
-#' Calculate the calving date from cattle ALMS weights from the DataMuster database
+#' Calculate the calving date using cattle ALMS weights from the DataMuster MongoDB database.
 #'
-#' This function calculates the calving date of individuals or groups of cattle. The code first calculates the calving week using weekly weight. The largest negative weight difference between the weekly weights is assigned as the calving week.
-#' The calving date is then calculated using daily weight data. The data is filtered for the period around the detected calving week and erroneous weights are removed. The largest negative weight difference between the remaining daily weights is assigned as the calving date.
+#' This function calculates the calving date of individuals or groups of cattle using the DataMuster MongoDB database. The code first calculates the calving week using weekly weight. The largest negative weight difference between the weekly weights is assigned as the calving week.
+#' The calving date is then calculated using daily weight data. The data is filtered for the period around the detected calving week and erroneous weights are removed. The largest negative weight difference between the remaining daily weights is assigned as the calving date. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
 #' @name calc_calvingdate
-#' @param RFID a list of cattle RFID numbers
+#' @param RFID a list of cattle RFID number/s
 #' @param start a start date to be returned in date format
 #' @param end an end date to be returned in date format
 #' @param unit the filename of the ALMS unit to search for
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
 #' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
-#' @return a dataframe of cattle RFID numbers and weekly weight statistics
-#' @author Dave Swain \email{dave.swain@@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@@datamuster.net.au}
+#' @return a dataframe of cattle RFID numbers and calculated calving dates
+#' @author Dave Swain \email{d.swain@@cqu.edu.au} and Lauren O'Connor \email{l.r.oconnor@@cqu.edu.au}
 #' @import mongolite
 #' @import keyring
 #' @import dplyr

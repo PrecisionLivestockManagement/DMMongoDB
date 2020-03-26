@@ -2,7 +2,7 @@
 % Please edit documentation in R/add_paddocks.R
 \name{add_paddocks}
 \alias{add_paddocks}
-\title{Add paddocks to the DataMuster MongoDB database}
+\title{Add paddocks to the DataMuster MongoDB database.}
 \usage{
 add_paddocks(
   property,
@@ -33,11 +33,11 @@ add_paddocks(
 \item{password}{if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access}
 }
 \value{
-a message that indicates the paddock/s have been successfully added
+a message that indicates that the paddock/s have been successfully added
 }
 \description{
 This function adds individual or groups of paddocks to the DataMuster MongoDB database. If you need assistance please email \email{info@datamuster.net.au} to seek help or suggest improvements.
 }
 \author{
-Dave Swain \email{dave.swain@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@datamuster.net.au}
+Dave Swain \email{d.swain@cqu.edu.au} and Lauren O'Connor \email{l.r.oconnor@cqu.edu.au}
 }

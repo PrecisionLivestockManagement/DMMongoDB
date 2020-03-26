@@ -2,7 +2,7 @@
 % Please edit documentation in R/calc_weeklywts.R
 \name{calc_weeklywts}
 \alias{calc_weeklywts}
-\title{Retrieve data on cattle ALMS weekly weights from the DataMuster database}
+\title{Calculate average weekly weights from the DataMuster MongoDB database.}
 \usage{
 calc_weeklywts(
   RFID = NULL,
@@ -17,11 +17,11 @@ calc_weeklywts(
 )
 }
 \arguments{
-\item{RFID}{a list of cattle RFID numbers}
+\item{RFID}{a list of cattle RFID number/s}
 
-\item{start}{a start date to be returned in date format.}
+\item{start}{a start date to be returned in date format, default is "2014-09-01"}
 
-\item{end}{an end date to be returned in date format.}
+\item{end}{an end date to be returned in date format, default is today's date}
 
 \item{values}{the minimum number of daily weight values required to calculate an average weekly weight, default is 4}
 
@@ -39,8 +39,8 @@ calc_weeklywts(
 a dataframe of cattle RFID numbers and weekly weight statistics
 }
 \description{
-This function calculates average weekly weights from daily ALMS weights for individual or groups of cattle. If you need assistance please email \email{info@datamuster.net.au} to seek help or suggest improvements.
+This function calculates average weekly weights from daily ALMS weights for individual or groups of cattle using the DataMuster MongoDB database. If you need assistance please email \email{info@datamuster.net.au} to seek help or suggest improvements.
 }
 \author{
-Dave Swain \email{dave.swain@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@datamuster.net.au}
+Dave Swain \email{d.swain@cqu.edu.au} and Lauren O'Connor \email{l.r.oconnor@cqu.edu.au}
 }

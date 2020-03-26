@@ -1,13 +1,12 @@
-#' Retrieve WoW data from the DataMuster MongoDB database
+#' Retrieve WoW information from the DataMuster MongoDB database.
 #'
-#' This function pulls in WoW weights for specified time periods. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
-#' @name get_intawow
-#' @param start provide a start date and time to be returned, this has to be in datetime format.
-#' @param end provide a end date and time to be returned, this has to be in datetime format.
+#' This function provides a search tool to retrieve WoW information from the INTAWoW collection in the DataMuster MongoDB database. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
+#' @param start a start date and time to be returned in datetime format
+#' @param end an end date and time to be returned in datetime format
 #' @param username required for access. Please email \email{info@@datamuster.net.au} to acquire a username.
 #' @param password required for access. Please email \email{info@@datamuster.net.au} to acquire a password.
-#' @return a dataframe of WoW weights that have been recorded during specified time periods.
-#' @author Dave Swain \email{dave.swain@@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@@datamuster.net.au}
+#' @return a dataframe of cattle RFID numbers and associated WoW information
+#' @author Dave Swain \email{d.swain@@cqu.edu.au} and Lauren O'Connor \email{l.r.oconnor@@cqu.edu.au}
 #' @import mongolite
 #' @import keyring
 #' @import dplyr

@@ -1,14 +1,14 @@
-#' Calculate cattle ALMS use from the DataMuster database
+#' Calculate cattle ALMS use from the DataMuster MongoDB database.
 #'
-#' This function calculates individual or groups of cattle ALMS use from the DataMuster database
+#' This function calculates individual or groups of cattle ALMS use using the DataMuster Mongo DB database. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
 #' @name calc_almsuse
 #' @param property the name of the property
 #' @param start a start date to be returned in date format, default is "2014-09-01"
 #' @param end an end date to be returned in date format, default is today's date
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
 #' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
-#' @return a dataframe with a list of the cattle numbers associated with the ALMS and the number of cattle recorded
-#' @author Dave Swain \email{dave.swain@@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@@datamuster.net.au}
+#' @return a dataframe with a list of the cattle RFID numbers and ALMS use statistics
+#' @author Dave Swain \email{d.swain@@cqu.edu.au} and Lauren O'Connor \email{l.r.oconnor@@cqu.edu.au}
 #' @import mongolite
 #' @import keyring
 #' @import dplyr

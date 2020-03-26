@@ -1,6 +1,6 @@
-#' Add a user to the DataMuster MongoDB database
+#' Add a user to the DataMuster MongoDB database.
 #'
-#' This function adds a user to the DataMuster MongoDB database. You can only access this function if you have read and write permission
+#' This function adds a user to the DataMuster MongoDB database. You can only access this function if you have read and write permissions.
 #' @name add_users
 #' @param user the name of the user to be added to the DataMuster MongoDB Altas server, preferably without a space between the first and last name
 #' @param email the email address of the user that was used to register via the DataMuster website
@@ -10,14 +10,14 @@
 #' @return This function writes directly to the database. A message will appear to indicate the number of documents that have been successfully added to the MongoDB database
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
 #' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
-#' @return message to say the user has been successfully added
-#' @author Lauren O'Connor \email{lauren.oconnor@@datamuster.net.au}
+#' @return a message that indicates that the user has been successfully added
+#' @author Lauren O'Connor \email{l.r.oconnor@@cqu.edu.au}
 #' @import mongolite
 #' @import keyring
 #' @export
 
 
-add_users <- function(user, email, accesslevel, writeaccess, property=NULL, username=NULL, password=NULL){
+add_users <- function(user, email, accesslevel, writeaccess, property, username=NULL, password=NULL){
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]

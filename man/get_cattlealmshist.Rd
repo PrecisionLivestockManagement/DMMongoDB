@@ -2,25 +2,25 @@
 % Please edit documentation in R/get_cattlealmshist.R
 \name{get_cattlealmshist}
 \alias{get_cattlealmshist}
-\title{Retrieve cattle pregnancy history from the DataMuster MongoDB database}
+\title{Retrieve cattle ALMS history from the DataMuster MongoDB database.}
 \usage{
 get_cattlealmshist(RFID, values = NULL, username = NULL, password = NULL)
 }
 \arguments{
-\item{RFID}{a list of cattle RFID numbers}
+\item{RFID}{a list of cattle RFID number/s}
 
-\item{values}{the minimum number of calving date values required, default 1}
+\item{values}{the minimum number of values required, default 1}
 
 \item{username}{if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring}
 
 \item{password}{if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access}
 }
 \value{
-a list of RFID numbers and associated calving dates
+a list of cattle RFID numbers and associated cattle ALMS history
 }
 \description{
-This function pulls in pregnancy history data for individual or groups of cattle. If you need assistance please email \email{info@datamuster.net.au} to seek help or suggest improvements.
+This function provides a search tool to retrieve cattle ALMS history from the Cattle collection in the DataMuster MongoDB database. If you need assistance please email \email{info@datamuster.net.au} to seek help or suggest improvements.
 }
 \author{
-Dave Swain \email{dave.swain@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@datamuster.net.au}
+Anita Chang \email{a.chang@cqu.edu.au}
 }

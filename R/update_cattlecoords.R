@@ -1,13 +1,13 @@
-#' Update a paddock's coordinates
+#' Update a paddock coordinates in the DataMuster MongoDB database.
 #'
-#' This function updates paddock coordinates. Inputs need to be a list of one or more property names
+#' This function updates paddock coordinates in the DataMuster MongoDB database. Inputs need to be a list of one or more property names. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
 #' @name update_cattlecoords
-#' @param property the name of the property to search the DataMuster MongoDB Atlas server
-#' @param paddock the name of the paddocks to search the DataMuster MongoDB Atlas server
+#' @param property the name of the property to search for
+#' @param paddock the name of the paddock to search for
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
 #' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
 #' @return a spatialpointsdataframe with a list of the RFID numbers and a number of other data points, associated management tags and current paddocks the cattle are in
-#' @author Dave Swain \email{dave.swain@@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@@datamuster.net.au}
+#' @author Dave Swain \email{d.swain@@cqu.edu.au} and Lauren O'Connor \email{l.r.oconnor@@cqu.edu.au}
 #' @import mongolite
 #' @import keyring
 #' @import dplyr

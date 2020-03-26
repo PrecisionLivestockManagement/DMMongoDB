@@ -2,37 +2,25 @@
 % Please edit documentation in R/get_newusers.R
 \name{get_newusers}
 \alias{get_newusers}
-\title{Retrieve cattle information via the DataMuster website app}
+\title{Retrieve new user information from the DataMuster MongoDB database.}
 \usage{
 get_newusers(start = NULL, fields = NULL, username = NULL, password = NULL)
 }
 \arguments{
-\item{fields}{a list of MongoDB cattle collection headers that you want returned}
+\item{start}{a start date to be returned in date format, default is “2014-09-01”}
+
+\item{fields}{a list of headers from the NewUser collection in the DataMuster MongoDB database to be returned}
 
 \item{username}{if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring}
 
 \item{password}{if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access}
-
-\item{property}{property to search for}
-
-\item{sex}{male or female}
-
-\item{zoom}{whole property or paddock zoomchoice}
-
-\item{paddock}{paddock on property}
-
-\item{category}{the class of cattle either breeding or growing}
-
-\item{alms}{TRUE or FALSE, if true filters the data for cattle currently allocated to an alms unit}
-
-\item{timezone}{the timezone that applies to the cattle data}
 }
 \value{
-a list of cattle with the list of fields defined in the inputs and searched using the search terms.
+a list of cattle RFID numbers and associated user information
 }
 \description{
-This function provides a flexible search tool to find cattle based on a flexible number of search terms. It also allows the user to define what fields should be returned via a list of fields.
+This function provides a search tool to retrieve new user information from the NewUser collection in the DataMuster MongoDB database. It also allows the user to define what fields should be returned. If you need assistance please email \email{info@datamuster.net.au} to seek help or suggest improvements.
 }
 \author{
-Dave Swain \email{dave.swain@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@datamuster.net.au}
+Dave Swain \email{d.swain@cqu.edu.au} and Lauren O'Connor \email{l.r.oconnor@cqu.edu.au}
 }

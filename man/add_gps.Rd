@@ -7,7 +7,7 @@
 add_gps(RFID, DateTime, lat, long, voltage, username, password)
 }
 \arguments{
-\item{RFID}{a list of cattle RFID numbers}
+\item{RFID}{a list of cattle RFID number/s}
 
 \item{DateTime}{a list of timestamps in POSIXct format}
 
@@ -25,8 +25,8 @@ add_gps(RFID, DateTime, lat, long, voltage, username, password)
 a message that indicates the data has been successfully added
 }
 \description{
-This function allows GPS data to be added to the DataMuster MongoDB database
+This function adds GPS data to the DataMuster MongoDB database. If you need assistance please email \email{info@datamuster.net.au} to seek help or suggest improvements.
 }
 \author{
-Dave Swain \email{dave.swain@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@datamuster.net.au}
+Dave Swain \email{d.swain@cqu.edu.au} and Lauren O'Connor \email{l.r.oconnor@cqu.edu.au}
 }

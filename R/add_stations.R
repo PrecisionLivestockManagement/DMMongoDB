@@ -1,17 +1,17 @@
-#' Add a station to the DataMuster MongoDB database
+#' Add a station to the DataMuster MongoDB database.
 #'
-#' This function adds a station to the DataMuster MongoDB database. You can only access this function if you have read and write permission
+#' This function adds a station to the DataMuster MongoDB database. You can only access this function if you have read and write permissions.
 #' @name add_stations
 #' @param stationname the name of the property
 #' @param lat the latitude of a coordinate point to locate the property
 #' @param long the longitude of a coordinate point to locate the property
 #' @param area the area of the staion in hectares, default is 100 ha
-#' @param timezone the local timezone of the property, see https://en.wikipedia.org/wiki/List_of_tz_database_time_zones for the list of accepted timezones
+#' @param timezone the local timezone of the property, see https://en.wikipedia.org/wiki/List_of_tz_database_time_zones for the list of accepted timezones, default is Australia/Brisbane
 #' @param PIC the Property Identification Code
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
 #' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
-#' @return message to say the station has been successfully added
-#' @author Dave Swain \email{dave.swain@@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@@datamuster.net.au}
+#' @return a message that indicates that the station has been successfully added
+#' @author Dave Swain \email{d.swain@@cqu.edu.au} and Lauren O'Connor \email{l.r.oconnor@@cqu.edu.au}
 #' @import mongolite
 #' @import keyring
 #' @export

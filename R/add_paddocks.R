@@ -1,4 +1,4 @@
-#' Add paddocks to the DataMuster MongoDB database
+#' Add paddocks to the DataMuster MongoDB database.
 #'
 #' This function adds individual or groups of paddocks to the DataMuster MongoDB database. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
 #' @name add_paddocks
@@ -10,15 +10,15 @@
 #' @param coords the coordinates of the paddock, if inputting raw coordinates they must be listed in pairs with long first then lat, if in decimal degrees minutes they must be in the format "35d9'58.12\"S"  "66d40'42.74\"W"
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
 #' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
-#' @return a message that indicates the paddock/s have been successfully added
-#' @author Dave Swain \email{dave.swain@@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@@datamuster.net.au}
+#' @return a message that indicates that the paddock/s have been successfully added
+#' @author Dave Swain \email{d.swain@@cqu.edu.au} and Lauren O'Connor \email{l.r.oconnor@@cqu.edu.au}
 #' @import mongolite
 #' @import keyring
 #' @import rgdal
 #' @import leafletR
 #' @export
 
-add_paddocks <- function(property, paddockname=NULL, filedir=NULL,filename=NULL, filetype, coords=NULL, username=NULL, password=NULL){
+add_paddocks <- function(property, paddockname=NULL, filedir=NULL, filename=NULL, filetype, coords=NULL, username=NULL, password=NULL){
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]

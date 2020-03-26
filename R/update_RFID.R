@@ -1,20 +1,20 @@
-#' Update RFID tag number
+#' Update RFID tag number in the DataMuster MongoDB database.
 #'
-#' This function pulls in daily weights for individual or groups of cattle for specified periods. It searches based on a list of RFID values. It is recommended that you use the propsearch function to find a list of cattle RFID numbers for a particular property. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
-#' @name updateRFID
-#' @param RFID this is a list of the previous cattle RFID numbers
-#' @param newRFID this is a list of the new cattle RFID numbers
-#' @param date provide the date that the new RFID tag was applied, this has to be in date format. Default is today's date.
+#' This function updates the RFID number for individual or groups of cattle in the DataMuster MongoDB database. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
+#' @name update_RFID
+#' @param RFID a list of the previous cattle RFID number/s
+#' @param newRFID a list of the new cattle RFID number/s
+#' @param date the date that the new RFID tag was applied in date format, default is today's date
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
 #' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
 #' @return a message that indicates the RFID tag number has been successfully updated
-#' @author Dave Swain \email{dave.swain@@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@@datamuster.net.au}
+#' @author Dave Swain \email{d.swain@@cqu.edu.au} and Lauren O'Connor \email{l.r.oconnor@@cqu.edu.au}
 #' @import mongolite
 #' @import keyring
 #' @import dplyr
 #' @export
 
-updateRFID <- function(RFID, newRFID, date=NULL, username=NULL, password=NULL){
+update_RFID <- function(RFID, newRFID, date=NULL, username=NULL, password=NULL){
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]

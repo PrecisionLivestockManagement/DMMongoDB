@@ -1,21 +1,21 @@
-#' Update cattle allocations to paddocks
+#' Update cattle allocations to paddocks in the DataMuster MongoDB database.
 #'
-#' This function allocates individual or groups of cattle to paddocks. It searches based on a list of RFID values. It is recommended that you use the propsearch function to find a list of cattle RFID numbers for a particular property. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
-#' @name updatepaddock
-#' @param RFID this is a list of cattle RFID numbers
-#' @param property the name of the property to search the DataMuster MongoDB Atlas server
-#' @param date provide the date that the new paddock allocation was applied, this has to be in date format. Default is today's date.
-#' @param addtoherd this indicates whether or not there are cattle already allocated to the paddock. use addtoherd = TRUE to ignore.
+#' This function allocates individual or groups of cattle to paddocks in the DataMuster MongoDB database. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
+#' @name update_paddock
+#' @param RFID a list of cattle RFID number/s
+#' @param property the name of the property to search for
+#' @param date the date the new paddock allocation was applied in date format, default is today's date
+#' @param addtoherd this indicates whether or not there are cattle already allocated to the paddock. Use addtoherd = TRUE to ignore
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
 #' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
-#' @return a message that indicates the RFID tag number has been successfully updated
-#' @author Dave Swain \email{dave.swain@@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@@datamuster.net.au}
+#' @return a message that indicates that the paddocks have been successfully updated
+#' @author Dave Swain \email{d.swain@@cqu.edu.au} and Lauren O'Connor \email{l.r.oconnor@@cqu.edu.au}
 #' @import mongolite
 #' @import keyring
 #' @export
 
 
-updatepaddock <- function(RFID, property, paddock, MTag = NULL, date=NULL, username=NULL, password=NULL){
+update_paddock <- function(RFID, property, paddock, MTag = NULL, date=NULL, username=NULL, password=NULL){
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]

@@ -2,7 +2,7 @@
 % Please edit documentation in R/calc_calvingdate.R
 \name{calc_calvingdate}
 \alias{calc_calvingdate}
-\title{Calculate the calving date from cattle ALMS weights from the DataMuster database}
+\title{Calculate the calving date using cattle ALMS weights from the DataMuster MongoDB database.}
 \usage{
 calc_calvingdate(
   RFID,
@@ -14,7 +14,7 @@ calc_calvingdate(
 )
 }
 \arguments{
-\item{RFID}{a list of cattle RFID numbers}
+\item{RFID}{a list of cattle RFID number/s}
 
 \item{start}{a start date to be returned in date format}
 
@@ -27,12 +27,12 @@ calc_calvingdate(
 \item{password}{if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access}
 }
 \value{
-a dataframe of cattle RFID numbers and weekly weight statistics
+a dataframe of cattle RFID numbers and calculated calving dates
 }
 \description{
-This function calculates the calving date of individuals or groups of cattle. The code first calculates the calving week using weekly weight. The largest negative weight difference between the weekly weights is assigned as the calving week.
-The calving date is then calculated using daily weight data. The data is filtered for the period around the detected calving week and erroneous weights are removed. The largest negative weight difference between the remaining daily weights is assigned as the calving date.
+This function calculates the calving date of individuals or groups of cattle using the DataMuster MongoDB database. The code first calculates the calving week using weekly weight. The largest negative weight difference between the weekly weights is assigned as the calving week.
+The calving date is then calculated using daily weight data. The data is filtered for the period around the detected calving week and erroneous weights are removed. The largest negative weight difference between the remaining daily weights is assigned as the calving date. If you need assistance please email \email{info@datamuster.net.au} to seek help or suggest improvements.
 }
 \author{
-Dave Swain \email{dave.swain@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@datamuster.net.au}
+Dave Swain \email{d.swain@cqu.edu.au} and Lauren O'Connor \email{l.r.oconnor@cqu.edu.au}
 }

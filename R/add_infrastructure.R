@@ -1,20 +1,20 @@
-#' Add infrastructure to the DataMuster MongoDB database
+#' Add infrastructure to the DataMuster MongoDB database.
 #'
-#' This function adds infrastructure to the DataMuster MongoDB database. You can only access this function if you have read and write permission
+#' This function adds infrastructure to the DataMuster MongoDB database. You can only access this function if you have read and write permissions.
 #' @name add_infrastructure
 #' @param property the name of the property to add the infrastructure
 #' @param paddock the name of the paddock to add the infrastructure
 #' @param infstype the infrastructure type (e.g. Walk-over-Weighing Unit, EID Reader, Water sensor)
 #' @param assetID the asset identification number
-#' @param fileout TRUE if the data is written to file or FALSE if the data is sent direct to the DataMuster database, default is FALSE
+#' @param fileout TRUE if the data is written to file or FALSE if the data is sent direct to the DataMuster MongoDB database, default is FALSE
 #' @param active TRUE if the infrastructure is actively recording data or FALSE if the infrastructure is not yet recording data, default is TRUE
 #' @param training only applicable for Walk-over-Weighing Units, TRUE if the herd is currently under training or FALSE if the herd is already trained, default is FALSE
 #' @param telemetry only applicable for Walk-over-Weighing Units, TRUE if the Unit emits an hourly telemetry signal or FALSE if the Unit does not emit an hourly telemetry signal, default is FALSE
 #' @param date the date that the infrastructure was installed in date format, default is today's date
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
 #' @param password if you include a username you will also need to add a password, contact Lauren O'Connor if you don't have access
-#' @return message to say the infrastructure has been successfully added
-#' @author Dave Swain \email{dave.swain@@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@@datamuster.net.au}
+#' @return a message that indicates that the infrastructure has been successfully added
+#' @author Dave Swain \email{d.swain@@cqu.edu.au} and Lauren O'Connor \email{l.r.oconnor@@cqu.edu.au}
 #' @import mongolite
 #' @import keyring
 #' @export

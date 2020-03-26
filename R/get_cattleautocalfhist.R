@@ -1,22 +1,19 @@
-#' Retrieve cattle pregnancy history from the DataMuster MongoDB database
+#' Retrieve cattle auto calf history from the DataMuster MongoDB database.
 #'
-#' This function pulls in pregnancy history data for individual or groups of cattle. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
+#' This function provides a search tool to retrieve cattle auto calf history from the Cattle collection in the DataMuster MongoDB database. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
 #' @name get_cattleautocalfhist
-#' @param RFID a list of cattle RFID numbers
-#' @param values the minimum number of calving date values required, default 1
+#' @param RFID a list of cattle RFID number/s
+#' @param values the minimum number of auto calf history values required, default is 1
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
 #' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
-#' @return a list of RFID numbers and associated calving dates
-#' @author Dave Swain \email{dave.swain@@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@@datamuster.net.au}
+#' @return a list of RFID numbers and associated cattle auto calf history
+#' @author Anita Chang \email{a.chang@@cqu.edu.au}
 #' @import mongolite
 #' @import keyring
 #' @import dplyr
 #' @export
 
-get_cattleautocalfhist <- function(RFID,
-                               values = NULL,
-                               username = NULL,
-                               password = NULL){
+get_cattleautocalfhist <- function(RFID, values = NULL, username = NULL, password = NULL){
 
   if(is.null(values)|| values < 1 ){values <- 1}
   if(is.null(username)||is.null(password)){

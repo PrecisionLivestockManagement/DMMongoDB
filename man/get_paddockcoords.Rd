@@ -2,26 +2,23 @@
 % Please edit documentation in R/get_paddockcoords.R
 \name{get_paddockcoords}
 \alias{get_paddockcoords}
-\title{Retrieve cattle paddock history from the DataMuster MongoDB database}
+\title{Retrieve paddock coordinate information from the DataMuster MongoDB database.}
 \usage{
 get_paddockcoords(property, username = NULL, password = NULL)
 }
 \arguments{
-\item{property}{the name of the property to search the DataMuster MongoDB Atlas server}
+\item{property}{the name of the property to search for}
 
 \item{username}{if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring}
 
 \item{password}{if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access}
-
-\item{paddock}{this is the name of a paddock or list of paddocks as character entries, if no value is entered then all paddocks are loaded}
 }
 \value{
-a dataframe with a list of the RFID numbers and paddock history
+a list of cattle RFID numbers and associated paddock coordinate information
 }
 \description{
-This function provides a list of cattle paddock history
-for a property from DataMuster MongoDB. Inputs need to be a list of one or more property names and if only one property a paddock name can be included
+This function provides a search tool to retrieve paddock coordinate information from the Paddocks collection in the DataMuster MongoDB database. Inputs need to be a list of one or more property names and if only one property a paddock name can be included. If you need assistance please email \email{info@datamuster.net.au} to seek help or suggest improvements.
 }
 \author{
-Dave Swain \email{dave.swain@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@datamuster.net.au}
+Dave Swain \email{d.swain@cqu.edu.au} and Lauren O'Connor \email{l.r.oconnor@cqu.edu.au}
 }

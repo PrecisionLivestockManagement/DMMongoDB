@@ -1,8 +1,8 @@
 #' Add GPS data to the DataMuster MongoDB database
 #'
-#' This function allows GPS data to be added to the DataMuster MongoDB database
+#' This function adds GPS data to the DataMuster MongoDB database. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
 #' @name add_gps
-#' @param RFID a list of cattle RFID numbers
+#' @param RFID a list of cattle RFID number/s
 #' @param DateTime a list of timestamps in POSIXct format
 #' @param lat the latitude of a coordinate point
 #' @param long the longitude of a coordinate point
@@ -10,18 +10,12 @@
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
 #' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
 #' @return a message that indicates the data has been successfully added
-#' @author Dave Swain \email{dave.swain@@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@@datamuster.net.au}
+#' @author Dave Swain \email{d.swain@@cqu.edu.au} and Lauren O'Connor \email{l.r.oconnor@@cqu.edu.au}
 #' @import mongolite
 #' @export
 
 
-add_gps <- function(RFID,
-                    DateTime,
-                    lat,
-                    long,
-                    voltage,
-                    username,
-                    password){
+add_gps <- function(RFID, DateTime, lat, long, voltage, username, password){
 
 
   pass <- sprintf("mongodb://%s:%s@datamuster-shard-00-00-8mplm.mongodb.net:27017,datamuster-shard-00-01-8mplm.mongodb.net:27017,datamuster-shard-00-02-8mplm.mongodb.net:27017/test?ssl=true&replicaSet=DataMuster-shard-0&authSource=admin", username, password)

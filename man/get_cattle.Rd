@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_cattle.R
 \name{get_cattle}
 \alias{get_cattle}
-\title{Retrieve cattle information via the DataMuster website app}
+\title{Retrieve cattle information from the DataMuster MongoDB database.}
 \usage{
 get_cattle(
   RFID = NULL,
@@ -27,32 +27,50 @@ get_cattle(
 )
 }
 \arguments{
-\item{property}{property to search for}
+\item{RFID}{a list of cattle RFID number/s}
+
+\item{property}{the name of the property to search for}
 
 \item{sex}{male or female}
 
-\item{category}{the class of cattle either breeding or growing}
+\item{category}{the class of cattle either (breeding or growing)}
 
-\item{paddock}{paddock on property}
+\item{paddock}{the name of the paddock to search for}
 
 \item{alms}{TRUE or FALSE, if true filters the data for cattle currently allocated to an alms unit}
 
-\item{timezone}{the timezone that applies to the cattle data}
+\item{weaned}{TRUE if the animal/s are weaned or FALSE if animal/s are not weaned}
 
-\item{fields}{a list of MongoDB cattle collection headers that you want returned}
+\item{id}{ID of the animal}
+
+\item{almsasset_id}{ID of the ALMS unit}
+
+\item{exstation}{the former property of the animal}
+
+\item{exitdate}{the date that the animal left the property in date format}
+
+\item{entrydate}{the date that the animal entered the property in date format}
+
+\item{deathdate}{the date that the animal died}
+
+\item{timezone}{the local timezone of the property, see https://en.wikipedia.org/wiki/List_of_tz_database_time_zones for the list of accepted timezones}
+
+\item{prevpaddock}{the former paddock of the animal}
+
+\item{active}{TRUE or FALSE, if true filters the data for cattle that are currently active}
+
+\item{fields}{a list of headers from the Cattle collection in the DataMuster MongoDB database to be returned}
 
 \item{username}{if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring}
 
 \item{password}{if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access}
-
-\item{zoom}{whole property or paddock zoomchoice}
 }
 \value{
-a list of cattle with the list of fields defined in the inputs and searched using the search terms.
+a list of cattle RFID numbers with the list of fields defined in the inputs and searched using the search terms
 }
 \description{
-This function provides a flexible search tool to find cattle based on a flexible number of search terms. It also allows the user to define what fields should be returned via a list of fields.
+This function provides a search tool to retrieve cattle information from the Cattle collection in the DataMuster MongoDB database. It also allows the user to define what fields should be returned. If you need assistance please email \email{info@datamuster.net.au} to seek help or suggest improvements.
 }
 \author{
-Dave Swain \email{dave.swain@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@datamuster.net.au}
+Dave Swain \email{d.swain@cqu.edu.au}, Lauren O'Connor \email{l.r.oconnor@cqu.edu.au}, and Anita Chang \email{a.chang@cqu.edu.au}
 }

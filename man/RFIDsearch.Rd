@@ -2,12 +2,12 @@
 % Please edit documentation in R/RFIDsearch.R
 \name{RFIDsearch}
 \alias{RFIDsearch}
-\title{Package with functions to enable easier code to access to DataMuster MongoDB Atlas servers}
+\title{Search for cattle using RFID in the DataMuster MongoDB database.}
 \usage{
 RFIDsearch(RFID, username = NULL, password = NULL)
 }
 \arguments{
-\item{RFID}{the list of RFID numbers to search the DataMuster MongoDB Atlas server}
+\item{RFID}{a list of cattle RFID number/s}
 
 \item{username}{if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring}
 
@@ -17,9 +17,8 @@ RFIDsearch(RFID, username = NULL, password = NULL)
 a dataframe with a list of the RFID numbers
 }
 \description{
-This function provides details for a list of cattle
-RFID numbers from MongoDB. Inputs need to be a list of one or more RFID numbers
+This function retrieves RFID from the DataMuster MongoDB database.
 }
 \author{
-Dave Swain \email{dave.swain@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@datamuster.net.au}
+Dave Swain \email{d.swain@cqu.edu.au} and Lauren O'Connor \email{l.r.oconnor@cqu.edu.au}
 }

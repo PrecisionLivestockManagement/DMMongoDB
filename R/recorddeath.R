@@ -1,14 +1,14 @@
-#' Record a cattle death
+#' Record a cattle death on the DataMuster MongoDB database.
 #'
-#' This function removes individual or groups of cattle from a station. It searches based on a list of RFID values. It is recommended that you use the propsearch function to find a list of cattle RFID numbers for a particular property. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
+#' This function removes individual or groups of cattle from a station on the DataMuster MongoDB database. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
 #' @name recorddeath
-#' @param RFID this is a list of cattle RFID numbers
-#' @param date provide the date that the animal died, this has to be in date format. Default is today's date.
-#' @param cause provide the cause of death
+#' @param RFID a list of cattle RFID number/s
+#' @param date the date that the animal died in date format, default is today's date
+#' @param cause the cause of death
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
 #' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
-#' @return a message that indicates the RFID tag number has been successfully updated
-#' @author Dave Swain \email{dave.swain@@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@@datamuster.net.au}
+#' @return a message that indicates that the cow has successfully been assigned a dead status
+#' @author Dave Swain \email{d.swain@@cqu.edu.au} and Lauren O'Connor \email{l.r.oconnor@@cqu.edu.au}
 #' @import mongolite
 #' @import keyring
 #' @export

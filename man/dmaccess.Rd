@@ -20,5 +20,5 @@ Please check with Lauren O'Connor \email{lauren.oconnor@datamuster.net.au} to ge
 to providing detailed access.
 }
 \author{
-Dave Swain \email{dave.swain@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@datamuster.net.au}
+Dave Swain \email{d.swain@cqu.edu.au} and Lauren O'Connor \email{l.r.oconnor@cqu.edu.au}
 }

@@ -1,17 +1,16 @@
-#' Retrieve cattle paddock history from the DataMuster MongoDB database
+#' Retrieve cattle paddock history information from the DataMuster MongoDB database.
 #'
-#' This function provides a list of cattle paddock history
-#' for a property from DataMuster MongoDB. Inputs need to be a list of one or more property names and if only one property a paddock name can be included
+#' This function provides a search tool to retrieve cattle paddock history from the Cattle collection in the DataMuster MongoDB database. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
 #' @name get_cattlepdkhist
-#' @param property the name of the property to search the DataMuster MongoDB Atlas server
-#' @param paddock this is the name of a paddock or list of paddocks as character entries, if no value is entered then all paddocks are loaded
-#' @param archives if true, the list of animals returned will include those that are no longer on the property
-#' @param start provide a start date to be returned, this has to be in date format.
-#' @param end provide a end date to be returned, this has to be in date format.
+#' @param property the name of the property to search for
+#' @param paddock the name of the paddock/s to search for. If not value is entered, then all paddocks are returned
+#' @param archives if TRUE, the list of animals returned will include those that are no longer on the property
+#' @param start a start date to be returned in date format, default is "2014-09-01"
+#' @param end an end date to be returned in date format, default is today's date
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
 #' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
-#' @return a dataframe with a list of the RFID numbers and paddock history
-#' @author Dave Swain \email{dave.swain@@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@@datamuster.net.au}
+#' @return a list of cattle RFID numbers and associated cattle paddock history
+#' @author Anita Chang \email{a.chang@@cqu.edu.au}
 #' @import mongolite
 #' @import keyring
 #' @import dplyr

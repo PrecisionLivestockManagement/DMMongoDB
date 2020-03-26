@@ -1,14 +1,12 @@
-#' Retrieve cattle paddock history from the DataMuster MongoDB database
+#' Retrieve paddock coordinate information from the DataMuster MongoDB database.
 #'
-#' This function provides a list of cattle paddock history
-#' for a property from DataMuster MongoDB. Inputs need to be a list of one or more property names and if only one property a paddock name can be included
+#' This function provides a search tool to retrieve paddock coordinate information from the Paddocks collection in the DataMuster MongoDB database. Inputs need to be a list of one or more property names and if only one property a paddock name can be included. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
 #' @name get_paddockcoords
-#' @param property the name of the property to search the DataMuster MongoDB Atlas server
-#' @param paddock this is the name of a paddock or list of paddocks as character entries, if no value is entered then all paddocks are loaded
+#' @param property the name of the property to search for
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
 #' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
-#' @return a dataframe with a list of the RFID numbers and paddock history
-#' @author Dave Swain \email{dave.swain@@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@@datamuster.net.au}
+#' @return a list of cattle RFID numbers and associated paddock coordinate information
+#' @author Dave Swain \email{d.swain@@cqu.edu.au} and Lauren O'Connor \email{l.r.oconnor@@cqu.edu.au}
 #' @import mongolite
 #' @import keyring
 #' @import dplyr

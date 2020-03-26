@@ -1,10 +1,10 @@
-#' Retrieve data on cattle ALMS weekly weights from the DataMuster database
+#' Calculate average weekly weights from the DataMuster MongoDB database.
 #'
-#' This function calculates average weekly weights from daily ALMS weights for individual or groups of cattle. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
+#' This function calculates average weekly weights from daily ALMS weights for individual or groups of cattle using the DataMuster MongoDB database. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
 #' @name calc_weeklywts
-#' @param RFID a list of cattle RFID numbers
-#' @param start a start date to be returned in date format.
-#' @param end an end date to be returned in date format.
+#' @param RFID a list of cattle RFID number/s
+#' @param start a start date to be returned in date format, default is "2014-09-01"
+#' @param end an end date to be returned in date format, default is today's date
 #' @param values the minimum number of daily weight values required to calculate an average weekly weight, default is 4
 #' @param s.d the minimin standard deviation between daily weight values required to calculate an average weekly weight, default is 25
 #' @param minwt the minimum daily weight (kg) required to be included to calculate an average weekly weight, default is 10
@@ -12,7 +12,7 @@
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
 #' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
 #' @return a dataframe of cattle RFID numbers and weekly weight statistics
-#' @author Dave Swain \email{dave.swain@@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@@datamuster.net.au}
+#' @author Dave Swain \email{d.swain@@cqu.edu.au} and Lauren O'Connor \email{l.r.oconnor@@cqu.edu.au}
 #' @import mongolite
 #' @import keyring
 #' @import dplyr

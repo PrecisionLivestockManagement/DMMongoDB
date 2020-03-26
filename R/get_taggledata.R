@@ -1,19 +1,19 @@
-#' Taggle water meter data
+#' Retrieve taggle data information from the DataMuster MongoDB database.
 #'
-#' This function pulls in weekly weights for individual or groups of cattle for specified periods. It searches based on a list of RFID values. It is recommended that you use the propsearch function to find a list of cattle RFID numbers for a particular property. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
-#' @name taggledata
-#' @param TagNo this is a Taggle tag number
-#' @param Days number of days to go back and pull data in
+#' This function provides a search tool to retrieve taggle data from the DMWater collection in the DataMuster MongoDB database. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
+#' @name get_taggledata
+#' @param TagNo the Taggle tag number
+#' @param Days number of days to go back and retrieve data for
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
 #' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
-#' @return A dataframe that includes the Taggle tag ID plus the meter readings and the water use per hour.
-#'@author Dave Swain \email{dave.swain@@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@@datamuster.net.au}
+#' @return a dataframe that includes the Taggle tag ID plus the meter readings and the water use per hour
+#' @author Dave Swain \email{d.swain@@cqu.edu.au} and Lauren O'Connor \email{l.r.oconnor@@cqu.edu.au}
 #' @import mongolite
 #' @import keyring
 #' @import dplyr
 #' @export
 
-taggledata <- function(TagNo, Days, username=NULL, password=NULL){
+get_taggledata <- function(TagNo, Days, username=NULL, password=NULL){
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]

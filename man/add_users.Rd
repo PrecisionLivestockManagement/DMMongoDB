@@ -2,14 +2,14 @@
 % Please edit documentation in R/add_users.R
 \name{add_users}
 \alias{add_users}
-\title{Add a user to the DataMuster MongoDB database}
+\title{Add a user to the DataMuster MongoDB database.}
 \usage{
 add_users(
   user,
   email,
   accesslevel,
   writeaccess,
-  property = NULL,
+  property,
   username = NULL,
   password = NULL
 )
@@ -32,11 +32,11 @@ add_users(
 \value{
 This function writes directly to the database. A message will appear to indicate the number of documents that have been successfully added to the MongoDB database
 
-message to say the user has been successfully added
+a message that indicates that the user has been successfully added
 }
 \description{
-This function adds a user to the DataMuster MongoDB database. You can only access this function if you have read and write permission
+This function adds a user to the DataMuster MongoDB database. You can only access this function if you have read and write permissions.
 }
 \author{
-Lauren O'Connor \email{lauren.oconnor@datamuster.net.au}
+Lauren O'Connor \email{l.r.oconnor@cqu.edu.au}
 }

@@ -1,9 +1,9 @@
-#' Add cattle to the DataMuster MongoDB database
+#' Add cattle to the DataMuster MongoDB database.
 #'
 #' This function adds individual or groups of cattle to the DataMuster MongoDB database. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
 #' @name add_cattle
-#' @param RFID a list of the RFID number/s
-#' @param MTag a list of the management tag number/s
+#' @param RFID a list of cattle RFID number/s
+#' @param MTag a list of cattle management tag number/s
 #' @param category the class of animal (breeding or growing)
 #' @param property the name of the property to add the animal/s
 #' @param paddock the name of the paddock to add the animal/s
@@ -24,8 +24,8 @@
 #' @param animalID only applicable to a select few original animals, a unique database identification number
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
 #' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
-#' @return a message that indicates the cattle have been successfully updated
-#' @author Dave Swain \email{dave.swain@@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@@datamuster.net.au}
+#' @return a message that indicates the cattle have been successfully added
+#' @author Dave Swain \email{d.swain@@cqu.edu.au} and Lauren O'Connor \email{l.r.oconnor@@cqu.edu.au}
 #' @import mongolite
 #' @import keyring
 #' @export

@@ -1,20 +1,20 @@
-#' Update static weight
+#' Update static weight in the DataMuster MongoDB database.
 #'
-#' This function inserts a new static weight for individual or groups of cattle based on a list of RFID values. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
-#' @name updatestweight
-#' @param RFID this is a list of the cattle RFID numbers
-#' @param weight this is a list of the cattle weights
-#' @param date provide the date that the weight was measured, this has to be in date format. Default is today's date.
+#' This function updates static weights for individual or groups of cattle in the DataMuster MongoDB database. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
+#' @name update_stweight
+#' @param RFID a list of cattle RFID number/s
+#' @param weight a list of the cattle weights
+#' @param date the date that the weight was measured in date format, default is today's date
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
 #' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
-#' @return a message that indicates the weights been successfully updated
-#' @author Dave Swain \email{dave.swain@@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@@datamuster.net.au}
+#' @return a message that indicates the static weights have been successfully updated
+#' @author Dave Swain \email{d.swain@@cqu.edu.au} and Lauren O'Connor \email{l.r.oconnor@@cqu.edu.au}
 #' @import mongolite
 #' @import keyring
 #' @export
 
 
-updatestweight <- function(RFID, weight, date=NULL, username=NULL, password=NULL){
+update_stweight <- function(RFID, weight, date=NULL, username=NULL, password=NULL){
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]

@@ -5,11 +5,11 @@
 #'
 #' @section DMMongoDB functions:
 #' The dmaccess function to help store username and password to enable easy database access..
-#' The dailywts function to enable to access individual or groups of cattle daily weaights from the Automated Livestock Management Systems
-#' The weeklywts function to enable to access individual or groups of cattle daily weaights from the Automated Livestock Management Systems
-#' The propsearch function to identify IDs of cattle from indivudal or groups of cattle properties and filter for individual paddocks.
+#' The get_dailywts function to enable to access individual or groups of cattle daily weaights from the Automated Livestock Management Systems
+#' The get_weeklywts function to enable to access individual or groups of cattle daily weaights from the Automated Livestock Management Systems
+#' The get_cattle function to identify IDs of cattle from indivudal or groups of cattle properties and filter for individual paddocks.
 #'
-#' @author Dave Swain \email{d.swain@@cqu.edu.au} and Lauren O'Connor \email{l.r.oconnor@@cqu.edu.au}
+#' @author Dave Swain \email{d.swain@@cqu.edu.au}, Lauren O'Connor \email{l.r.oconnor@@cqu.edu.au}, and Anita Chang \email{a.chang@@cqu.edu.au}
 #'
 #' @docType package
 #' @name DMMongoDB

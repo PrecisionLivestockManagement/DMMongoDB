@@ -2,14 +2,14 @@
 % Please edit documentation in R/update_cattlecoords.R
 \name{update_cattlecoords}
 \alias{update_cattlecoords}
-\title{Update a paddock's coordinates}
+\title{Update a paddock coordinates in the DataMuster MongoDB database.}
 \usage{
 update_cattlecoords(property, paddock = NULL, username = NULL, password = NULL)
 }
 \arguments{
-\item{property}{the name of the property to search the DataMuster MongoDB Atlas server}
+\item{property}{the name of the property to search for}
 
-\item{paddock}{the name of the paddocks to search the DataMuster MongoDB Atlas server}
+\item{paddock}{the name of the paddock to search for}
 
 \item{username}{if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring}
 
@@ -19,8 +19,8 @@ update_cattlecoords(property, paddock = NULL, username = NULL, password = NULL)
 a spatialpointsdataframe with a list of the RFID numbers and a number of other data points, associated management tags and current paddocks the cattle are in
 }
 \description{
-This function updates paddock coordinates. Inputs need to be a list of one or more property names
+This function updates paddock coordinates in the DataMuster MongoDB database. Inputs need to be a list of one or more property names. If you need assistance please email \email{info@datamuster.net.au} to seek help or suggest improvements.
 }
 \author{
-Dave Swain \email{dave.swain@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@datamuster.net.au}
+Dave Swain \email{d.swain@cqu.edu.au} and Lauren O'Connor \email{l.r.oconnor@cqu.edu.au}
 }

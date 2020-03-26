@@ -2,25 +2,25 @@
 % Please edit documentation in R/removecattle.R
 \name{removecattle}
 \alias{removecattle}
-\title{Remove cattle from a station}
+\title{Remove cattle from a station in the DataMuster MongoDB database.}
 \usage{
 removecattle(RFID, date = NULL, username = NULL, password = NULL)
 }
 \arguments{
-\item{RFID}{this is a list of cattle RFID numbers}
+\item{RFID}{a list of cattle RFID number/s}
 
-\item{date}{provide the date that the animal left the station, this has to be in date format. Default is today's date.}
+\item{date}{the date that the animal left the station in date format, default is today's date}
 
 \item{username}{if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring}
 
 \item{password}{if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access}
 }
 \value{
-a message that indicates the RFID tag number has been successfully updated
+a message that indicates that the cow has successfully been removed from the station
 }
 \description{
-This function removes individual or groups of cattle from a station. It searches based on a list of RFID values. It is recommended that you use the propsearch function to find a list of cattle RFID numbers for a particular property. If you need assistance please email \email{info@datamuster.net.au} to seek help or suggest improvements.
+This function removes individual or groups of cattle from a station in the DataMuster MongoDB database. If you need assistance please email \email{info@datamuster.net.au} to seek help or suggest improvements.
 }
 \author{
-Dave Swain \email{dave.swain@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@datamuster.net.au}
+Dave Swain \email{d.swain@cqu.edu.au} and Lauren O'Connor \email{l.r.oconnor@cqu.edu.au}
 }

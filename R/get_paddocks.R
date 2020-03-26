@@ -1,13 +1,13 @@
-#' Retrieve cattle information via the DataMuster website app
+#' Retrieve paddock information from the DataMuster MongoDB database.
 #'
-#' This function provides a flexible search tool to find cattle based on a flexible number of search terms. It also allows the user to define what fields should be returned via a list of fields.
+#' This function provides a search tool to retrieve paddock information from the Paddocks collection in the DataMuster MongoDB database. It also allows the user to define what fields should be returned. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
 #' @name get_paddocks
-#' @param property property to search for
-#' @param fields a list of MongoDB cattle collection headers that you want returned
+#' @param property the name of the property to search for
+#' @param fields a list of headers from the Paddocks collection in the DataMuster MongoDB database to be returned
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
 #' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
-#' @return a list of cattle with the list of fields defined in the inputs and searched using the search terms.
-#' @author Dave Swain \email{dave.swain@@datamuster.net.au} and Lauren O'Connor \email{lauren.oconnor@@datamuster.net.au}
+#' @return a list of cattle RFID numbers and associated paddock information
+#' @author Dave Swain \email{d.swain@@cqu.edu.au} and Lauren O'Connor \email{l.r.oconnor@@cqu.edu.au}
 #' @import mongolite
 #' @import dplyr
 #' @import keyring
