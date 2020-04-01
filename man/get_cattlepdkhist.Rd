@@ -7,7 +7,7 @@
 get_cattlepdkhist(
   property,
   paddock = NULL,
-  achives = NULL,
+  archives = NULL,
   start = NULL,
   end = NULL,
   username = NULL,
@@ -19,6 +19,8 @@ get_cattlepdkhist(
 
 \item{paddock}{the name of the paddock/s to search for. If not value is entered, then all paddocks are returned}
 
+\item{archives}{if TRUE, the list of animals returned will include those that are no longer on the property}
+
 \item{start}{a start date to be returned in date format, default is "2014-09-01"}
 
 \item{end}{an end date to be returned in date format, default is today's date}
@@ -26,8 +28,6 @@ get_cattlepdkhist(
 \item{username}{if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring}
 
 \item{password}{if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access}
-
-\item{archives}{if TRUE, the list of animals returned will include those that are no longer on the property}
 }
 \value{
 a list of cattle RFID numbers and associated cattle paddock history

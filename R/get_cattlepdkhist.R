@@ -17,7 +17,7 @@
 #' @export
 
 
-get_cattlepdkhist <- function(property, paddock=NULL, achives=NULL, start=NULL, end=NULL, username=NULL, password=NULL){
+get_cattlepdkhist <- function(property, paddock=NULL, archives=NULL, start=NULL, end=NULL, username=NULL, password=NULL){
 
   if(is.null(username)||is.null(password)){
   username = keyring::key_list("DMMongoDB")[1,2]
