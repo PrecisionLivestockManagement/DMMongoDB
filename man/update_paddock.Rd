@@ -19,13 +19,15 @@ update_paddock(
 
 \item{property}{the name of the property to search for}
 
+\item{paddock}{the name of the paddock to allocate cattle to}
+
+\item{MTag}{a list of cattle management tags}
+
 \item{date}{the date the new paddock allocation was applied in date format, default is today's date}
 
 \item{username}{if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring}
 
 \item{password}{if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access}
-
-\item{addtoherd}{this indicates whether or not there are cattle already allocated to the paddock. Use addtoherd = TRUE to ignore}
 }
 \value{
 a message that indicates that the paddocks have been successfully updated

@@ -4,8 +4,9 @@
 #' @name update_paddock
 #' @param RFID a list of cattle RFID number/s
 #' @param property the name of the property to search for
+#' @param paddock the name of the paddock to allocate cattle to
+#' @param MTag a list of cattle management tags
 #' @param date the date the new paddock allocation was applied in date format, default is today's date
-#' @param addtoherd this indicates whether or not there are cattle already allocated to the paddock. Use addtoherd = TRUE to ignore
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
 #' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
 #' @return a message that indicates that the paddocks have been successfully updated
@@ -143,7 +144,7 @@ update_paddock <- function(RFID, property, paddock, MTag = NULL, date=NULL, user
 
           }}
 
-movecattle(property = property, paddock = unique(paddock), username = username, password = password)
+update_paddock(property = property, paddock = unique(paddock), username = username, password = password)
 
 }
 
