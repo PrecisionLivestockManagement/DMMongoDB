@@ -2,7 +2,7 @@
 % Please edit documentation in R/update_RFIDMTag.R
 \name{update_RFIDMTag}
 \alias{update_RFIDMTag}
-\title{Update cow calving information to DataMuster MongoDB database.}
+\title{Update RFID using MTag in the DataMuster MongoDB database.}
 \usage{
 update_RFIDMTag(MTag, RFID, property, date, username = NULL, password = NULL)
 }
@@ -23,7 +23,7 @@ update_RFIDMTag(MTag, RFID, property, date, username = NULL, password = NULL)
 a message that indicates that the calving information has been successfully updated
 }
 \description{
-This function updates individual or groups of cow calving information in the DataMuster MongoDB database. If you need assistance please email \email{info@datamuster.net.au} to seek help or suggest improvements.
+This function updates individual or groups of RFID numbers using MTag in the DataMuster MongoDB database. If you need assistance please email \email{info@datamuster.net.au} to seek help or suggest improvements.
 }
 \author{
 Anita Chang \email{a.chang@cqu.edu.au}
