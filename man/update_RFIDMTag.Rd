@@ -20,7 +20,7 @@ update_RFIDMTag(MTag, RFID, property, date, username = NULL, password = NULL)
 \item{password}{if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access}
 }
 \value{
-a message that indicates that the calving information has been successfully updated
+a message that indicates that the RFID tags have been successfully updated
 }
 \description{
 This function updates individual or groups of RFID numbers using MTag in the DataMuster MongoDB database. If you need assistance please email \email{info@datamuster.net.au} to seek help or suggest improvements.
