@@ -9,7 +9,7 @@
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
 #' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
 #' @return a message that indicates that the calving information has been successfully updated
-#' @author Dave Swain \email{d.swain@@cqu.edu.au} and Lauren O'Connor \email{l.r.oconnor@@cqu.edu.au}
+#' @author Anita Chang \email{a.chang@cqu.edu.au}
 #' @import mongolite
 #' @import keyring
 #' @import dplyr

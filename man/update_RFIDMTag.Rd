@@ -26,5 +26,5 @@ a message that indicates that the calving information has been successfully upda
 This function updates individual or groups of cow calving information in the DataMuster MongoDB database. If you need assistance please email \email{info@datamuster.net.au} to seek help or suggest improvements.
 }
 \author{
-Dave Swain \email{d.swain@cqu.edu.au} and Lauren O'Connor \email{l.r.oconnor@cqu.edu.au}
+Anita Chang \email{a.chang@cqu.edu.au}
 }
