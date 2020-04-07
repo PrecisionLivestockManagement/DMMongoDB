@@ -1,11 +1,11 @@
 #' Update cow calving information to DataMuster MongoDB database.
 #'
 #' This function updates individual or groups of cow calving information in the DataMuster MongoDB database. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
-#' @name update_calvinginfo
+#' @name update_RFIDMTag
 #' @param MTag a list of cattle management tag number/s
+#' @param RFID a list of cattle RFID number/s
 #' @param property the name of the property to search for
-#' @param calfMTag the calf's management tag number
-#' @param birthDate the cow's date of calving in date format
+#' @param date the date that the new RFID tag was applied, in date format. Default is today's date
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
 #' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
 #' @return a message that indicates that the calving information has been successfully updated
@@ -16,7 +16,7 @@
 #' @export
 
 
-update_calvinginfo <- function(MTag, calfMTag, property, birthDate, username=NULL, password=NULL){
+update_RFIDMTag <- function(MTag, RFID, property, date, username=NULL, password=NULL){
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]
@@ -29,7 +29,7 @@ update_calvinginfo <- function(MTag, calfMTag, property, birthDate, username=NUL
 
 # Check that the property is registered in the database ---------------------------------------------------------------------
 
-    filterstation <- sprintf('{"name":"%s"}', property)
+    filterstation <- sprintf('{"stationname":"%s"}', property)
     station <- stations$count(query = filterstation)
 
     if(station == 0) {
@@ -55,51 +55,22 @@ update_calvinginfo <- function(MTag, calfMTag, property, birthDate, username=NUL
         stop(paste0("The following MTag numbers cannot be found in the database. Please check that the MTag numbers are correct and try again: "), problemcowtags)}
     }}
 
-# Find calves in the database
-
-    if (!(is.null(calfMTag))){
-
-      checkcalves <- paste(unlist(calfMTag), collapse = '", "' )
-
-      filtercattle <- sprintf('{"properties.Management":{"$in":["%s"]}}', checkcalves)
-      calves <- cattle$find(query = filtercattle, fields = '{"RFID":true, "properties.Management":true, "stationname":true, "_id":true}')
-
-      calves <- calves%>%filter(stationname == property)
-
-      if (nrow(calves) < length(calfMTag)) {
-
-        problemcalftags <- as.character(calfMTag[!(calfMTag %in% calves$properties$Management)])
-
-        stop(paste0("The following calf MTag numbers cannot be found in the database. Please check that the MTag numbers are correct and try again: "), problemcalftags)}
-    }
 
 
   #  Update animal information --------------------------
 
       for (i in 1:length(MTag)){
 
-        calfid <- calves$`_id`[calves$properties$Management == calfMTag[i]]
 
         IDS <- sprintf('{"stationname":"%s","properties.Management":"%s"}', property, MTag[i])
 
-        banger <- cattle$find(query= IDS, fields='{"calfhist.date":true, "_id":false}')
-        arrpos <- length(banger$calfhist$date[[1]])
+        banger <- cattle$find(query= IDS, fields='{"RFIDhist.date":true, "_id":false}')
+        arrpos <- length(banger$RFIDhist$date[[1]])
+        RFIDIlast <- sprintf('{"$set":{"RFID":"%s"}}', RFID[i])
+        RFIDI <- sprintf('{"$set":{"RFIDhist.date.%s":{"$date":"%s"}, "RFIDhist.ID.%s":"%s"}}', arrpos, paste0(substr(date[i],1,10),"T","00:00:00","+1000"), arrpos, RFID[i])
 
-        matchdate <- which(substr(banger$calfhist$date[[1]],1,7) == substr(birthDate[i],1,7))
+        cattle$update(IDS, RFIDI) # Has to update RFIDI first otherwise won't update RFIDhist
+        cattle$update(IDS, RFIDIlast)
 
-        if (length(matchdate) == 0){
-
-          RFIDI <- sprintf('{"$set":{"calfhist.date.%s":{"$date":"%s"}, "calfhist.ID.%s":"%s"}}', arrpos, paste0(substr(birthDate[i],1,10),"T","00:00:00","+1000"), arrpos, calfid)
-          RFIDIlast <- sprintf('{"$set":{"properties.calvingdate":{"$date":"%s"}}}', paste0(substr(birthDate[i],1,10),"T","00:00:00","+1000"))
-
-          cattle$update(IDS, RFIDI)
-          cattle$update(IDS, RFIDIlast)
-
-          }}
-
+      }
 }
-
-
-
-
-
