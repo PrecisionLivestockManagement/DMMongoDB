@@ -52,13 +52,15 @@ calc_almsuse <- function(property, timezone, start=NULL, end=NULL, username = NU
 
   cattlehistory <- get_cattlealmshist(RFID = cows$RFID, username = username, password = password)
 
-  if(length(cattlehistory$RFID) == 0){cattleinfo <- data.frame()}else{
+  if(length(cattlehistory$RFID) == 0 | length(cattlehistory$ALMShist) == 0){cattleinfo <- data.frame()}else{
     cattlehistory <- bind_rows(cattlehistory$ALMShist, .id = "RFID") %>%
       filter(RFID != "xxx xxxxxxxxxxxx") %>%
       filter(dateON >= start) %>%
-      filter(dateOFF <= end)
-    cattlehistory$dateOFF <- as.character(cattlehistory$dateOFF)
-    cattlehistory$dateOFF <- ifelse(is.na(cattlehistory$dateOFF), as.character(end), cattlehistory$dateOFF)
+      filter(dateOFF <= end) %>%
+      mutate(dateOFF = as.character(dateOFF),
+             dateOFF = ifelse(is.na(dateOFF), as.character(end), dateOFF))
+    #cattlehistory$dateOFF <- as.character(cattlehistory$dateOFF)
+    #cattlehistory$dateOFF <- ifelse(is.na(cattlehistory$dateOFF), as.character(end), cattlehistory$dateOFF)
 
   cattleweights <- get_dailywts(RFID = cows$RFID, start = start, end = end, timezone = timezone,
                                 fields = c("RFID","datetime"),
@@ -82,7 +84,7 @@ calc_almsuse <- function(property, timezone, start=NULL, end=NULL, username = NU
       tempdf <- cattlehistory %>%
         filter(as.Date(dateON) <= dates[k] & as.Date(dateOFF) >= dates[k])%>%
         mutate(Date = dates[k])%>%
-        select(Date, asset_id, RFID)
+        select(Date, ALMS, RFID)
 
       if (nrow(tempdf) == 0) {} else {
         usehistory <- rbind(usehistory, tempdf)
@@ -91,8 +93,8 @@ calc_almsuse <- function(property, timezone, start=NULL, end=NULL, username = NU
     usehistory$Count <- ifelse(paste0(usehistory$RFID, usehistory$Date) %in% paste0(cattleweights$RFID, cattleweights$Date), "1", "0")
 
     cattleinfo <- left_join(usehistory, cows, by = "RFID") %>%
-      select(Date, asset_id, Property, RFID, Management, category, sex, Count) %>%
-      rename(ALMS = "asset_id", Category = "category", Sex = "sex")
+      select(Date, Property, ALMS, RFID, Management, category, sex, Count) %>%
+      rename(Category = "category", Sex = "sex")
 
   }
   }

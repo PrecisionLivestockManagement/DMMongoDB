@@ -36,20 +36,34 @@ get_cattlealmshist <- function(RFID, values = NULL, username = NULL, password = 
 
     if (length(jan2$almshist$asset_id[i][[1]]) != 0){
 
-    calving <- setNames(data.frame(cbind(jan2$almshist$asset_id[[i]],
-                                         jan2$almshist$dateON[[i]],
-                                         jan2$almshist$dateOFF[[i]])),
-                        c("asset_id", "dateON", "dateOFF"))
-    calving$asset_id <- as.character(calving$asset_id)
-    calving$dateON <- as.Date(jan2$almshist$dateON[[i]], tz = "Australia/Brisbane")
-    calving$dateOFF <- as.Date(jan2$almshist$dateOFF[[i]], tz = "Australia/Brisbane")
+    calving <- setNames(data.frame(matrix(ncol = 3, nrow = length(jan2$almshist$asset_id[[i]]))), c("ALMS", "dateON", "dateOFF"))
+
+    if (nrow(calving) >= 1){
+      calving$dateON <- as.Date(jan2$almshist$dateON[[i]], tz = "Australia/Brisbane")
+      calving$ALMS <- jan2$almshist$asset_id[[i]]
+      if (length(jan2$almshist$dateON[[i]]) != 0){
+        if (length(jan2$almshist$dateOFF[[i]]) != nrow(calving)){
+          if(length(jan2$almshist$dateOFF[[i]]) == 0) {
+            row <- NA}else{
+              row <- c(as.Date(jan2$almshist$dateOFF[[i]], tz = "Australia/Brisbane"), NA)}
+          calving$dateOFF <- row}else{
+            calving$dateOFF <- as.Date(jan2$almshist$dateOFF[[i]], tz = "Australia/Brisbane")}}}
+
+    # calving <- setNames(data.frame(cbind(jan2$almshist$asset_id[[i]],
+    #                                      jan2$almshist$dateON[[i]],
+    #                                      jan2$almshist$dateOFF[[i]])),
+    #                     c("asset_id", "dateON", "dateOFF"))
+    # calving$asset_id <- as.character(calving$asset_id)
+    # calving$dateON <- as.Date(jan2$almshist$dateON[[i]], tz = "Australia/Brisbane")
+    # calving$dateOFF <- as.Date(jan2$almshist$dateOFF[[i]], tz = "Australia/Brisbane")
 
     #This is the section where we can apply further filters based on breed, class, etc.
 
+    if (nrow(calving) != 0){
     cattleinfo[[jan2$RFID[i]]] <- as.data.frame(calving)
     }else{
       jan2$RFID[[i]] <- "xxxx"}
-}
+}}
 
   RFID <- jan2[which(jan2$RFID!="xxxx"),]
   cattleinfo <- list(RFID=RFID$RFID, ALMShist=cattleinfo)
