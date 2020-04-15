@@ -48,6 +48,8 @@ calc_almsuse <- function(property, timezone, start=NULL, end=NULL, username = NU
   cows <- cows%>%
           filter(RFID != "xxx xxxxxxxxxxxx")
 
+  if(nrow(cows) == 0){cattleinfo <- data.frame()}else{
+
   cattlehistory <- get_cattlealmshist(RFID = cows$RFID, username = username, password = password)
 
   if(length(cattlehistory$RFID) == 0){cattleinfo <- data.frame()}else{
@@ -69,7 +71,7 @@ calc_almsuse <- function(property, timezone, start=NULL, end=NULL, username = NU
 
   usehistory <- data.frame()
 
-  if (nrow(cattlehistory) == 0){}else{
+  if (nrow(cattlehistory) == 0){cattleinfo <- data.frame()}else{
 
     newstart <- min(cattlehistory$dateON)
 
@@ -94,7 +96,7 @@ calc_almsuse <- function(property, timezone, start=NULL, end=NULL, username = NU
 
   }
   }
-  }
+  }}
 
   return(cattleinfo)
 
