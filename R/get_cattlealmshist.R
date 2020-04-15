@@ -36,10 +36,9 @@ get_cattlealmshist <- function(RFID, values = NULL, username = NULL, password = 
 
     if (length(jan2$almshist$asset_id[i][[1]]) != 0){
 
-    calving <- setNames(data.frame(matrix(ncol = 3,
-                                          nrow = length(jan2$almshist$asset_id[[i]]),
-                                          jan2$almshist$dateON[[i]],
-                                          jan2$almshist$dateOFF[[i]])),
+    calving <- setNames(data.frame(cbind(jan2$almshist$asset_id[[i]],
+                                         jan2$almshist$dateON[[i]],
+                                         jan2$almshist$dateOFF[[i]])),
                         c("asset_id", "dateON", "dateOFF"))
     calving$asset_id <- as.character(calving$asset_id)
     calving$dateON <- as.Date(jan2$almshist$dateON[[i]], tz = "Australia/Brisbane")

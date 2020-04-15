@@ -32,35 +32,17 @@ calc_almsuse <- function(property, timezone, start=NULL, end=NULL, username = NU
                    end <- as.Date(end, tz = timezone)}
 
   wowunits <- get_infrastructure(property = property, type = "Walk-over-Weighing Unit",
-                                 fields = c("properties.asset_id", "properties.type", "properties.usenum",
-                                            "properties.datarecording", "properties.filename",
-                                            "properties.Paddock", "properties.telemetry_out",
-                                            "properties.lastsignal", "properties.statEID", "properties.statweight",
-                                            "properties.statdate", "stationname", "_id"))
-  # wowunits <- infsearch(property, infstype = "Walk-over-Weighing Unit", username = username, password = password)
+                                 fields = c("properties.asset_id", "stationname", "_id"),
+                                 username = username, password = password)
 
   if(nrow(wowunits) == 0) {cattleinfo <- data.frame()}else{
 
-  df <- get_cattle(property = property,
-                   fields = c("properties.birthDate", "properties.deathDate", "properties.sex",
-                              "properties.breed", "properties.recordedtime", "properties.Management",
-                              "properties.Paddock", "properties.category", "properties.horn",
-                              "properties.colour", "properties.stweight", "properties.stwtdate",
-                              "properties.birthWeight", "properties.damRFID", "properties.sireRFID",
-                              "properties.ALMS", "properties.ALMSasset_id", "properties.wkweight",
-                              "properties.wkwtdate", "properties.brand", "properties.damMTag",
-                              "properties.weaned", "properties.exitDate", "properties.entryDate",
-                              "properties.calvingdate", "properties.PaddockdateIN", "RFID"))
-  dt <- get_cattle(exstation = property,
-                   fields = c("properties.birthDate", "properties.deathDate", "properties.sex",
-                              "properties.breed", "properties.recordedtime", "properties.Management",
-                              "properties.Paddock", "properties.category", "properties.horn",
-                              "properties.colour", "properties.stweight", "properties.stwtdate",
-                              "properties.birthWeight", "properties.damRFID", "properties.sireRFID",
-                              "properties.ALMS", "properties.ALMSasset_id", "properties.wkweight",
-                              "properties.wkwtdate", "properties.brand", "properties.damMTag",
-                              "properties.weaned", "properties.exitDate", "properties.entryDate",
-                              "properties.calvingdate", "properties.PaddockdateIN", "RFID"))
+  df <- get_cattle(property = property, fields = c("RFID", "properties.Management", "properties.category", "properties.sex", "stationname"), username = username, password = password)
+  df <- df %>% rename("Property" = stationname)
+
+  dt <- get_cattle(exstation = property, fields = c("RFID", "properties.Management", "properties.category", "properties.sex", "exstation"), username = username, password = password)
+  dt <- dt %>% rename("Property" = exstation)
+
   cows <- rbind(df, dt)
 
   cows <- cows%>%
@@ -107,7 +89,7 @@ calc_almsuse <- function(property, timezone, start=NULL, end=NULL, username = NU
     usehistory$Count <- ifelse(paste0(usehistory$RFID, usehistory$Date) %in% paste0(cattleweights$RFID, cattleweights$Date), "1", "0")
 
     cattleinfo <- left_join(usehistory, cows, by = "RFID") %>%
-      select(Date, asset_id, RFID, Management, category, sex, Count) %>%
+      select(Date, asset_id, Property, RFID, Management, category, sex, Count) %>%
       rename(ALMS = "asset_id", Category = "category", Sex = "sex")
 
   }
