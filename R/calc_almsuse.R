@@ -55,10 +55,11 @@ calc_almsuse <- function(property, timezone, start=NULL, end=NULL, username = NU
   if(length(cattlehistory$RFID) == 0 | length(cattlehistory$ALMShist) == 0){cattleinfo <- data.frame()}else{
     cattlehistory <- bind_rows(cattlehistory$ALMShist, .id = "RFID") %>%
       filter(RFID != "xxx xxxxxxxxxxxx") %>%
-      filter(dateON >= start) %>%
-      filter(dateOFF <= end) %>%
       mutate(dateOFF = as.character(dateOFF),
-             dateOFF = ifelse(is.na(dateOFF), as.character(end), dateOFF))
+             dateOFF = ifelse(is.na(dateOFF), as.character(end), dateOFF)) %>%
+      filter(dateON >= start) %>%
+      filter(dateOFF <= end)
+
     #cattlehistory$dateOFF <- as.character(cattlehistory$dateOFF)
     #cattlehistory$dateOFF <- ifelse(is.na(cattlehistory$dateOFF), as.character(end), cattlehistory$dateOFF)
 
