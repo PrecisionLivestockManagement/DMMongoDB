@@ -10,6 +10,7 @@
 #' @author Dave Swain \email{d.swain@@cqu.edu.au} and Lauren O'Connor \email{l.r.oconnor@@cqu.edu.au}
 #' @import mongolite
 #' @import keyring
+#' @import dplyr
 #' @import rgdal
 #' @export
 
@@ -24,6 +25,12 @@ get_paddock_shapefiles <- function(property, filedir, username=NULL, password=NU
     paddocks <- mongo(collection = "Paddocks", db = "DataMuster", url = pass, verbose = T)
 
     padfiles <- DMApp::apppaddocks(property = property, username = username, password = password)
+
+    padnames <- get_paddocks(property = property, fields = c("paddname", "poly_paddname"), username = username, password = password)
+
+    padfiles$paddname <- replace(padfiles$paddname, padfiles$paddname == padnames$paddname, padnames$poly_paddname)
+
+    padfiles <- padfiles %>% rename("poly_paddname" = paddname)
 
     writeOGR(obj = padfiles, dsn = filedir, layer = "padfiles", driver = "ESRI Shapefile")
 
