@@ -14,19 +14,36 @@
 #' @import mongolite
 #' @export
 
+#Just need to add a read.csv object as the data stream e.g.
+add_wowraw <- function(data, username, password){
 
-add_gps <- function(RFID){
 
+  library(mongolite)
+  library(jsonlite)
+  library(dplyr)
+
+  names(data) <- "data"
+
+  weights <- data%>%filter(data<5000)
+  RFID <- data%>%filter(data>5000)
+  RFIDlocation <- which(data$data %in% RFID$data, arr.ind=TRUE)
+
+  print(RFIDlocation[1])
+
+  print(weights)
+
+  print(RFID)
+
+  alldata <- toJSON(data$data)
+  id <- toJSON(RFID$data)
 
   pass <- sprintf("mongodb://%s:%s@datamuster-shard-00-00-8mplm.mongodb.net:27017,datamuster-shard-00-01-8mplm.mongodb.net:27017,datamuster-shard-00-02-8mplm.mongodb.net:27017/test?ssl=true&replicaSet=DataMuster-shard-0&authSource=admin", username, password)
-  GPSIoT <- mongo(collection = "WoWData", db = "WoWRaw",
-    url = pass,
-    verbose = T)
+  WoWData <- mongo(collection = "WoWData", db = "WoWRaw",
+                   url = pass,
+                   verbose = T)
 
-  GPSdata <- sprintf('{"RFID":"%s", "DateTime":{"$date":"%s"}, "lat":%s, "long": %s , "voltage": %s }', RFID, paste0(substr(DateTime,1,10),"T",substr(DateTime,12,19),"+1000"), lat, long, voltage)
-
-  GPSIoT$insert(GPSdata)
+  total <- sprintf('{"RawData":%s, "RFID":%s}', alldata, id)
 
 
-
+  WoWData$insert(total)
 }
