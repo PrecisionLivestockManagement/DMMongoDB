@@ -1,12 +1,8 @@
-#' Add GPS data to the DataMuster MongoDB database
+#' Add Raw WoW data to the WoWRaw MongoDB database
 #'
-#' This function adds GPS data to the DataMuster MongoDB database. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
-#' @name add_gps
-#' @param RFID a list of cattle RFID number/s
-#' @param DateTime a list of timestamps in POSIXct format
-#' @param lat the latitude of a coordinate point
-#' @param long the longitude of a coordinate point
-#' @param voltage the voltage of the device as a number or percentage
+#' This function adds raw WoW data to the WoWRaw MongoDB database. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
+#' @name add_wowraw
+#' @param data is a single file of a column of weights including the RFID read that is inserted between the weights when it is read
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
 #' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
 #' @return a message that indicates the data has been successfully added
@@ -14,7 +10,11 @@
 #' @import mongolite
 #' @export
 
-#Just need to add a read.csv object as the data stream e.g.
+# Just need to add a read.csv object as the data stream e.g. data <- read.csv('20200116_121648_Kraatz_WoW_1.txt')
+# The plan is to include some summary statistics as the data is uploaded. For example the RFID location finds where the
+# the RFID tag occurs in the weight stream. Greg is going to send me details of his algorithm so we can run his weight
+# calculation at the same time that we add the data. The function needs to have a wrapper to read multiple
+# csv files.
 add_wowraw <- function(data, username, password){
 
 
@@ -28,11 +28,11 @@ add_wowraw <- function(data, username, password){
   RFID <- data%>%filter(data>5000)
   RFIDlocation <- which(data$data %in% RFID$data, arr.ind=TRUE)
 
-  print(RFIDlocation[1])
+ # print(RFIDlocation[1])
 
-  print(weights)
+ # print(weights)
 
-  print(RFID)
+ # print(RFID)
 
   alldata <- toJSON(data$data)
   id <- toJSON(RFID$data)
