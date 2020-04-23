@@ -41,59 +41,58 @@ get_cattlepdkhist <- function(property, paddock=NULL, archives=NULL, start=NULL,
   cattleinfo <- list()
 
   for(i in 1:length(jan2$RFID)){
+    pdk <- setNames(data.frame(matrix(ncol = 3, nrow = length(jan2$pdkhist$name[[i]]))), c("name", "dateIN", "dateOUT"))
 
-    dailywts <- setNames(data.frame(matrix(ncol = 3, nrow = length(jan2$pdkhist$name[[i]]))), c("name", "dateIN", "dateOUT"))
-
-    if (nrow(dailywts) >= 1){
-      dailywts$dateIN <- as.Date(jan2$pdkhist$dateIN[[i]], tz = "Australia/Brisbane")
-      dailywts$name <- jan2$pdkhist$name[[i]]
+    if (nrow(pdk) >= 1){
+      pdk$dateIN <- as.Date(jan2$pdkhist$dateIN[[i]], tz = "Australia/Brisbane")
+      pdk$name <- jan2$pdkhist$name[[i]]
       if (length(jan2$pdkhist$dateOUT[[i]]) != 0){
-        if (length(jan2$pdkhist$dateOUT[[i]]) != nrow(dailywts)){
+        if (length(jan2$pdkhist$dateOUT[[i]]) != nrow(pdk)){
           if (length(jan2$pdkhist$dateOUT[[i]]) == 0) {
             row <- NA}else{
           row <- c(as.Date(jan2$pdkhist$dateOUT[[i]], tz = "Australia/Brisbane"), NA)}
-          dailywts$dateOUT <- row}else{
-      dailywts$dateOUT <- as.Date(jan2$pdkhist$dateOUT[[i]], tz = "Australia/Brisbane")}}}
+          pdk$dateOUT <- row}else{
+      pdk$dateOUT <- as.Date(jan2$pdkhist$dateOUT[[i]], tz = "Australia/Brisbane")}}}
 
     if(is.null(paddock)){
 
-      if (nrow(dailywts) != 0){
+      if (nrow(pdk) != 0){
 
-        for (p in 1:nrow(dailywts)){
-          if (is.na(as.Date(dailywts$dateOUT[p]))){
-            dates <- seq(as.Date(dailywts$dateIN[p]), Sys.Date(), by = "days")
+        for (p in 1:nrow(pdk)){
+          if (is.na(as.Date(pdk$dateOUT[p]))){
+            dates <- seq(as.Date(pdk$dateIN[p]), Sys.Date(), by = "days")
             dates<-dates[between(dates, as.Date(start), as.Date(end))]
           }else{
-            dates <- seq(as.Date(dailywts$dateIN[p]), as.Date(dailywts$dateOUT[p]), by = "days")
+            dates <- seq(as.Date(pdk$dateIN[p]), as.Date(pdk$dateOUT[p]), by = "days")
             dates<-dates[between(dates, as.Date(start), as.Date(end))]}
 
-          if (length(dates) == 0){dailywts$name[p] <- ""}}
+          if (length(dates) == 0){pdk$name[p] <- ""}}
 
-      dailywts <- dailywts %>% filter(name != "")}
+      pdk <- pdk %>% filter(name != "")}
 
     }else{
 
-    n <- which(dailywts$name == paddock)
+    n <- which(pdk$name == paddock)
 
     if (length(n) != 0){
 
     for (p in 1:length(n)){
-      if (is.na(as.Date(dailywts$dateOUT[n[p]]))){
-        dates <- seq(as.Date(dailywts$dateIN[n[p]]), Sys.Date(), by = "days")
+      if (is.na(as.Date(pdk$dateOUT[n[p]]))){
+        dates <- seq(as.Date(pdk$dateIN[n[p]]), Sys.Date(), by = "days")
         dates<-dates[between(dates, as.Date(start), as.Date(end))]
       }else{
-      dates <- seq(as.Date(dailywts$dateIN[n[p]]), as.Date(dailywts$dateOUT[n[p]]), by = "days")
+      dates <- seq(as.Date(pdk$dateIN[n[p]]), as.Date(pdk$dateOUT[n[p]]), by = "days")
       dates<-dates[between(dates, as.Date(start), as.Date(end))]}
 
-      if (length(dates) == 0){dailywts$name[n[p]] <- ""}}}
+      if (length(dates) == 0){pdk$name[n[p]] <- ""}}}
 
-      dailywts <- dailywts %>% filter(paddock %in% name)
+      pdk <- pdk %>% filter(paddock %in% name)
       }
 
     #This is the section where we can apply further filters based on breed, class, etc.
 
-    if (nrow(dailywts) != 0){
-      cattleinfo[[jan2$properties$Management[i]]] <- as.data.frame(dailywts)}else{
+    if (nrow(pdk) != 0){
+      cattleinfo[[jan2$properties$Management[i]]] <- as.data.frame(pdk)}else{
         jan2$properties$Management[[i]] <- "xxxx"}
   }
 

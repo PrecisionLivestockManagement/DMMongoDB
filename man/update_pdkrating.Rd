@@ -10,6 +10,9 @@ update_pdkrating(
   ALMSrating = NULL,
   condition = NULL,
   LTCC = NULL,
+  LTCC_B = NULL,
+  LTCC_C = NULL,
+  LTCC_D = NULL,
   username = NULL,
   password = NULL
 )
@@ -17,13 +20,19 @@ update_pdkrating(
 \arguments{
 \item{property}{the name of the property to search for}
 
-\item{paddock}{the name of the paddock that the ALMS rating will be applied to}
+\item{paddock}{the name of the paddock that the ALMS rating will be applied to in poly_paddname format. This removes all special characters and will reformats paddocks with numeric names}
 
 \item{ALMSrating}{the ALMS rating of the paddock. Default is 0}
 
 \item{condition}{the condition rating of the paddock. Default is A}
 
 \item{LTCC}{the long term carrying capacity of the paddock. Default is 0}
+
+\item{LTCC_B}{the long term carrying capacity of the paddock in condition B. Default is 0}
+
+\item{LTCC_C}{the long term carrying capacity of the paddock in condition C. Default is 0}
+
+\item{LTCC_D}{the long term carrying capacity of the paddock in condition D. Default is 0}
 
 \item{username}{if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring}
 
