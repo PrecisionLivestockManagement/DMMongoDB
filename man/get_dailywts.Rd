@@ -6,7 +6,7 @@
 \usage{
 get_dailywts(
   RFID = NULL,
-  location = NULL,
+  property = NULL,
   start = NULL,
   end = NULL,
   minwt = NULL,
@@ -18,6 +18,8 @@ get_dailywts(
 }
 \arguments{
 \item{RFID}{a list of cattle RFID number/s}
+
+\item{property}{the name of the property to search for}
 
 \item{start}{a start date to be returned in date format, default is "2014-09-01"}
 
@@ -32,8 +34,6 @@ get_dailywts(
 \item{username}{if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring}
 
 \item{password}{if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access}
-
-\item{property}{the name of the property to search for}
 }
 \value{
 a list of cattle RFID numbers and associated daily weight statistics
