@@ -6,7 +6,7 @@
 #' @param paddock the name of the paddock that the ALMS rating will be applied to in poly_paddname format. This removes all special characters and will reformats paddocks with numeric names
 #' @param ALMSrating the ALMS rating of the paddock. Default is 0
 #' @param condition the condition rating of the paddock. Default is A
-#' @param LTCC the long term carrying capacity of the paddock. Default is 0
+#' @param LTCC_A the long term carrying capacity of the paddock in condition A. Default is 0
 #' @param LTCC_B the long term carrying capacity of the paddock in condition B. Default is 0
 #' @param LTCC_C the long term carrying capacity of the paddock in condition C. Default is 0
 #' @param LTCC_D the long term carrying capacity of the paddock in condition D. Default is 0
@@ -19,7 +19,7 @@
 #' @export
 
 
-update_pdkrating <- function(property, paddock, ALMSrating=NULL, condition=NULL, LTCC=NULL, LTCC_B=NULL, LTCC_C=NULL,
+update_pdkrating <- function(property, paddock, ALMSrating=NULL, condition=NULL, LTCC_A=NULL, LTCC_B=NULL, LTCC_C=NULL,
                              LTCC_D=NULL, username=NULL, password=NULL){
 
   if(is.null(username)||is.null(password)){
@@ -59,7 +59,7 @@ update_pdkrating <- function(property, paddock, ALMSrating=NULL, condition=NULL,
     pdk <- sprintf('{"stationname":"%s", "poly_paddname":"%s"}', property, paddock[i])
 
     if(!(is.na(pdk))){
-      banger <- paddocks$find(query = filterpaddock, fields = '{"stationname":true, "poly_paddname":true, "ALMSrating":true, "condition":true, "LTCC":true}')
+      banger <- paddocks$find(query = filterpaddock, fields = '{"stationname":true, "poly_paddname":true, "ALMSrating":true, "condition":true, "LTCC_A":true}')
 
       # ALMSrating
       if(!(is.null(ALMSrating))){
@@ -74,10 +74,10 @@ update_pdkrating <- function(property, paddock, ALMSrating=NULL, condition=NULL,
             RFIDI <- sprintf('{"$set":{"condition":"%s"}}', condition[i])
             paddocks$update(pdk, RFIDI)}}}
       # LTCC
-      if(!(is.null(LTCC))){
-        if(!(is.na(LTCC[i]))){
-          if(LTCC[i] != ""){
-            RFIDI <- sprintf('{"$set":{"LTCC":"%s"}}', LTCC[i])
+      if(!(is.null(LTCC_A))){
+        if(!(is.na(LTCC_A[i]))){
+          if(LTCC_A[i] != ""){
+            RFIDI <- sprintf('{"$set":{"LTCC_A":"%s"}}', LTCC_A[i])
             paddocks$update(pdk, RFIDI)}}}
       # LTCC_B
       if(!(is.null(LTCC_B))){

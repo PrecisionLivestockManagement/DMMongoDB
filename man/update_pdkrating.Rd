@@ -9,7 +9,7 @@ update_pdkrating(
   paddock,
   ALMSrating = NULL,
   condition = NULL,
-  LTCC = NULL,
+  LTCC_A = NULL,
   LTCC_B = NULL,
   LTCC_C = NULL,
   LTCC_D = NULL,
@@ -26,7 +26,7 @@ update_pdkrating(
 
 \item{condition}{the condition rating of the paddock. Default is A}
 
-\item{LTCC}{the long term carrying capacity of the paddock. Default is 0}
+\item{LTCC_A}{the long term carrying capacity of the paddock in condition A. Default is 0}
 
 \item{LTCC_B}{the long term carrying capacity of the paddock in condition B. Default is 0}
 
