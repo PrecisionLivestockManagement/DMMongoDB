@@ -2,10 +2,9 @@
 % Please edit documentation in R/add_staticwts.R
 \name{add_staticwts}
 \alias{add_staticwts}
-\alias{update_stweight}
 \title{Add static weight data to the DataMuster MongoDB database.}
 \usage{
-update_stweight(RFID, weight, date = NULL, username = NULL, password = NULL)
+add_staticwts(RFID, weight, date = NULL, username = NULL, password = NULL)
 }
 \arguments{
 \item{RFID}{a list of cattle RFID number/s}

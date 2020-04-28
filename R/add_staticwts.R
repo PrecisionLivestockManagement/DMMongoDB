@@ -14,7 +14,7 @@
 #' @export
 
 
-update_stweight <- function(RFID, weight, date=NULL, username=NULL, password=NULL){
+add_staticwts <- function(RFID, weight, date=NULL, username=NULL, password=NULL){
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]
