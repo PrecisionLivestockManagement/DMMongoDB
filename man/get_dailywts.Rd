@@ -7,10 +7,11 @@
 get_dailywts(
   RFID = NULL,
   property = NULL,
+  location = NULL,
   start = NULL,
   end = NULL,
   minwt = NULL,
-  timezone,
+  timezone = NULL,
   fields = NULL,
   username = NULL,
   password = NULL
