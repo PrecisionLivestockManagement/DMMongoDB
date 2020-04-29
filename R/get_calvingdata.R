@@ -40,6 +40,8 @@ get_calvingdata <- function(RFID = NULL, property = NULL, start = NULL, end = NU
   if(is.null(cow_id)){}else{cow_id <- paste(unlist(cow_id), collapse = '", "' )
   cow_id <- sprintf('"cow_id":{"$in":["%s"]},', cow_id)}
 
+  timezone <- "Australia/Brisbane"
+
 pass <- sprintf("mongodb://%s:%s@datamuster-shard-00-00-8mplm.mongodb.net:27017,datamuster-shard-00-01-8mplm.mongodb.net:27017,datamuster-shard-00-02-8mplm.mongodb.net:27017/test?ssl=true&replicaSet=DataMuster-shard-0&authSource=admin", username, password)
 
 calvingdata <- mongo(collection = "CalvingData", db = "DataMuster", url = pass, verbose = T)
