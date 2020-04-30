@@ -35,7 +35,16 @@ add_foetalagedata <- function(RFID, foetalagedate, foetalage, estcalvingdate, us
       filtercattle <- sprintf('{"RFID":{"$in":["%s"]}}', checkcows)
       cows <- cattle$find(query = filtercattle, fields = '{"RFID":true, "properties.Management":true, "stationname":true, "_id":true}')
 
-      cows <- cows%>%filter(stationname == property) %>%
+      if (nrow(cows) < length(RFID)) {
+
+        problemcows <- as.character(RFID[!(RFID %in% cows$RFID)])
+
+        if (length(problemcows) != 0){ #Indicates they are not in the database
+
+          stop(paste0("The following RFID numbers cannot be found in the database. Please check that the RFID numbers are correct and try again: "), problemcows)}
+      }
+
+      cows <- cows %>%
               mutate(MTag = properties$Management) %>%
               select(RFID, MTag, `_id`)
 

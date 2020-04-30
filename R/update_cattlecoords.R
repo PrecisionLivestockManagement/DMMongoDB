@@ -14,6 +14,7 @@
 #' @import rgdal
 #' @import splancs
 #' @import spdplyr
+#' @import sp
 #' @export
 
 

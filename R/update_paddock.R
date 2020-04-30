@@ -144,7 +144,7 @@ update_paddock <- function(RFID, property, paddock, MTag = NULL, date=NULL, user
 
           }}
 
-update_paddock(property = property, paddock = unique(paddock), username = username, password = password)
+update_cattlecoords(property = property, paddock = unique(paddock), username = username, password = password)
 
 }
 
