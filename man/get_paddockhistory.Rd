@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_paddockhistory.R
 \name{get_paddockhistory}
 \alias{get_paddockhistory}
-\title{Retrieve ALMS historical information from the DataMuster MongoDB database.}
+\title{Retrieve Paddock historical information from the DataMuster MongoDB database.}
 \usage{
 get_paddockhistory(
   RFID = NULL,
@@ -37,10 +37,10 @@ get_paddockhistory(
 \item{end}{an end date to be returned in date format, default is today's date}
 }
 \value{
-a list of cattle RFID numbers and associated ALMS allocation statistics
+a list of cattle RFID numbers and associated Paddock allocation statistics
 }
 \description{
-This function provides a search tool to retrieve historical ALMS information from the ALMSHistory collection in the DataMuster MongoDB database. It also allows the user to define what fields should be returned. If you need assistance please email \email{info@datamuster.net.au} to seek help or suggest improvements.
+This function provides a search tool to retrieve historical Paddock information from the PaddockHistory collection in the DataMuster MongoDB database. It also allows the user to define what fields should be returned. If you need assistance please email \email{info@datamuster.net.au} to seek help or suggest improvements.
 }
 \author{
 Dave Swain \email{d.swain@cqu.edu.au} and Lauren O'Connor \email{l.r.oconnor@cqu.edu.au}
