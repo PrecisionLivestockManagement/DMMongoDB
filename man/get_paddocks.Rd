@@ -9,7 +9,7 @@ get_paddocks(property = NULL, fields = NULL, username = NULL, password = NULL)
 \arguments{
 \item{property}{the name of the property to search for}
 
-\item{fields}{a list of headers from the Paddocks collection in the DataMuster MongoDB database to be returned}
+\item{fields}{a list of headers from the Paddocks collection in the DataMuster MongoDB database to be returned. If not specified, the property, paddock name, ALMS rating, and long term carrying capacity (A, B, C, D) will be returned}
 
 \item{username}{if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring}
 
@@ -22,5 +22,5 @@ a list of cattle RFID numbers and associated paddock information
 This function provides a search tool to retrieve paddock information from the Paddocks collection in the DataMuster MongoDB database. It also allows the user to define what fields should be returned. If you need assistance please email \email{info@datamuster.net.au} to seek help or suggest improvements.
 }
 \author{
-Dave Swain \email{d.swain@cqu.edu.au} and Lauren O'Connor \email{l.r.oconnor@cqu.edu.au}
+Dave Swain \email{d.swain@cqu.edu.au}, Lauren O'Connor \email{l.r.oconnor@cqu.edu.au}, and Anita Chang \email{a.chang@cqu.edu.au}
 }

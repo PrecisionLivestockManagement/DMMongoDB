@@ -26,7 +26,7 @@ get_almsuse(
 
 \item{timezone}{the local timezone of the property, see https://en.wikipedia.org/wiki/List_of_tz_database_time_zones for the list of accepted timezones, default is Australia/Brisbane}
 
-\item{fields}{a list of headers from the ALMSUse collection in the DataMuster MongoDB database to be returned}
+\item{fields}{a list of headers from the ALMSUse collection in the DataMuster MongoDB database to be returned. If not specified, the RFID, property, ALMS, category, sex, and count will be returned}
 
 \item{username}{if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring}
 
