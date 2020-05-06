@@ -6,6 +6,7 @@
 \usage{
 get_cattle(
   RFID = NULL,
+  MTag = NULL,
   property = NULL,
   sex = NULL,
   category = NULL,
@@ -28,6 +29,8 @@ get_cattle(
 }
 \arguments{
 \item{RFID}{a list of cattle RFID number/s}
+
+\item{MTag}{a list of cattle management tag number/s}
 
 \item{property}{the name of the property to search for}
 

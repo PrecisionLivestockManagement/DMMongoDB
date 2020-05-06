@@ -3,6 +3,7 @@
 #' This function provides a search tool to retrieve cattle information from the Cattle collection in the DataMuster MongoDB database. It also allows the user to define what fields should be returned. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
 #' @name get_cattle
 #' @param RFID a list of cattle RFID number/s
+#' @param MTag a list of cattle management tag number/s
 #' @param property the name of the property to search for
 #' @param sex male or female
 #' @param category the class of cattle either (breeding or growing)
@@ -29,14 +30,18 @@
 #' @export
 
 
-get_cattle <- function(RFID = NULL, property = NULL, sex = NULL, category = NULL, paddock = NULL, alms = NULL, weaned = NULL, id = NULL, almsasset_id = NULL, exstation = NULL, exitdate = NULL, entrydate = NULL, deathdate = NULL, timezone = NULL, prevpaddock = NULL, active = NULL, fields = NULL, username = NULL, password = NULL){
+get_cattle <- function(RFID = NULL, MTag = NULL, property = NULL, sex = NULL, category = NULL, paddock = NULL, alms = NULL, weaned = NULL, id = NULL, almsasset_id = NULL, exstation = NULL, exitdate = NULL, entrydate = NULL, deathdate = NULL, timezone = NULL, prevpaddock = NULL, active = NULL, fields = NULL, username = NULL, password = NULL){
+
+  if(is.null(property) & !is.null(MTag)){
+    stop(paste0("To search using the management tag, please ensure the property field is filled out"))}
+
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]
     password =  keyring::key_get("DMMongoDB", username)
   }
 
-  if(is.null(timezone)){timezone <- "AUstralia/Brisbane"} else {}
+  if(is.null(timezone)){timezone <- "Australia/Brisbane"} else {}
 
   if(is.null(property)){} else {
   property <- paste(unlist(property), collapse = '", "' )
@@ -65,6 +70,12 @@ get_cattle <- function(RFID = NULL, property = NULL, sex = NULL, category = NULL
     RFID <- paste(unlist(RFID), collapse = '", "' )
     RFID <- sprintf('"RFID":{"$in":["%s"]},', RFID)}
 
+  if(is.null(MTag)){} else {
+    mtag <- MTag
+    MTag <- paste(unlist(MTag), collapse = '", "' )
+    MTag <- sprintf('"properties.Management":{"$in":["%s"]}}', MTag)}
+
+
 pass <- sprintf("mongodb://%s:%s@datamuster-shard-00-00-8mplm.mongodb.net:27017,datamuster-shard-00-01-8mplm.mongodb.net:27017,datamuster-shard-00-02-8mplm.mongodb.net:27017/test?ssl=true&replicaSet=DataMuster-shard-0&authSource=admin", username, password)
 
 cattle <- mongo(collection = "Cattle", db = "DataMuster", url = pass, verbose = T)
@@ -72,7 +83,7 @@ cattle <- mongo(collection = "Cattle", db = "DataMuster", url = pass, verbose = 
 
 # Set up find query
 
-search <-paste0("{", property, sex, paddock, category, alms, weaned, id, almsasset_id, exstation, exitdate, entrydate, deathdate, RFID, prevpaddock, active,"}")
+search <- paste0("{", property, sex, paddock, category, alms, weaned, id, almsasset_id, exstation, exitdate, entrydate, deathdate, RFID, prevpaddock, active, MTag, "}")
 
 if(nchar(search)==2){}else{
 search <- substr(search, 1 , nchar(search)-2)
@@ -147,4 +158,3 @@ if (length(missing) != 0){
 return(dataf)
 
 }
-
