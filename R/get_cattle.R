@@ -19,7 +19,7 @@
 #' @param timezone the local timezone of the property, see https://en.wikipedia.org/wiki/List_of_tz_database_time_zones for the list of accepted timezones
 #' @param prevpaddock the former paddock of the animal
 #' @param active TRUE or FALSE, if true filters the data for cattle that are currently active
-#' @param fields a list of headers from the Cattle collection in the DataMuster MongoDB database to be returned
+#' @param fields a list of headers from the Cattle collection in the DataMuster MongoDB database to be returned. If left as NULL, the RFID, MTag, property, sex, paddock, category, and static weight will be returned
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
 #' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
 #' @return a list of cattle RFID numbers with the list of fields defined in the inputs and searched using the search terms
@@ -75,6 +75,10 @@ get_cattle <- function(RFID = NULL, MTag = NULL, property = NULL, sex = NULL, ca
     MTag <- paste(unlist(MTag), collapse = '", "' )
     MTag <- sprintf('"properties.Management":{"$in":["%s"]}}', MTag)}
 
+  if(is.null(fields)){
+    fields = c("RFID", "properties.Management", "stationname", "properties.sex", "properties.Paddock",
+               "properties.category", "properties.stweight")
+  }
 
 pass <- sprintf("mongodb://%s:%s@datamuster-shard-00-00-8mplm.mongodb.net:27017,datamuster-shard-00-01-8mplm.mongodb.net:27017,datamuster-shard-00-02-8mplm.mongodb.net:27017/test?ssl=true&replicaSet=DataMuster-shard-0&authSource=admin", username, password)
 

@@ -62,7 +62,7 @@ get_cattle(
 
 \item{active}{TRUE or FALSE, if true filters the data for cattle that are currently active}
 
-\item{fields}{a list of headers from the Cattle collection in the DataMuster MongoDB database to be returned}
+\item{fields}{a list of headers from the Cattle collection in the DataMuster MongoDB database to be returned. If left as NULL, the RFID, MTag, property, sex, paddock, category, and static weight will be returned}
 
 \item{username}{if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring}
 
