@@ -6,6 +6,7 @@
 \usage{
 get_cattle(
   RFID = NULL,
+  MTag = NULL,
   property = NULL,
   sex = NULL,
   category = NULL,
