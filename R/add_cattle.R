@@ -297,6 +297,8 @@ if(nrow(cows) != 0){
 
 }
 
+update_cattlecoords(property = property, username = username, password = password)
+
     }
 
 
