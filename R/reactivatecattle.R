@@ -81,7 +81,7 @@ reactivatecattle <- function(RFID, property, paddock, date=NULL, replacevalues=N
     }}
     }
 
-    updatepaddock(cows$RFID[i], property = property, paddock = paddock[i], date = date[i], username = username, password = password)
+    update_paddock(cows$RFID[i], property = property, paddock = paddock[i], date = date[i], username = username, password = password)
 
     if (replacevalues == "FALSE"){
 
