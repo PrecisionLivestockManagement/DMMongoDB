@@ -50,15 +50,26 @@ calc_almsuse <- function(property, timezone, start=NULL, end=NULL, username = NU
 
   if(nrow(cows) == 0){cattleinfo <- data.frame()}else{
 
-  cattlehistory <- get_cattlealmshist(RFID = cows$RFID, username = username, password = password)
+    cattlehistory <- get_almshistory(RFID = cows$RFID, fields = c("RFID", "ALMS", "dateON", "dateOFF"),
+                                      username = username, password = password)
 
-  if(length(cattlehistory$RFID) == 0 | length(cattlehistory$ALMShist) == 0){cattleinfo <- data.frame()}else{
-    cattlehistory <- bind_rows(cattlehistory$ALMShist, .id = "RFID") %>%
-      filter(RFID != "xxx xxxxxxxxxxxx") %>%
-      mutate(dateOFF = as.character(dateOFF),
-             dateOFF = ifelse(is.na(dateOFF), as.character(end), dateOFF)) %>%
-      filter(dateON >= start) %>%
-      filter(dateOFF <= end)
+  # cattlehistory <- get_cattlealmshist(RFID = cows$RFID, username = username, password = password)
+  #
+   if(length(cattlehistory$RFID) == 0){cattleinfo <- data.frame()}else{
+  #   cattlehistory <- bind_rows(cattlehistory$ALMShist, .id = "RFID") %>%
+  #     filter(RFID != "xxx xxxxxxxxxxxx") %>%
+  #     mutate(dateOFF = as.character(dateOFF),
+  #            dateOFF = ifelse(is.na(dateOFF), as.character(end), dateOFF)) %>%
+  #     filter(dateON >= start) %>%
+  #     filter(dateOFF <= end)
+
+    cattlehistory <- cattlehistory %>%
+                      filter(RFID != "xxx xxxxxxxxxxxx") %>%
+                      mutate(dateON = as.Date(dateON, tz = timezone),
+                             dateOFF = as.character(dateOFF),
+                             dateOFF = ifelse(is.na(dateOFF), as.character(end), dateOFF)) %>%
+                      filter(dateON >= start) %>%
+                      filter(dateOFF <= end)
 
     #cattlehistory$dateOFF <- as.character(cattlehistory$dateOFF)
     #cattlehistory$dateOFF <- ifelse(is.na(cattlehistory$dateOFF), as.character(end), cattlehistory$dateOFF)
@@ -96,8 +107,7 @@ calc_almsuse <- function(property, timezone, start=NULL, end=NULL, username = NU
     cattleinfo <- left_join(usehistory, cows, by = "RFID") %>%
       select(Date, Property, ALMS, RFID, Management, category, sex, Count) %>%
       rename(Category = "category", Sex = "sex")
-
-  }
+}
   }
   }}
 
