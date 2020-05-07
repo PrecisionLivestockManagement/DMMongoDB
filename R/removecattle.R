@@ -75,7 +75,7 @@ removecattle <- function(RFID, date=NULL, username=NULL, password=NULL){
     IDS <- sprintf('{"$set":{"dateOUT.%s":{"$date":"%s"}}}', paste0(substr(date[i],1,10),"T","00:00:00","+1000"))
     paddockhistory$update(IDI, IDS)
 
-    # Update PaddockHistory collection
+    # Update ALMSHistory collection
     if(cows$ALMS[i] == "TRUE"){
     almshist <- get_almshistory(RFID = cows$RFID[i], currentALMS = "TRUE", username = username, password = password)
     IDII <- sprintf('{"_id":{"$oid":"%s"}}', almshist$`_id`)
