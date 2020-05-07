@@ -61,22 +61,23 @@ update_alms <- function(RFID, property, alms, date=NULL, username=NULL, password
 
   for (i in 1:length(RFID)){
 
-    RFIDS <- sprintf('{"RFID":"%s"}', RFID[i])
-
+    #Update Cattle collection
+          RFIDS <- sprintf('{"RFID":"%s"}', RFID[i])
           banger <- cattle$find(query= RFIDS, fields='{"almshist.dateON":true, "_id":false}')
-
           rip <- length(banger$almshist$dateON[[1]])
-
-
-         IDI <- sprintf('{"$set":{"almshist.dateON.%s":{"$date":"%s"}, "almshist.ID.%s":"%s", "almshist.asset_id.%s":"%s"}}',
+          IDI <- sprintf('{"$set":{"almshist.dateON.%s":{"$date":"%s"}, "almshist.ID.%s":"%s", "almshist.asset_id.%s":"%s"}}',
                              rip, paste0(substr(date[i],1,10),"T","00:00:00","+1000"), rip, unit$`_id`, rip, unit$properties$asset_id)
-
-         IDIlast <- sprintf('{"$set":{"properties.ALMS":"%s", "properties.ALMSID":"%s", "properties.ALMSasset_id":"%s"}}',
-                        "TRUE", unit$`_id`, unit$properties$asset_id)
-
-
+          IDIlast <- sprintf('{"$set":{"properties.ALMS":"%s", "properties.ALMSID":"%s", "properties.ALMSasset_id":"%s"}}',
+                             "TRUE", unit$`_id`, unit$properties$asset_id)
           cattle$update(RFIDS, IDI)
-          cattle$update(RFIDS, IDIlast)}
+          cattle$update(RFIDS, IDIlast)
+
+          #Update ALMSHistory collection
+          cows <- get_cattle(RFID = RFID, MTag = MTag, property = property, fields = c("RFID", "properties.Management", "stationname"))
+
+          add_almshistory(RFID = cows$RFID, cattle_id = cows$`_id`, MTag = cows$Management, property = cows$stationname, ALMS = alms[i],
+                            currentALMS = "TRUE", dateON = substr(date[i],1,10), dateOFF = NULL, username = username, password = password)
+          }
   }
 
 
