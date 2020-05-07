@@ -285,14 +285,15 @@ update_cattlecoords(property = property, paddock = unique(paddock), username = u
 cows <- get_cattle(RFID = RFID, MTag = MTag, property = property, fields = c("RFID", "properties.Management", "stationname", "properties.Paddock", "properties.PaddockdateIN",
                                                                              "properties.ALMS", "properties.ALMSasset_id"))
 
-add_PaddockHistory(RFID = cows$RFID, cattle_id = cows$`_id`, MTag = cows$Management, property = cows$stationname, Paddock = cows$Paddock,
-                   currentPaddock = "TRUE", dateIN = cows$PaddockdateIN, dateOUT = NULL, username=NULL, password=NULL)
+add_paddockhistory(RFID = cows$RFID, cattle_id = cows$`_id`, MTag = cows$Management, property = cows$stationname, Paddock = cows$Paddock,
+                   currentPaddock = "TRUE", dateIN = cows$PaddockdateIN, dateOUT = NULL, username = username, password = password)
 
 cows <- cows %>%
         filter(ALMS == "TRUE")
 
 if(nrow(cows) != 0){
-  add_ALMSHistory
+  add_almshistory(RFID = cows$RFID, cattle_id = cows$`_id`, MTag = cows$Management, property = cows$stationname, ALMS = cows$ALMSasset_id,
+                     currentALMS = "TRUE", dateON = cows$PaddockdateIN, dateOFF = NULL, username = username, password = password)
 
 }
 
