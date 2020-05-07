@@ -7,7 +7,7 @@
 #' @param start a start date to be returned in date format, default is "2014-09-01"
 #' @param end an end date to be returned in date format, default is today's date
 #' @param timezone the local timezone of the property, see https://en.wikipedia.org/wiki/List_of_tz_database_time_zones for the list of accepted timezones, default is Australia/Brisbane
-#' @param fields a list of headers from the ALMSUse collection in the DataMuster MongoDB database to be returned
+#' @param fields a list of headers from the ALMSUse collection in the DataMuster MongoDB database to be returned. If not specified, the RFID, property, ALMS, category, sex, and count will be returned
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
 #' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
 #' @return a list of cattle RFID numbers with the list of fields defined in the inputs and searched using the search terms
@@ -39,6 +39,8 @@ get_almsuse <- function(RFID = NULL, location = NULL, start = NULL, end = NULL, 
   if(is.null(end)){}else{
     end <- sprintf('"Date":{"$lt":{"$date":"%s"}},', strftime(as.POSIXct(paste0(end+1, "00:00:00")), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"))}
 
+  if(is.null(fields)){
+    fields = c("RFID", "Property", "ALMS", "Category", "Sex", "Count")}
 
 pass <- sprintf("mongodb://%s:%s@datamuster-shard-00-00-8mplm.mongodb.net:27017,datamuster-shard-00-01-8mplm.mongodb.net:27017,datamuster-shard-00-02-8mplm.mongodb.net:27017/test?ssl=true&replicaSet=DataMuster-shard-0&authSource=admin", username, password)
 

@@ -8,11 +8,11 @@
 #' @param end an end date to be returned in date format, default is today's date
 #' @param minwt the minimum weight to be returned
 #' @param timezone the local timezone of the property, see https://en.wikipedia.org/wiki/List_of_tz_database_time_zones for the list of accepted timezones
-#' @param fields a list of headers from the DailyWts collection in the DataMuster MongoDB database to be returned
+#' @param fields a list of headers from the DailyWts collection in the DataMuster MongoDB database to be returned. If not specified, the RFID, daily weight, datetime, and location will be returned
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
 #' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
 #' @return a list of cattle RFID numbers and associated daily weight statistics
-#' @author Dave Swain \email{d.swain@@cqu.edu.au} and Lauren O'Connor \email{l.r.oconnor@@cqu.edu.au}
+#' @author Dave Swain \email{d.swain@@cqu.edu.au}, Lauren O'Connor \email{l.r.oconnor@@cqu.edu.au}, and Anita Chang \email{a.chang@@cqu.edu.au}
 #' @import mongolite
 #' @import dplyr
 #' @import keyring
@@ -49,6 +49,9 @@ get_dailywts <- function(RFID = NULL, property = NULL, location = NULL, start = 
     }
 
   if(is.null(minwt)){}else{minwt <- sprintf('"Wt":{"$gte":%s},', minwt)}
+
+  if(is.null(fields)){
+    fields = c("RFID", "Wt", "datetime", "Location")}
 
 pass <- sprintf("mongodb://%s:%s@datamuster-shard-00-00-8mplm.mongodb.net:27017,datamuster-shard-00-01-8mplm.mongodb.net:27017,datamuster-shard-00-02-8mplm.mongodb.net:27017/test?ssl=true&replicaSet=DataMuster-shard-0&authSource=admin", username, password)
 

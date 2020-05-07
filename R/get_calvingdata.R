@@ -7,11 +7,11 @@
 #' @param start a start date to be returned in date format, default is "2014-09-01"
 #' @param end an end date to be returned in date format, default is today's date
 #' @param cow_id a list of DataMuster database cow identification numbers
-#' @param fields a list of headers from the StaticWts collection in the DataMuster MongoDB database to be returned
+#' @param fields a list of headers from the StaticWts collection in the DataMuster MongoDB database to be returned. If not specified, the RFID, MTag, property, date of foetal aging, age at foetal aging, calving date, and twin status will be returned
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
 #' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
 #' @return a list of cattle RFID numbers and associated static weight records
-#' @author Dave Swain \email{d.swain@@cqu.edu.au} and Lauren O'Connor \email{l.r.oconnor@@cqu.edu.au}
+#' @author Dave Swain \email{d.swain@@cqu.edu.au}, Lauren O'Connor \email{l.r.oconnor@@cqu.edu.au}, and Anita Chang \email{a.chang@@cqu.edu.au}
 #' @import mongolite
 #' @import dplyr
 #' @import keyring
@@ -39,6 +39,9 @@ get_calvingdata <- function(RFID = NULL, property = NULL, start = NULL, end = NU
 
   if(is.null(cow_id)){}else{cow_id <- paste(unlist(cow_id), collapse = '", "' )
   cow_id <- sprintf('"cow_id":{"$in":["%s"]},', cow_id)}
+
+  if(is.null(fields)){
+    fields = c("RFID", "Management", "stationname", "foetalagedate", "foetalage", "calvingdate", "multiples")}
 
   timezone <- "Australia/Brisbane"
 
