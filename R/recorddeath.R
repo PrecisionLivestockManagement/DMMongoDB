@@ -24,6 +24,8 @@ recorddeath <- function(RFID, date=NULL, cause=NULL, property, username=NULL, pa
   pass <- sprintf("mongodb://%s:%s@datamuster-shard-00-00-8mplm.mongodb.net:27017,datamuster-shard-00-01-8mplm.mongodb.net:27017,datamuster-shard-00-02-8mplm.mongodb.net:27017/test?ssl=true&replicaSet=DataMuster-shard-0&authSource=admin", username, password)
 
   cattle <- mongo(collection = "Cattle", db = "DataMuster", url = pass, verbose = T)
+  paddockhistory <- mongo(collection = "PaddockHistory", db = "DataMuster", url = pass, verbose = T)
+  almshistory <- mongo(collection = "ALMSHistory", db = "DataMuster", url = pass, verbose = T)
 
   if(is.null(date)){date <- Sys.Date()}else{date <- as.POSIXct(date)}
   if(is.null(cause)){cause <- "xxxxxx"}
@@ -48,30 +50,43 @@ recorddeath <- function(RFID, date=NULL, cause=NULL, property, username=NULL, pa
   if (nrow(cows) != length(RFID)) {
       stop("One or more of the RFID numbers cannot be found in the database. Please check that the RFID numbers are correct and try again")}
 
-
   for (i in 1:length(cows$RFID)){
 
-    banger <- cattle$find(query = sprintf('{"RFID":"%s"}', cows$RFID[i]), fields= sprintf('{"RFID":true,"pdkhist.dateOUT":true,"almshist.dateOFF":true, "_id":false}'))
-    arrpos1 <- length(banger$pdkhist$dateOUT[[1]])
-    arrpos2 <- length(banger$almshist$dateOFF[[1]])
-
+    # Update Cattle properties
     RFIDS <- sprintf('{"RFID":"%s"}', cows$RFID[i])
-
     RFIDI <- sprintf('{"$set":{"stationname":"%s", "stationID":"%s", "active":"%s", "exstation":"%s", "geometry.coordinates.0":%s, "geometry.coordinates.1":%s,
                      "properties.Paddock":"%s", "properties.PaddockID":"%s", "properties.deathcause":"%s", "properties.deathDate":{"$date":"%s"}, "properties.ALMS":"%s", "properties.ALMSID":"%s", "properties.ALMSasset_id":"%s"}}',
                      "xxxxxx", "xxxxxx", "FALSE", cows$stationname[i], 0.0, 0.0, "xxxxxx", "xxxxxx", cause[i], paste0(substr(date[i],1,10),"T","00:00:00","+1000"),"FALSE", "xxxxxx", "xxxxxx")
-
-    RFIDII <- sprintf('{"$set":{"pdkhist.dateOUT.%s":{"$date":"%s"}}}', arrpos1, paste0(substr(date[i],1,10),"T","00:00:00","+1000"))
-
     cattle$update(RFIDS, RFIDI)
-    cattle$update(RFIDS, RFIDII)
 
-    if(cows$ALMS == "TRUE"){
-    RFIDIII <- sprintf('{"$set":{"almshist.dateOFF.%s":{"$date":"%s"}}}', arrpos2, paste0(substr(date[i],1,10),"T","00:00:00","+1000"))
-    cattle$update(RFIDS, RFIDIII)
-    }
+    #Update Cattle PdkHist
+    banger <- cattle$find(query= RFIDS, fields='{"pdkhist.dateOUT":true, "_id":false}')
+    arrpos <- length(banger$pdkhist$dateOUT[[1]])
+    RFIDL <- sprintf('{"$set":{"pdkhist.dateOUT.%s":{"$date":"%s"}}}', arrpos, paste0(substr(date[i],1,10),"T","00:00:00","+1000"))
+    cattle$update(RFIDS, RFIDL)
 
-    }
+    #Update Cattle ALMSHist
+    if(cows$ALMS[i] == "TRUE"){
+      banger1 <- cattle$find(query= RFIDS, fields='{"almshist.dateOFF":true, "_id":false}')
+      arrpos1 <- length(banger1$almshist$dateOFF[[1]])
+      RFIDLI <- sprintf('{"$set":{"almshist.dateOFF.%s":{"$date":"%s"}}}', arrpos1, paste0(substr(date[i],1,10),"T","00:00:00","+1000"))
+      cattle$update(RFIDS, RFIDLI)}
+
+    # Update PaddockHistory collection
+    padhist <- get_paddockhistory(RFID = cows$RFID[i], currentPaddock = "TRUE", username = username, password = password)
+    IDI <- sprintf('{"_id":{"$oid":"%s"}}', padhist$`_id`)
+    IDS <- sprintf('{"$set":{"dateOUT.%s":{"$date":"%s"}}}', paste0(substr(date[i],1,10),"T","00:00:00","+1000"))
+    paddockhistory$update(IDI, IDS)
+
+    # Update ALMSHistory collection
+    if(cows$ALMS[i] == "TRUE"){
+      almshist <- get_almshistory(RFID = cows$RFID[i], currentALMS = "TRUE", username = username, password = password)
+      IDII <- sprintf('{"_id":{"$oid":"%s"}}', almshist$`_id`)
+      IDSI <- sprintf('{"$set":{"dateOFF.%s":{"$date":"%s"}}}', paste0(substr(date[i],1,10),"T","00:00:00","+1000"))
+      almshistory$update(IDII, IDSI)}
+  }
+
+  update_cattlecoords(property = unique(cows$stationname), paddock = unique(cows$Paddock), username = username, password = password)
 
 }
 
