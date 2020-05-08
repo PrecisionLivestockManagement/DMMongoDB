@@ -3,6 +3,7 @@
 #' This function provides a search tool to retrieve new user information from the NewUser collection in the DataMuster MongoDB database. It also allows the user to define what fields should be returned. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
 #' @name get_newusers
 #' @param start a start date to be returned in date format, default is “2014-09-01”
+#' @param login a list of login emails
 #' @param fields a list of headers from the NewUser collection in the DataMuster MongoDB database to be returned. If not specified, the login email and date of creation will be returned
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
 #' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
@@ -14,11 +15,16 @@
 #' @export
 
 
-get_newusers <- function(start = NULL, fields = NULL, username = NULL, password = NULL){
+get_newusers <- function(start = NULL, login = NULL, fields = NULL, username = NULL, password = NULL){
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]
     password =  keyring::key_get("DMMongoDB", username)
+  }
+
+  if(is.null(login)){}else{
+    login <- paste(unlist(login), collapse = '", "')
+    login <- sprintf('"loginemail":{"$in":["%s"]},', login)
   }
 
   if(is.null(fields)){
@@ -38,7 +44,7 @@ newusers <- mongo(collection = "NewUsers", db = "DataMuster", url = pass, verbos
 
 # Set up find query
 
-search <-paste0("{", start,"}")
+search <-paste0("{", start, login, "}")
 
   if(nchar(search)==2){}else{
     search <- substr(search, 1 , nchar(search)-2)

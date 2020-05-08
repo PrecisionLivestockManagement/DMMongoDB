@@ -3,7 +3,8 @@
 #' This function provides a search tool to retrieve ALMS use from the ALMSUse collection in the DataMuster MongoDB database. It also allows the user to define what fields should be returned. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
 #' @name get_almsuse
 #' @param RFID a list of cattle RFID number/s
-#' @param location the name of the property to search for
+#' @param property the name of the property to search for
+#' @param ALMS the ALMS number to search for
 #' @param start a start date to be returned in date format, default is "2014-09-01"
 #' @param end an end date to be returned in date format, default is today's date
 #' @param timezone the local timezone of the property, see https://en.wikipedia.org/wiki/List_of_tz_database_time_zones for the list of accepted timezones, default is Australia/Brisbane
@@ -18,20 +19,23 @@
 #' @export
 
 
-get_almsuse <- function(RFID = NULL, location = NULL, start = NULL, end = NULL, timezone = NULL, fields = NULL, username = NULL, password = NULL){
+get_almsuse <- function(RFID = NULL, property = NULL, ALMS = NULL, start = NULL, end = NULL, timezone = NULL, fields = NULL, username = NULL, password = NULL){
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]
     password =  keyring::key_get("DMMongoDB", username)
   }
 
-  #if(is.null(timezone)){timezone <- "Australia/Brisbane"} else {}
+  if(is.null(timezone)){timezone <- "Australia/Brisbane"}
 
   if(is.null(RFID)){}else{RFID <- paste(unlist(RFID), collapse = '", "' )
                           RFID <- sprintf('"RFID":{"$in":["%s"]},', RFID)}
 
-  if(is.null(location)){}else{location <- paste(unlist(location), collapse = '", "' )
-  location <- sprintf('"ALMS":{"$in":["%s"]},', location)}
+  if(is.null(ALMS)){}else{ALMS <- paste(unlist(ALMS), collapse = '", "' )
+  ALMS <- sprintf('"ALMS":{"$in":["%s"]},', ALMS)}
+
+  if(is.null(property)){}else{property <- paste(unlist(property), collapse = '", "' )
+  property <- sprintf('"Property":{"$in":["%s"]},', property)}
 
   if(is.null(start)){}else{
     start <- sprintf('"Date":{"$gte":{"$date":"%s"}},', strftime(as.POSIXct(paste0(start, "00:00:00")), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"))}
@@ -48,7 +52,7 @@ almsuse <- mongo(collection = "ALMSUse", db = "DataMuster", url = pass, verbose 
 
 # Set up find query
 
-search <-paste0("{", RFID, location, start, end, "}")
+search <-paste0("{", RFID, property, ALMS, start, end, "}")
 
 if(nchar(search)==2){}else{
 search <- substr(search, 1 , nchar(search)-2)

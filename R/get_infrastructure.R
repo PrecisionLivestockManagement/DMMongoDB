@@ -3,6 +3,7 @@
 #' This function provides a search tool to retrieve infrastructure information from the Infrastructure collection in the DataMuster MongoDB database. It also allows the user to define what fields should be returned. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
 #' @name get_infrastructure
 #' @param property the name of the property to search for
+#' @param paddock the name of the paddock to search for
 #' @param type type of infrastructure
 #' @param active TRUE or FALSE, if TRUE, filters the data for infrastructure that is currently active
 #' @param training TRUE or FALSE
@@ -17,7 +18,7 @@
 #' @export
 
 
-get_infrastructure <- function(property = NULL, type = NULL, active = NULL, training = NULL, fields = NULL, username = NULL, password = NULL){
+get_infrastructure <- function(property = NULL, paddock = NULL, type = NULL, active = NULL, training = NULL, fields = NULL, username = NULL, password = NULL){
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]
@@ -26,6 +27,9 @@ get_infrastructure <- function(property = NULL, type = NULL, active = NULL, trai
 
   if(is.null(property)){}else{property <- paste(unlist(property), collapse = '", "' )
                               property <- sprintf('"stationname":{"$in":["%s"]},', property)}
+
+  if(is.null(paddock)){}else{paddock <- paste(unlist(paddock), collapse = '", "' )
+  paddock <- sprintf('"properties.Paddock":{"$in":["%s"]},', paddock)}
 
   if(is.null(type)){}else{type <- paste(unlist(type), collapse = '", "' )
   type <- sprintf('"properties.type":{"$in":["%s"]},', type)}
@@ -43,7 +47,7 @@ infrastructure <- mongo(collection = "Infrastructure", db = "DataMuster", url = 
 
 # Set up find query
 
-search <-paste0("{", property, type, active, training,"}")
+search <-paste0("{", property, paddock, type, active, training,"}")
 
 if(nchar(search)==2){}else{
 search <- substr(search, 1 , nchar(search)-2)

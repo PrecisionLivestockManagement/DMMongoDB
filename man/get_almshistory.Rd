@@ -6,6 +6,7 @@
 \usage{
 get_almshistory(
   RFID = NULL,
+  MTag = NULL,
   property = NULL,
   ALMS = NULL,
   currentALMS = NULL,

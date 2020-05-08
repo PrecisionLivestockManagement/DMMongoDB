@@ -30,7 +30,7 @@ get_cattle(
 \arguments{
 \item{RFID}{a list of cattle RFID number/s}
 
-\item{MTag}{a list of cattle management tag number/s}
+\item{MTag}{a list of cattle management tag number/s. Property must be specified in order to search using this field}
 
 \item{property}{the name of the property to search for}
 

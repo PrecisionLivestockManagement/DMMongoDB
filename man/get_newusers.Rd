@@ -4,10 +4,18 @@
 \alias{get_newusers}
 \title{Retrieve new user information from the DataMuster MongoDB database.}
 \usage{
-get_newusers(start = NULL, fields = NULL, username = NULL, password = NULL)
+get_newusers(
+  start = NULL,
+  login = NULL,
+  fields = NULL,
+  username = NULL,
+  password = NULL
+)
 }
 \arguments{
 \item{start}{a start date to be returned in date format, default is “2014-09-01”}
+
+\item{login}{a list of login emails}
 
 \item{fields}{a list of headers from the NewUser collection in the DataMuster MongoDB database to be returned. If not specified, the login email and date of creation will be returned}
 

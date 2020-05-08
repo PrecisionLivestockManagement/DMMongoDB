@@ -3,11 +3,13 @@
 #' This function provides a search tool to retrieve calving data from the CalvingData collection in the DataMuster MongoDB database. It also allows the user to define what fields should be returned. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
 #' @name get_calvingdata
 #' @param RFID a list of cattle RFID number/s
+#' @param MTag a list of cattle MTag/s. Property must be specified in order to search using this field
 #' @param property the name of the property to search for
+#' @param twins whether the cow had twins or not (TRUE/FALSE)
 #' @param start a start date to be returned in date format, default is "2014-09-01"
 #' @param end an end date to be returned in date format, default is today's date
 #' @param cow_id a list of DataMuster database cow identification numbers
-#' @param fields a list of headers from the StaticWts collection in the DataMuster MongoDB database to be returned. If not specified, the RFID, MTag, property, date of foetal aging, age at foetal aging, calving date, and twin status will be returned
+#' @param fields a list of headers from the CalvingData collection in the DataMuster MongoDB database to be returned. If not specified, the RFID, MTag, property, date of foetal aging, age at foetal aging, calving date, and twin status will be returned
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
 #' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
 #' @return a list of cattle RFID numbers and associated static weight records
@@ -18,7 +20,7 @@
 #' @export
 
 
-get_calvingdata <- function(RFID = NULL, property = NULL, start = NULL, end = NULL, cow_id = NULL, fields = NULL, username = NULL, password = NULL){
+get_calvingdata <- function(RFID = NULL, MTag = NULL, property = NULL, twins = NULL, start = NULL, end = NULL, cow_id = NULL, fields = NULL, username = NULL, password = NULL){
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]
@@ -26,10 +28,16 @@ get_calvingdata <- function(RFID = NULL, property = NULL, start = NULL, end = NU
   }
 
   if(is.null(RFID)){}else{RFID <- paste(unlist(RFID), collapse = '", "' )
-                          RFID <- sprintf('"RFID":{"$in":["%s"]},', RFID)}
+  RFID <- sprintf('"RFID":{"$in":["%s"]},', RFID)}
+
+  if(is.null(MTag)){}else{MTag <- paste(unlist(MTag), collapse = '", "' )
+  MTag <- sprintf('"Management":{"$in":["%s"]},', MTag)}
 
   if(is.null(property)){}else{property <- paste(unlist(property), collapse = '", "' )
   property <- sprintf('"stationname":{"$in":["%s"]},', property)}
+
+  if(is.null(twins)){}else{twins <- paste(unlist(twins), collapse = '", "' )
+  twins <- sprintf('"multiples":{"$in":["%s"]},', twins)}
 
   if(is.null(start)){}else{
     start <- sprintf('"calvingdate":{"$gte":{"$date":"%s"}},', strftime(as.POSIXct(paste0(start, "00:00:00")), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"))}
@@ -51,7 +59,7 @@ calvingdata <- mongo(collection = "CalvingData", db = "DataMuster", url = pass, 
 
 # Set up find query
 
-search <-paste0("{", RFID, property, start, end, cow_id,"}")
+search <-paste0("{", RFID, MTag, property, twins, start, end, cow_id,"}")
 
 if(nchar(search)==2){}else{
 search <- substr(search, 1 , nchar(search)-2)

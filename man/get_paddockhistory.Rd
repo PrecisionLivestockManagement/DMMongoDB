@@ -6,6 +6,7 @@
 \usage{
 get_paddockhistory(
   RFID = NULL,
+  MTag = NULL,
   property = NULL,
   Paddock = NULL,
   currentPaddock = NULL,

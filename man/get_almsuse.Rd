@@ -6,7 +6,8 @@
 \usage{
 get_almsuse(
   RFID = NULL,
-  location = NULL,
+  property = NULL,
+  ALMS = NULL,
   start = NULL,
   end = NULL,
   timezone = NULL,
@@ -18,7 +19,9 @@ get_almsuse(
 \arguments{
 \item{RFID}{a list of cattle RFID number/s}
 
-\item{location}{the name of the property to search for}
+\item{property}{the name of the property to search for}
+
+\item{ALMS}{the ALMS number to search for}
 
 \item{start}{a start date to be returned in date format, default is "2014-09-01"}
 

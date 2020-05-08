@@ -6,6 +6,7 @@
 \usage{
 get_infrastructure(
   property = NULL,
+  paddock = NULL,
   type = NULL,
   active = NULL,
   training = NULL,
@@ -16,6 +17,8 @@ get_infrastructure(
 }
 \arguments{
 \item{property}{the name of the property to search for}
+
+\item{paddock}{the name of the paddock to search for}
 
 \item{type}{type of infrastructure}
 
