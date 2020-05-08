@@ -20,7 +20,7 @@
 #' @export
 
 
-get_paddockhistory <- function(RFID = NULL, property = NULL, Paddock = NULL, currentPaddock = NULL, timezone = NULL, fields = NULL, username = NULL, password = NULL){
+get_paddockhistory <- function(RFID = NULL, MTag = NULL, property = NULL, Paddock = NULL, currentPaddock = NULL, timezone = NULL, fields = NULL, username = NULL, password = NULL){
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]
@@ -31,6 +31,9 @@ get_paddockhistory <- function(RFID = NULL, property = NULL, Paddock = NULL, cur
 
   if(is.null(RFID)){}else{RFID <- paste(unlist(RFID), collapse = '", "' )
                           RFID <- sprintf('"RFID":{"$in":["%s"]},', RFID)}
+
+  if(is.null(MTag)){}else{MTag <- paste(unlist(MTag), collapse = '", "' )
+  MTag <- sprintf('"Management":{"$in":["%s"]},', MTag)}
 
   if(is.null(property)){}else{property <- paste(unlist(property), collapse = '", "' )
   property <- sprintf('"stationname":{"$in":["%s"]},', property)}
@@ -67,7 +70,7 @@ paddockhistory <- mongo(collection = "PaddockHistory", db = "DataMuster", url = 
 
 # Set up find query
 
-search <-paste0("{", RFID, property, Paddock, currentPaddock,"}")
+search <-paste0("{", RFID, MTag, property, Paddock, currentPaddock,"}")
 
 if(nchar(search)==2){}else{
 search <- substr(search, 1 , nchar(search)-2)

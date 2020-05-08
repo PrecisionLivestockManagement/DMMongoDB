@@ -30,6 +30,7 @@ reactivatecattle <- function(RFID, property, paddock, date=NULL, replacevalues=N
   if(is.null(date)){date <- Sys.Date()}else{date <- as.POSIXct(date)}
   if (length(date) == 1){date <- rep(date, length = length(RFID))}
   if (length(paddock) == 1){paddock <- rep(paddock, length = length(RFID))}
+  if(is.null(replacevalues)){replacevalues <- "FALSE"}else{}
 
   # Check that the RFID numbers are in the correct format and exist in the database
 

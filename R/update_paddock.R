@@ -97,9 +97,9 @@ update_paddock <- function(RFID, property, paddock, MTag = NULL, date=NULL, user
       cattle$update(RFIDS, RFIDIlast)
 
       # Update PaddockHistory collection
-      padhist <- get_paddockhistory(RFID = RFID[i], currentPaddock = "TRUE", username = username, password = password)
+      padhist <- get_paddockhistory(RFID = RFID[i], MTag = MTag[i], property = property, currentPaddock = "TRUE", username = username, password = password)
       IDII <- sprintf('{"_id":{"$oid":"%s"}}', padhist$`_id`)
-      IDSI <- sprintf('{"$set":{"dateOUT.%s":{"$date":"%s"}}}', paste0(substr(date[i],1,10),"T","00:00:00","+1000"))
+      IDSI <- sprintf('{"$set":{"dateOUT":{"$date":"%s"}}}', paste0(substr(date[i],1,10),"T","00:00:00","+1000"))
       paddockhistory$update(IDII, IDSI)
 
       cows <- get_cattle(RFID = RFID[i], fields = c("RFID","properties.Management", "stationname"))
@@ -127,9 +127,9 @@ update_paddock <- function(RFID, property, paddock, MTag = NULL, date=NULL, user
              cattle$update(RFIDS, IDI)
 
             #Update ALMSHistory collection
-             almshist <- get_almshistory(RFID = RFID[i], currentALMS = "TRUE", username = username, password = password)
+             almshist <- get_almshistory(RFID = RFID[i],  MTag = MTag[i], property = property, currentALMS = "TRUE", username = username, password = password)
              IDII <- sprintf('{"_id":{"$oid":"%s"}}', almshist$`_id`)
-             IDSI <- sprintf('{"$set":{"dateOFF.%s":{"$date":"%s"}}}', paste0(substr(date[i],1,10),"T","00:00:00","+1000"))
+             IDSI <- sprintf('{"$set":{"dateOFF":{"$date":"%s"}}}', paste0(substr(date[i],1,10),"T","00:00:00","+1000"))
              almshistory$update(IDII, IDSI)
               }}
 
@@ -150,9 +150,9 @@ update_paddock <- function(RFID, property, paddock, MTag = NULL, date=NULL, user
                              arrpos2, paste0(substr(date[i],1,10),"T","00:00:00","+1000"), arrpos3, paste0(substr(date[i],1,10),"T","00:00:00","+1000"), arrpos2, WOW$`_id`, arrpos2, WOW$properties$asset_id)}
 
             #Update ALMSHistory collection
-            almshist <- get_almshistory(RFID = RFID[i], currentALMS = "TRUE", username = username, password = password)
+            almshist <- get_almshistory(RFID = RFID[i],  MTag = MTag[i], property = property, currentALMS = "TRUE", username = username, password = password)
             IDII <- sprintf('{"_id":{"$oid":"%s"}}', almshist$`_id`)
-            IDSI <- sprintf('{"$set":{"dateOFF.%s":{"$date":"%s"}}}', paste0(substr(date[i],1,10),"T","00:00:00","+1000"))
+            IDSI <- sprintf('{"$set":{"dateOFF":{"$date":"%s"}}}', paste0(substr(date[i],1,10),"T","00:00:00","+1000"))
             almshistory$update(IDII, IDSI)
 
             cows <- get_cattle(RFID = RFID[i], fields = c("RFID","properties.Management", "stationname"))
@@ -171,7 +171,7 @@ update_paddock <- function(RFID, property, paddock, MTag = NULL, date=NULL, user
             cattle$update(RFIDS, IDI)
 
           #Update ALMSHistory collection
-            cows <- get_cattle(RFID = RFID[i], fields = c("RFID","properties.Management", "stationname"))
+            cows <- get_cattle(RFID = RFID[i], MTag = MTag[i], property = property, fields = c("RFID","properties.Management", "stationname"))
 
             add_almshistory(RFID = cows$RFID, cattle_id = cows$`_id`, MTag = cows$Management, property = cows$stationname, ALMS = WOW$properties$asset_id, currentALMS = "TRUE",
                           dateON = substr(date[i],1,10), dateOFF = NULL, username = username, password = password)
