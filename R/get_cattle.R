@@ -45,6 +45,14 @@ get_cattle <- function(RFID = NULL, MTag = NULL, property = NULL, sex = NULL, ca
   property <- paste(unlist(property), collapse = '", "' )
   property <- sprintf('"stationname":{"$in":["%s"]},', property)}
 
+  if(is.null(RFID)){}else{
+  rfid <- RFID
+  RFID <- paste(unlist(RFID), collapse = '", "' )
+  RFID <- sprintf('"RFID":{"$in":["%s"]},', RFID)}
+
+  if(is.null(MTag)){}else{MTag <- paste(unlist(MTag), collapse = '", "' )
+  MTag <- sprintf('"properties.Management":{"$in":["%s"]},', MTag)}
+
   if(is.null(sex)){} else {sex <- sprintf('"properties.sex":"%s",', sex)}
   if(is.null(category)){} else {category <- sprintf('"properties.category":"%s",', category)}
   if(is.null(paddock)){}else{paddock <- sprintf('"properties.Paddock":"%s",', paddock)}
@@ -54,7 +62,7 @@ get_cattle <- function(RFID = NULL, MTag = NULL, property = NULL, sex = NULL, ca
   if(is.null(prevpaddock)){} else {prevpaddock <- sprintf('"properties.PrevPaddock":"%s",', prevpaddock)}
   if(is.null(active)){} else {active <- sprintf('"active":"%s",', active)}
   if(is.null(id)){} else {id <- sprintf('"_id":{"$oid":"%s"},', id)}
-  if(is.null(MTag)){} else {MTag <- sprintf('"properties.Management":"%s",', MTag)}
+  #if(is.null(MTag)){} else {MTag <- sprintf('"properties.Management":"%s",', MTag)}
 
 
   if(is.null(exitdate)){} else {exitdate <- sprintf('"properties.exitDate":{"$gte":{"$date":"%s"}},', strftime(paste0(exitdate, "00:00:00"), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"))}
@@ -65,15 +73,10 @@ get_cattle <- function(RFID = NULL, MTag = NULL, property = NULL, sex = NULL, ca
     almsasset_id <- paste(unlist(almsasset_id), collapse = '", "' )
     almsasset_id <- sprintf('"properties.ALMSasset_id":{"$in":["%s"]},', almsasset_id)}
 
-  if(is.null(RFID)){} else {
-    rfid <- RFID
-    RFID <- paste(unlist(RFID), collapse = '", "' )
-    RFID <- sprintf('"RFID":{"$in":["%s"]},', RFID)}
-
-  if(is.null(MTag)){} else {
-    mtag <- MTag
-    MTag <- paste(unlist(MTag), collapse = '", "' )
-    MTag <- sprintf('"properties.Management":{"$in":["%s"]}}', MTag)}
+  # if(is.null(MTag)){} else {
+  #   mtag <- MTag
+  #   MTag <- paste(unlist(MTag), collapse = '", "' )
+  #   MTag <- sprintf('"properties.Management":{"$in":["%s"]}}', MTag)}
 
   if(is.null(property) & !is.null(MTag)){
     stop(paste0("To search using the management tag, please ensure the property field is filled out"))}
