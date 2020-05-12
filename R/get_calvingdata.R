@@ -77,10 +77,12 @@ collist <- colnames(data)
 
  for(i in 1:length(collist)){
    if("POSIXt" %in% class(data[,i])){
-     attributes(data[,i])$tzone <- timezone}}
+     attributes(data[,i])$tzone <- timezone
+     data[,i] <- as.Date(data[,i], tz = timezone)
+     }}
 
- # dataf <- data%>%
- #          rename_all(recode, datetime = "Date", Wt = "Weight")
+# dataf <- data%>%
+#          mutate_if(~'POSIXt' %in% class(.x), format(as.Date(.x, tz = timezone)))
 
  dataf <- data
 
