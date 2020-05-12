@@ -4,10 +4,18 @@
 \alias{get_paddocks}
 \title{Retrieve paddock information from the DataMuster MongoDB database.}
 \usage{
-get_paddocks(property = NULL, fields = NULL, username = NULL, password = NULL)
+get_paddocks(
+  property = NULL,
+  paddock = NULL,
+  fields = NULL,
+  username = NULL,
+  password = NULL
+)
 }
 \arguments{
 \item{property}{the name of the property to search for}
+
+\item{paddock}{the name of the paddock/s to search for}
 
 \item{fields}{a list of headers from the Paddocks collection in the DataMuster MongoDB database to be returned. If not specified, the property, paddock name, ALMS rating, and long term carrying capacity (A, B, C, D) will be returned}
 

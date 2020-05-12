@@ -3,6 +3,7 @@
 #' This function provides a search tool to retrieve paddock information from the Paddocks collection in the DataMuster MongoDB database. It also allows the user to define what fields should be returned. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
 #' @name get_paddocks
 #' @param property the name of the property to search for
+#' @param paddock the name of the paddock/s to search for
 #' @param fields a list of headers from the Paddocks collection in the DataMuster MongoDB database to be returned. If not specified, the property, paddock name, ALMS rating, and long term carrying capacity (A, B, C, D) will be returned
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
 #' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
@@ -14,7 +15,7 @@
 #' @export
 
 
-get_paddocks <- function(property = NULL, fields = NULL, username = NULL, password = NULL){
+get_paddocks <- function(property = NULL, paddock = NULL, fields = NULL, username = NULL, password = NULL){
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]
@@ -27,6 +28,10 @@ get_paddocks <- function(property = NULL, fields = NULL, username = NULL, passwo
     property <- paste(unlist(property), collapse = '", "' )
     property <- sprintf('"stationname":{"$in":["%s"]},', property)}
 
+  if(is.null(paddock)){} else {
+    paddock <- paste(unlist(paddock), collapse = '", "' )
+    paddock <- sprintf('"paddname":{"$in":["%s"]},', paddock)}
+
   if(is.null(fields)){
     fields = c("stationname", "paddname", "ALMSrating", "LTCC_A", "LTCC_B", "LTCC_C", "LTCC_D")}
 
@@ -37,7 +42,7 @@ get_paddocks <- function(property = NULL, fields = NULL, username = NULL, passwo
 
   # Set up find query
 
-  search <-paste0("{", property,"}")
+  search <-paste0("{", property, paddock, "}")
 
   if(nchar(search)==2){}else{
     search <- substr(search, 1 , nchar(search)-2)

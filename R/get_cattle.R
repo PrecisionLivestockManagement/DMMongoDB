@@ -3,7 +3,7 @@
 #' This function provides a search tool to retrieve cattle information from the Cattle collection in the DataMuster MongoDB database. It also allows the user to define what fields should be returned. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
 #' @name get_cattle
 #' @param RFID a list of cattle RFID number/s
-#' @param MTag a list of cattle management tag number/s
+#' @param MTag a list of cattle management tag number/s. Property must be specified in order to search using this field
 #' @param property the name of the property to search for
 #' @param sex male or female
 #' @param category the class of cattle either (breeding or growing)

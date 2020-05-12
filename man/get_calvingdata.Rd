@@ -6,7 +6,9 @@
 \usage{
 get_calvingdata(
   RFID = NULL,
+  MTag = NULL,
   property = NULL,
+  twins = NULL,
   start = NULL,
   end = NULL,
   cow_id = NULL,
@@ -18,7 +20,11 @@ get_calvingdata(
 \arguments{
 \item{RFID}{a list of cattle RFID number/s}
 
+\item{MTag}{a list of cattle MTag/s. Property must be specified in order to search using this field}
+
 \item{property}{the name of the property to search for}
+
+\item{twins}{whether the cow had twins or not (TRUE/FALSE)}
 
 \item{start}{a start date to be returned in date format, default is "2014-09-01"}
 
@@ -26,7 +32,7 @@ get_calvingdata(
 
 \item{cow_id}{a list of DataMuster database cow identification numbers}
 
-\item{fields}{a list of headers from the StaticWts collection in the DataMuster MongoDB database to be returned. If not specified, the RFID, MTag, property, date of foetal aging, age at foetal aging, calving date, and twin status will be returned}
+\item{fields}{a list of headers from the CalvingData collection in the DataMuster MongoDB database to be returned. If not specified, the RFID, MTag, property, date of foetal aging, age at foetal aging, calving date, and twin status will be returned}
 
 \item{username}{if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring}
 
