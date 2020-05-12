@@ -37,6 +37,7 @@ add_infrastructure <- function(property, paddock, infstype, assetID, fileout=NUL
 
     template <- infrastructure$find(query = '{"stationname": "xxxxxx"}', fields='{"_id":false}')
 
+    if(is.null(date)){date <- Sys.Date()}else{}
 
     #Input new infrastructure details into the template dataframe --------
 
@@ -55,7 +56,7 @@ add_infrastructure <- function(property, paddock, infstype, assetID, fileout=NUL
 
     template$pdkhist$name <- list(paddock)
     template$pdkhist$ID <- list("xxxxxx")
-    template$pdkhist$dateIN <- list(as.POSIXct(ifelse(is.null(date), Sys.Date(), date)))
+    template$pdkhist$dateIN <- list(as.POSIXct(date))
 
     rownames(template)<-c()
     rownames(template$geometry)<-c()
