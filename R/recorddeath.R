@@ -3,6 +3,8 @@
 #' This function removes individual or groups of cattle from a station on the DataMuster MongoDB database. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
 #' @name recorddeath
 #' @param RFID a list of cattle RFID number/s
+#' @param MTag a list of cattle management tags
+#' @param property the name of the property to search for
 #' @param date the date that the animal died in date format, default is today's date
 #' @param cause the cause of death
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
@@ -14,7 +16,7 @@
 #' @export
 
 
-recorddeath <- function(RFID, date=NULL, cause=NULL, property, username=NULL, password=NULL){
+recorddeath <- function(RFID, MTag, property, date=NULL, cause=NULL, username=NULL, password=NULL){
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]
@@ -40,7 +42,7 @@ recorddeath <- function(RFID, date=NULL, cause=NULL, property, username=NULL, pa
 
   #checkcows <- paste(unlist(RFID), collapse = '", "' )
 
-  cows <- get_cattle(RFID, username = username, password = password,
+  cows <- get_cattle(RFID = RFID, MTag = MTag, property = property, username = username, password = password,
                      fields = c("RFID", "properties.Management", "active",
                                 "stationname", "properties.Paddock", "properties.ALMS",
                                 "properties.category", "properties.breed", "properties.sex"))
@@ -53,11 +55,11 @@ recorddeath <- function(RFID, date=NULL, cause=NULL, property, username=NULL, pa
   for (i in 1:length(cows$RFID)){
 
     # Update Cattle properties
-    RFIDS <- sprintf('{"RFID":"%s"}', cows$RFID[i])
-    RFIDI <- sprintf('{"$set":{"stationname":"%s", "stationID":"%s", "active":"%s", "exstation":"%s", "geometry.coordinates.0":%s, "geometry.coordinates.1":%s,
-                     "properties.Paddock":"%s", "properties.PaddockID":"%s", "properties.deathcause":"%s", "properties.deathDate":{"$date":"%s"}, "properties.ALMS":"%s", "properties.ALMSID":"%s", "properties.ALMSasset_id":"%s"}}',
-                     "xxxxxx", "xxxxxx", "FALSE", cows$stationname[i], 0.0, 0.0, "xxxxxx", "xxxxxx", cause[i], paste0(substr(date[i],1,10),"T","00:00:00","+1000"),"FALSE", "xxxxxx", "xxxxxx")
-    cattle$update(RFIDS, RFIDI)
+    if (RFID[i] != "xxx xxxxxxxxxxxx"){
+
+      RFIDS <- sprintf('{"RFID":"%s"}', RFID[i])}else{
+
+        RFIDS <- sprintf('{"stationname":"%s", "properties.Management":"%s"}', property, MTag[i])}
 
     #Update Cattle PdkHist
     banger <- cattle$find(query= RFIDS, fields='{"pdkhist.dateOUT":true, "_id":false}')
@@ -75,15 +77,20 @@ recorddeath <- function(RFID, date=NULL, cause=NULL, property, username=NULL, pa
     # Update PaddockHistory collection
     padhist <- get_paddockhistory(RFID = cows$RFID[i], MTag = cows$Management[i], property = cows$stationname[i], currentPaddock = "TRUE", username = username, password = password)
     IDI <- sprintf('{"_id":{"$oid":"%s"}}', padhist$`_id`)
-    IDS <- sprintf('{"$set":{"dateOUT":{"$date":"%s"}}}', paste0(substr(date[i],1,10),"T","00:00:00","+1000"))
+    IDS <- IDSI <- sprintf('{"$set":{"currentPaddock":"%s", "dateOUT":{"$date":"%s"}}}', "FALSE", paste0(substr(date[i],1,10),"T","00:00:00","+1000"))
     paddockhistory$update(IDI, IDS)
 
     # Update ALMSHistory collection
     if(cows$ALMS[i] == "TRUE"){
       almshist <- get_almshistory(RFID = cows$RFID[i], MTag = cows$Management[i], property = cows$stationname[i], currentALMS = "TRUE", username = username, password = password)
       IDII <- sprintf('{"_id":{"$oid":"%s"}}', almshist$`_id`)
-      IDSI <- sprintf('{"$set":{"dateOFF":{"$date":"%s"}}}', paste0(substr(date[i],1,10),"T","00:00:00","+1000"))
+      IDSI <- sprintf('{"$set":{"currentALMS":"%s", "dateOFF":{"$date":"%s"}}}', "FALSE", paste0(substr(date[i],1,10),"T","00:00:00","+1000"))
       almshistory$update(IDII, IDSI)}
+
+    RFIDI <- sprintf('{"$set":{"stationname":"%s", "stationID":"%s", "active":"%s", "exstation":"%s", "geometry.coordinates.0":%s, "geometry.coordinates.1":%s,
+                     "properties.Paddock":"%s", "properties.PaddockID":"%s", "properties.deathcause":"%s", "properties.deathDate":{"$date":"%s"}, "properties.ALMS":"%s", "properties.ALMSID":"%s", "properties.ALMSasset_id":"%s"}}',
+                     "xxxxxx", "xxxxxx", "FALSE", cows$stationname[i], 0.0, 0.0, "xxxxxx", "xxxxxx", cause[i], paste0(substr(date[i],1,10),"T","00:00:00","+1000"),"FALSE", "xxxxxx", "xxxxxx")
+    cattle$update(RFIDS, RFIDI)
   }
 
   update_cattlecoords(property = unique(cows$stationname), paddock = unique(cows$Paddock), username = username, password = password)

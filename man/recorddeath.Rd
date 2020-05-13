@@ -6,15 +6,20 @@
 \usage{
 recorddeath(
   RFID,
+  MTag,
+  property,
   date = NULL,
   cause = NULL,
-  property,
   username = NULL,
   password = NULL
 )
 }
 \arguments{
 \item{RFID}{a list of cattle RFID number/s}
+
+\item{MTag}{a list of cattle management tags}
+
+\item{property}{the name of the property to search for}
 
 \item{date}{the date that the animal died in date format, default is today's date}
 
