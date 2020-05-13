@@ -8,7 +8,7 @@ update_paddock(
   RFID,
   property,
   paddock,
-  MTag = NULL,
+  MTag,
   date = NULL,
   username = NULL,
   password = NULL

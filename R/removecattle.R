@@ -4,6 +4,7 @@
 #' @name removecattle
 #' @param RFID a list of cattle RFID number/s
 #' @param MTag a list of cattle management tag number/s
+#' @param property the name of the property to search for
 #' @param date the date that the animal left the station in date format, default is today's date
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
 #' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access

@@ -4,10 +4,21 @@
 \alias{removecattle}
 \title{Remove cattle from a station in the DataMuster MongoDB database.}
 \usage{
-removecattle(RFID, date = NULL, username = NULL, password = NULL)
+removecattle(
+  RFID,
+  MTag,
+  property,
+  date = NULL,
+  username = NULL,
+  password = NULL
+)
 }
 \arguments{
 \item{RFID}{a list of cattle RFID number/s}
+
+\item{MTag}{a list of cattle management tag number/s}
+
+\item{property}{the name of the property to search for}
 
 \item{date}{the date that the animal left the station in date format, default is today's date}
 
