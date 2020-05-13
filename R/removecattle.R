@@ -3,6 +3,7 @@
 #' This function removes individual or groups of cattle from a station in the DataMuster MongoDB database. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
 #' @name removecattle
 #' @param RFID a list of cattle RFID number/s
+#' @param MTag a list of cattle management tag number/s
 #' @param date the date that the animal left the station in date format, default is today's date
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
 #' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
@@ -13,7 +14,7 @@
 #' @export
 
 
-removecattle <- function(RFID, date=NULL, username=NULL, password=NULL){
+removecattle <- function(RFID, MTag, property, date=NULL, username=NULL, password=NULL){
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]
@@ -36,7 +37,7 @@ removecattle <- function(RFID, date=NULL, username=NULL, password=NULL){
 
   #checkcows <- paste(unlist(RFID), collapse = '", "' )
 
-  cows <- get_cattle(RFID, username = username, password = password,
+  cows <- get_cattle(RFID = RFID, MTag = MTag, property = property, username = username, password = password,
                      fields = c("RFID", "properties.Management", "active",
                                 "stationname", "properties.Paddock", "properties.ALMS",
                                 "properties.category", "properties.breed", "properties.sex"))
@@ -51,10 +52,13 @@ removecattle <- function(RFID, date=NULL, username=NULL, password=NULL){
     if (cows$active[i] == TRUE){
 
     # Update Cattle properties
-    RFIDS <- sprintf('{"RFID":"%s"}', cows$RFID[i])
-    RFIDI <- sprintf('{"$set":{"stationname":"%s", "stationID":"%s", "active":"%s", "exstation":"%s", "geometry.coordinates.0":%s, "geometry.coordinates.1":%s, "properties.Paddock":"%s", "properties.PaddockID":"%s", "properties.exitDate":{"$date":"%s"}, "properties.ALMS":"%s", "properties.ALMSID":"%s", "properties.ALMSasset_id":"%s"}}',
-                     "xxxxxx", "xxxxxx", "FALSE", cows$stationname[i], 0.0, 0.0, "xxxxxx", "xxxxxx", paste0(substr(date[i],1,10),"T","00:00:00","+1000"), "FALSE", "xxxxxx", "xxxxxx")
-    cattle$update(RFIDS, RFIDI)
+
+      if (RFID[i] != "xxx xxxxxxxxxxxx"){
+
+        RFIDS <- sprintf('{"RFID":"%s"}', cows$RFID[i])}else{
+
+          RFIDS <- sprintf('{"stationname":"%s", "properties.Management":"%s"}', property, cows$Management[i])}
+    #RFIDS <- sprintf('{"RFID":"%s"}', cows$RFID[i])
 
     #Update Cattle PdkHist
     banger <- cattle$find(query= RFIDS, fields='{"pdkhist.dateOUT":true, "_id":false}')
@@ -90,7 +94,12 @@ removecattle <- function(RFID, date=NULL, username=NULL, password=NULL){
     RFIDI <- sprintf('{"$set":{"properties.exitDate":{"$date":"%s"}}}', paste0(substr(date[i],1,10),"T","00:00:00","+1000"))
     cattle$update(RFIDS, RFIDI)
     }
-    }
+  }
+
+  RFIDII <- sprintf('{"$set":{"stationname":"%s", "stationID":"%s", "active":"%s", "exstation":"%s", "geometry.coordinates.0":%s, "geometry.coordinates.1":%s, "properties.Paddock":"%s", "properties.PaddockID":"%s", "properties.exitDate":{"$date":"%s"}, "properties.ALMS":"%s", "properties.ALMSID":"%s", "properties.ALMSasset_id":"%s"}}',
+                    "xxxxxx", "xxxxxx", "FALSE", cows$stationname[i], 0.0, 0.0, "xxxxxx", "xxxxxx", paste0(substr(date[i],1,10),"T","00:00:00","+1000"), "FALSE", "xxxxxx", "xxxxxx")
+
+  cattle$update(RFIDS, RFIDII)
 
   update_cattlecoords(property = unique(cows$stationname), paddock = unique(cows$Paddock), username = username, password = password)
 
