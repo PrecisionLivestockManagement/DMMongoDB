@@ -79,8 +79,9 @@ removecattle <- function(RFID, date=NULL, username=NULL, password=NULL){
     if(cows$ALMS[i] == "TRUE"){
     almshist <- get_almshistory(RFID = cows$RFID[i], MTag = cows$Management[i], property = cows$stationname[i], currentALMS = "TRUE", username = username, password = password)
     IDII <- sprintf('{"_id":{"$oid":"%s"}}', almshist$`_id`)
-    IDSI <- sprintf('{"$set":{"currentALMS":"%s", dateOFF":{"$date":"%s"}}}', "FALSE", paste0(substr(date[i],1,10),"T","00:00:00","+1000"))
-    almshistory$update(IDII, IDSI)}
+    IDSI <- sprintf('{"$set":{"currentALMS":"%s", "dateOFF":{"$date":"%s"}}}', "FALSE", paste0(substr(date[i],1,10),"T","00:00:00","+1000"))
+    almshistory$update(IDII, IDSI)
+    }
     }
 
     # Update Cattle properties
