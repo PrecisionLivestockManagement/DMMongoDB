@@ -16,7 +16,7 @@
 #' @export
 
 
-update_paddock <- function(RFID, property, paddock, MTag = NULL, date=NULL, username=NULL, password=NULL){
+update_paddock <- function(RFID, property, paddock, MTag, date=NULL, username=NULL, password=NULL){
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]
@@ -91,7 +91,7 @@ update_paddock <- function(RFID, property, paddock, MTag = NULL, date=NULL, user
           temppad <- pad[which(pad$paddname == paddock[i]),]
 
           RFIDIlast <- sprintf('{"$set":{"properties.PaddockdateIN":{"$date":"%s"},"properties.Paddock":"%s", "properties.PaddockID":"%s", "properties.PrevPaddock":"%s"}}', paste0(substr(date[i],1,10),"T","00:00:00","+1000"), paddock[i], temppad$`_id`, prevpaddock)
-          RFIDI <- sprintf('{"$set":{"pdkhist.dateOUT.%s":{"$date":"%s"}, "pdkhist.dateIN.%s":{"$date":"%s"}, "pdkhist.ID.%s":"%s"}}', arrpos1, paste0(substr(date[i],1,10),"T","00:00:00","+1000"), arrpos, paste0(substr(date[i],1,10),"T","00:00:00","+1000"), arrpos, paddock[i], arrpos, temppad$`_id`)
+          RFIDI <- sprintf('{"$set":{"pdkhist.dateOUT.%s":{"$date":"%s"}, "pdkhist.dateIN.%s":{"$date":"%s"}, "pdkhist.ID.%s":"%s", "pdkhist.name.%s":"%s"}}', arrpos1, paste0(substr(date[i],1,10),"T","00:00:00","+1000"), arrpos, paste0(substr(date[i],1,10),"T","00:00:00","+1000"), arrpos, paddock[i], arrpos, temppad$`_id`, temppad$paddname)
 
       cattle$update(RFIDS, RFIDI)
       cattle$update(RFIDS, RFIDIlast)
@@ -102,7 +102,7 @@ update_paddock <- function(RFID, property, paddock, MTag = NULL, date=NULL, user
       IDSI <- sprintf('{"$set":{"currentPaddock":"%s", "dateOUT":{"$date":"%s"}}}', "FALSE", paste0(substr(date[i],1,10),"T","00:00:00","+1000"))
       paddockhistory$update(IDII, IDSI)
 
-      cows <- get_cattle(RFID = RFID[i], fields = c("RFID","properties.Management", "stationname"))
+      cows <- get_cattle(RFID = RFID[i], MTag = MTag[i], property = property, fields = c("RFID","properties.Management", "stationname"))
 
       add_paddockhistory(RFID = cows$RFID, cattle_id = cows$`_id`, MTag = cows$Management, property = cows$stationname, Paddock = paddock[i], currentPaddock = "TRUE",
                          dateIN = substr(date[i],1,10), dateOUT = NULL, username = username, password = password)
@@ -147,7 +147,7 @@ update_paddock <- function(RFID, property, paddock, MTag = NULL, date=NULL, user
             if (banger$properties$ALMS == "TRUE"){
 
               IDI <- sprintf('{"$set":{"almshist.dateON.%s":{"$date":"%s"}, "almshist.dateOFF.%s":{"$date":"%s"}, "almshist.ID.%s":"%s", "almshist.asset_id.%s":"%s"}}',
-                             arrpos2, paste0(substr(date[i],1,10),"T","00:00:00","+1000"), arrpos3, paste0(substr(date[i],1,10),"T","00:00:00","+1000"), arrpos2, WOW$`_id`, arrpos2, WOW$properties$asset_id)}
+                             arrpos2, paste0(substr(date[i],1,10),"T","00:00:00","+1000"), arrpos3, paste0(substr(date[i],1,10),"T","00:00:00","+1000"), arrpos2, WOW$`_id`, arrpos2, WOW$properties$asset_id)
 
             #Update ALMSHistory collection
             almshist <- get_almshistory(RFID = RFID[i],  MTag = MTag[i], property = property, currentALMS = "TRUE", username = username, password = password)
@@ -158,7 +158,7 @@ update_paddock <- function(RFID, property, paddock, MTag = NULL, date=NULL, user
             cows <- get_cattle(RFID = RFID[i], fields = c("RFID","properties.Management", "stationname"))
 
             add_almshistory(RFID = cows$RFID, cattle_id = cows$`_id`, MTag = cows$Management, property = cows$stationname, ALMS = WOW$properties$asset_id, currentALMS = "TRUE",
-                               dateON = substr(date[i],1,10), dateOFF = NULL, username = username, password = password)
+                               dateON = substr(date[i],1,10), dateOFF = NULL, username = username, password = password)}
 
             # If the animal is not currently allocated to an ALMS unit...
 
@@ -166,7 +166,7 @@ update_paddock <- function(RFID, property, paddock, MTag = NULL, date=NULL, user
 
             #Update Cattle collection
             IDI <- sprintf('{"$set":{"almshist.dateON.%s":{"$date":"%s"}, "almshist.ID.%s":"%s", "almshist.asset_id.%s":"%s"}}',
-                             arrpos2, paste0(substr(date[i],1,10),"T","00:00:00","+1000"), arrpos2, WOW$`_id`, arrpos2, WOW$properties$asset_id)}
+                             arrpos2, paste0(substr(date[i],1,10),"T","00:00:00","+1000"), arrpos2, WOW$`_id`, arrpos2, WOW$properties$asset_id)
             cattle$update(RFIDS, IDIlast)
             cattle$update(RFIDS, IDI)
 
@@ -174,12 +174,13 @@ update_paddock <- function(RFID, property, paddock, MTag = NULL, date=NULL, user
             cows <- get_cattle(RFID = RFID[i], MTag = MTag[i], property = property, fields = c("RFID","properties.Management", "stationname"))
 
             add_almshistory(RFID = cows$RFID, cattle_id = cows$`_id`, MTag = cows$Management, property = cows$stationname, ALMS = WOW$properties$asset_id, currentALMS = "TRUE",
-                          dateON = substr(date[i],1,10), dateOFF = NULL, username = username, password = password)
+                          dateON = substr(date[i],1,10), dateOFF = NULL, username = username, password = password)}
 
           }
 
 
-          }}
+          }
+          }
 
 update_cattlecoords(property = property, paddock = unique(paddock), username = username, password = password)
 
