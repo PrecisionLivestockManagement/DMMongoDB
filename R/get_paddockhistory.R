@@ -20,7 +20,7 @@
 #' @export
 
 
-get_paddockhistory <- function(RFID = NULL, MTag = NULL, property = NULL, Paddock = NULL, currentPaddock = NULL, timezone = NULL, fields = NULL, username = NULL, password = NULL){
+get_paddockhistory <- function(RFID = NULL, MTag = NULL, property = NULL, Paddock = NULL, currentPaddock = NULL, timezone = NULL, start = NULL, end = NULL, fields = NULL, username = NULL, password = NULL){
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]
@@ -47,6 +47,21 @@ get_paddockhistory <- function(RFID = NULL, MTag = NULL, property = NULL, Paddoc
   if(is.null(fields)){
     fields = c("RFID", "stationname", "Paddock", "dateIN", "dateOUT")}
 
+
+  if(is.null(start)){}else{
+    if(timezone == "Australia/Brisbane"){
+      start <- sprintf('"dateIN":{"$gte":{"$date":"%s"}},', strftime(as.POSIXct(paste0(start, "00:00:00")), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"))}else{
+        if(timezone == "America/Argentina/Buenos_Aires"){
+          start <- sprintf('"dateIN":{"$gte":{"$date":"%s"}},', strftime(as.POSIXct(paste0(start, "13:00:00")), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"))}}
+  }
+
+  if(is.null(end)){}else{
+    if(timezone == "Australia/Brisbane"){
+      end <- sprintf('"dateOUT":{"$lt":{"$date":"%s"}},', strftime(as.POSIXct(paste0(end+1, "00:00:00")), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"))}else{
+        if(timezone == "America/Argentina/Buenos_Aires"){
+          end <- sprintf('"dateOUT":{"$lt":{"$date":"%s"}},', strftime(as.POSIXct(paste0(end+1, "13:00:00")), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"))}}
+  }
+
   # if(is.null(start)){}else{
   #   if(timezone == "Australia/Brisbane"){
   #   start <- sprintf('"dataON":{"$lte":{"$date":"%s"}},', strftime(as.POSIXct(paste0(start, "00:00:00")), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"))}else{
@@ -70,7 +85,7 @@ paddockhistory <- mongo(collection = "PaddockHistory", db = "DataMuster", url = 
 
 # Set up find query
 
-search <-paste0("{", RFID, MTag, property, Paddock, currentPaddock,"}")
+search <-paste0("{", RFID, MTag, property, Paddock, currentPaddock, start, end,"}")
 
 if(nchar(search)==2){}else{
 search <- substr(search, 1 , nchar(search)-2)

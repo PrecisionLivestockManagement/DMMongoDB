@@ -11,6 +11,8 @@ get_almshistory(
   ALMS = NULL,
   currentALMS = NULL,
   timezone = NULL,
+  start = NULL,
+  end = NULL,
   fields = NULL,
   username = NULL,
   password = NULL
@@ -27,15 +29,15 @@ get_almshistory(
 
 \item{timezone}{the local timezone of the property, see https://en.wikipedia.org/wiki/List_of_tz_database_time_zones for the list of accepted timezones}
 
+\item{start}{a start date to be returned in date format, default is "2014-09-01"}
+
+\item{end}{an end date to be returned in date format, default is today's date}
+
 \item{fields}{a list of headers from the DailyWts collection in the DataMuster MongoDB database to be returned. If not specified, the RFID, stationname, ALMS, dateON, and dateOFF will be returned}
 
 \item{username}{if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring}
 
 \item{password}{if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access}
-
-\item{start}{a start date to be returned in date format, default is "2014-09-01"}
-
-\item{end}{an end date to be returned in date format, default is today's date}
 }
 \value{
 a list of cattle RFID numbers and associated ALMS allocation statistics

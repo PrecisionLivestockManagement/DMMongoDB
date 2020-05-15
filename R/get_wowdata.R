@@ -2,6 +2,8 @@
 #'
 #' This function provides a search tool to retrieve WoW information from the WoWData collection in the DataMuster MongoDB database. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
 #' @name get_wowdata
+#' @param RFID a list of cattle RFID number/s
+#' @param property the name of the property to search for
 #' @param start a start date and time to be returned in datetime format, default is “2014-09-01 00:00:00”
 #' @param end an end date and time to be returned in datetime format, default is today’s date and time
 #' @param username required for access. Please email \email{info@@datamuster.net.au} to acquire a username.
@@ -14,7 +16,7 @@
 #' @export
 
 
-get_wowdata <- function(start=NULL, end=NULL, username=NULL, password=NULL){
+get_wowdata <- function(RFID = NULL, property = NULL, minwt = NULL, start=NULL, end=NULL, username=NULL, password=NULL){
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]
@@ -30,9 +32,29 @@ get_wowdata <- function(start=NULL, end=NULL, username=NULL, password=NULL){
   #data <- data%>%
   #  mutate(datetime = as.POSIXct(format(datetime, tz="America/Argentina/Buenos_Aires",usetz=TRUE)))
 
+  if(is.null(RFID)){}else{RFID <- paste(unlist(RFID), collapse = '", "' )
+  RFID <- sprintf('"RFID":{"$in":["%s"]},', RFID)}
+
+  if(is.null(property)){}else{property <- paste(unlist(property), collapse = '", "' )
+  property <- sprintf('"Location":{"$in":["%s"]},', property)}
+
+
   if(is.null(start)) {}
   else{if(is.null(end)){data <- data %>% filter(between(as.Date(datetime, tz = "America/Argentina/Buenos_Aires"),start,Sys.Date()))}
     else{data <- data %>% filter(between(as.Date(datetime, tz = "America/Argentina/Buenos_Aires"),start,end))}}
+
+
+  # Set up find query
+
+  search <-paste0("{", RFID, property, start, end,"}")
+
+  if(nchar(search)==2){}else{
+    search <- substr(search, 1 , nchar(search)-2)
+    search <- paste0(search, "}")}
+
+  #Query database and format for website display
+
+  data <- wowdata$find(query = search)
 
   data <- data%>%
     mutate(datetime = as.POSIXct(strptime(datetime, format = "%Y-%m-%d %H:%M:%S", tz = "America/Argentina/Buenos_Aires")))%>%
