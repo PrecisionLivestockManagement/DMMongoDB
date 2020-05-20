@@ -90,8 +90,10 @@ update_paddock <- function(RFID, property, paddock, MTag, date=NULL, username=NU
 
           temppad <- pad[which(pad$paddname == paddock[i]),]
 
-          RFIDIlast <- sprintf('{"$set":{"properties.PaddockdateIN":{"$date":"%s"},"properties.Paddock":"%s", "properties.PaddockID":"%s", "properties.PrevPaddock":"%s"}}', paste0(substr(date[i],1,10),"T","00:00:00","+1000"), paddock[i], temppad$`_id`, prevpaddock)
-          RFIDI <- sprintf('{"$set":{"pdkhist.dateOUT.%s":{"$date":"%s"}, "pdkhist.dateIN.%s":{"$date":"%s"}, "pdkhist.ID.%s":"%s", "pdkhist.name.%s":"%s"}}', arrpos1, paste0(substr(date[i],1,10),"T","00:00:00","+1000"), arrpos, paste0(substr(date[i],1,10),"T","00:00:00","+1000"), arrpos, paddock[i], arrpos, temppad$`_id`, temppad$paddname)
+          RFIDIlast <- sprintf('{"$set":{"properties.PaddockdateIN":{"$date":"%s"},"properties.Paddock":"%s", "properties.PaddockID":"%s", "properties.PrevPaddock":"%s"}}',
+                               paste0(substr(date[i],1,10),"T","00:00:00","+1000"), paddock[i], temppad$`_id`, prevpaddock)
+          RFIDI <- sprintf('{"$set":{"pdkhist.dateOUT.%s":{"$date":"%s"}, "pdkhist.dateIN.%s":{"$date":"%s"}, "pdkhist.ID.%s":"%s", "pdkhist.name.%s":"%s"}}',
+                           arrpos1, paste0(substr(date[i],1,10),"T","00:00:00","+1000"), arrpos, paste0(substr(date[i],1,10),"T","00:00:00","+1000"), arrpos, temppad$`_id`, arrpos, paddock[i])
 
       cattle$update(RFIDS, RFIDI)
       cattle$update(RFIDS, RFIDIlast)
@@ -177,8 +179,6 @@ update_paddock <- function(RFID, property, paddock, MTag, date=NULL, username=NU
                           dateON = substr(date[i],1,10), dateOFF = NULL, username = username, password = password)}
 
           }
-
-
           }
           }
 
