@@ -20,7 +20,7 @@
 #' @export
 
 
-get_almshistory <- function(RFID = NULL, MTag = NULL, property = NULL, ALMS = NULL, currentALMS = NULL, timezone = NULL, fields = NULL, username = NULL, password = NULL){
+get_almshistory <- function(RFID = NULL, MTag = NULL, property = NULL, ALMS = NULL, currentALMS = NULL, timezone = NULL, start = NULL, end = NULL, fields = NULL, username = NULL, password = NULL){
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]
@@ -47,6 +47,24 @@ get_almshistory <- function(RFID = NULL, MTag = NULL, property = NULL, ALMS = NU
   if(is.null(fields)){
     fields = c("RFID", "stationname", "ALMS", "dateON", "dateOFF")}
 
+
+  if(is.null(start)){}else{
+    if(timezone == "Australia/Brisbane"){
+      start <- sprintf('"dateON":{"$gte":{"$date":"%s"}},', strftime(as.POSIXct(paste0(start, "00:00:00")), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"))}else{
+        if(timezone == "America/Argentina/Buenos_Aires"){
+          start <- sprintf('"dateON":{"$gte":{"$date":"%s"}},', strftime(as.POSIXct(paste0(start, "13:00:00")), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"))}}
+  }
+
+  if(is.null(end)){}else{
+    if(timezone == "Australia/Brisbane"){
+      end <- sprintf('"dateOFF":{"$lt":{"$date":"%s"}},', strftime(as.POSIXct(paste0(end+1, "00:00:00")), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"))}else{
+        if(timezone == "America/Argentina/Buenos_Aires"){
+          end <- sprintf('"dateOFF":{"$lt":{"$date":"%s"}},', strftime(as.POSIXct(paste0(end+1, "13:00:00")), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"))}}
+  }
+
+
+
+
   # if(is.null(start)){}else{
   #   if(timezone == "Australia/Brisbane"){
   #   start <- sprintf('"dataON":{"$lte":{"$date":"%s"}},', strftime(as.POSIXct(paste0(start, "00:00:00")), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"))}else{
@@ -70,7 +88,7 @@ almshistory <- mongo(collection = "ALMSHistory", db = "DataMuster", url = pass, 
 
 # Set up find query
 
-search <-paste0("{", RFID, MTag, property, ALMS, currentALMS,"}")
+search <-paste0("{", RFID, MTag, property, ALMS, currentALMS, start, end,"}")
 
 if(nchar(search)==2){}else{
 search <- substr(search, 1 , nchar(search)-2)

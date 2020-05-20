@@ -4,9 +4,21 @@
 \alias{get_wowdata}
 \title{Retrieve WoW information from the DataMuster MongoDB database.}
 \usage{
-get_wowdata(start = NULL, end = NULL, username = NULL, password = NULL)
+get_wowdata(
+  RFID = NULL,
+  property = NULL,
+  minwt = NULL,
+  start = NULL,
+  end = NULL,
+  username = NULL,
+  password = NULL
+)
 }
 \arguments{
+\item{RFID}{a list of cattle RFID number/s}
+
+\item{property}{the name of the property to search for}
+
 \item{start}{a start date and time to be returned in datetime format, default is “2014-09-01 00:00:00”}
 
 \item{end}{an end date and time to be returned in datetime format, default is today’s date and time}
