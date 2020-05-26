@@ -50,8 +50,6 @@ reactivatecattle <- function(RFID, MTag, property, paddock, date=NULL, username=
   stationinfo <- get_stations(property, username = username, password = password,
                               fields = c("_id", "longitude", "latitude", "reports", "PIC", "timezone", "stationname"))
 
-  pads <- get_paddocks(property = property, paddock = paddock, fields = c("paddname"), username = username, password = password)
-
   for (i in 1:length(cows$RFID)){
 
     if (cows$active[i] == FALSE){
@@ -62,25 +60,28 @@ reactivatecattle <- function(RFID, MTag, property, paddock, date=NULL, username=
 
           RFIDS <- sprintf('{"stationname":"%s", "properties.Management":"%s"}', "xxxxxx", MTag[i])}
 
-
-
-    update_paddock(RFID = cows$RFID[i], MTag = cows$Management[i], property = "Dummy", paddock = paddock[i], date = date[i], username = username, password = password)
-
-    banger <- cattle$find(query= RFIDS, fields='{"pdkhist.dateIN":true, "_id":false}')
-    arrpos <- length(banger$pdkhist$dateIN[[1]])
-
-    temppad <- pads[which(pads$paddname == paddock[i]),]
-
-    RFIDIlast <- sprintf('{"$set":{"properties.PaddockdateIN":{"$date":"%s"},"properties.Paddock":"%s", "properties.PaddockID":"%s"}}',
-                         paste0(substr(date[i],1,10),"T","00:00:00","+1000"), paddock[i], temppad$`_id`)
-    RFIDI <- sprintf('{"$set":{"pdkhist.dateIN.%s":{"$date":"%s"}, "pdkhist.ID.%s":"%s", "pdkhist.name.%s":"%s"}}',
-                     arrpos, paste0(substr(date[i],1,10),"T","00:00:00","+1000"), arrpos, temppad$`_id`, arrpos, paddock[i])
+    RFIDI <- sprintf('{"$set":{"stationname":"%s", "stationID":"%s", "active":"%s", "exstation":"%s", "properties.exitDate":{"$date":"%s"}}}',
+                       property, stationinfo$`_id`, "TRUE", "xxxxxx", paste0("1970-01-01","T","00:00:00","+1000"))
 
     cattle$update(RFIDS, RFIDI)
-    cattle$update(RFIDS, RFIDIlast)
 
-    add_paddockhistory(RFID = cows$RFID[i], cattle_id = cows$`_id`[i], MTag = cows$Management[i], property = property,
-                       Paddock = paddock[i], currentPaddock = "TRUE", dateIN = date[i], username = username, password = password)
+    update_paddock(RFID = cows$RFID[i], MTag = cows$Management[i], property = property, paddock = paddock[i], date = date[i], username = username, password = password)
+
+    #banger <- cattle$find(query= RFIDS, fields='{"pdkhist.dateIN":true, "_id":false}')
+    #arrpos <- length(banger$pdkhist$dateIN[[1]])
+
+    #temppad <- pads[which(pads$paddname == paddock[i]),]
+
+    #RFIDIlast <- sprintf('{"$set":{"properties.PaddockdateIN":{"$date":"%s"},"properties.Paddock":"%s", "properties.PaddockID":"%s"}}',
+    #                     paste0(substr(date[i],1,10),"T","00:00:00","+1000"), paddock[i], temppad$`_id`)
+    #RFIDI <- sprintf('{"$set":{"pdkhist.dateIN.%s":{"$date":"%s"}, "pdkhist.ID.%s":"%s", "pdkhist.name.%s":"%s"}}',
+    #                 arrpos, paste0(substr(date[i],1,10),"T","00:00:00","+1000"), arrpos, temppad$`_id`, arrpos, paddock[i])
+
+    #cattle$update(RFIDS, RFIDI)
+    #cattle$update(RFIDS, RFIDIlast)
+
+    #add_paddockhistory(RFID = cows$RFID[i], cattle_id = cows$`_id`[i], MTag = cows$Management[i], property = property,
+    #                   Paddock = paddock[i], currentPaddock = "TRUE", dateIN = date[i], username = username, password = password)
 
     }}
 
