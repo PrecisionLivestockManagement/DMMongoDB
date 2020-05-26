@@ -16,7 +16,7 @@
 #' @export
 
 
-reactivatecattle <- function(RFID, property, paddock, date=NULL, replacevalues=NULL, username=NULL, password=NULL){
+reactivatecattle <- function(RFID, MTag, property, paddock, date=NULL, username=NULL, password=NULL){
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]
@@ -30,7 +30,6 @@ reactivatecattle <- function(RFID, property, paddock, date=NULL, replacevalues=N
   if(is.null(date)){date <- Sys.Date()}else{date <- as.POSIXct(date)}
   if (length(date) == 1){date <- rep(date, length = length(RFID))}
   if (length(paddock) == 1){paddock <- rep(paddock, length = length(RFID))}
-  if(is.null(replacevalues)){replacevalues <- "FALSE"}else{}
 
   # Check that the RFID numbers are in the correct format and exist in the database
 
@@ -39,7 +38,7 @@ reactivatecattle <- function(RFID, property, paddock, date=NULL, replacevalues=N
 
   #checkcows <- paste(unlist(RFID), collapse = '", "' )
 
-  cows <- get_cattle(RFID, username = username, password = password,
+  cows <- get_cattle(RFID = RFID, MTag = MTag, property = "xxxxxx", username = username, password = password,
                      fields = c("RFID", "properties.Management", "active",
                                 "stationname", "properties.Paddock", "properties.ALMS",
                                 "properties.category", "properties.breed", "properties.sex"))
@@ -51,57 +50,37 @@ reactivatecattle <- function(RFID, property, paddock, date=NULL, replacevalues=N
   stationinfo <- get_stations(property, username = username, password = password,
                               fields = c("_id", "longitude", "latitude", "reports", "PIC", "timezone", "stationname"))
 
+  pads <- get_paddocks(property = property, paddock = paddock, fields = c("paddname"), username = username, password = password)
 
   for (i in 1:length(cows$RFID)){
 
     if (cows$active[i] == FALSE){
 
-    RFIDS <- sprintf('{"RFID":"%s"}', cows$RFID[i])
+      if (RFID[i] != "xxx xxxxxxxxxxxx"){
 
-    banger <- cattle$find(query= RFIDS, fields='{"pdkhist.dateOUT":true, "_id":false}')
-    arrpos <- length(banger$pdkhist$dateOUT[[1]])
+        RFIDS <- sprintf('{"RFID":"%s"}', RFID[i])}else{
 
-    RFIDI <- sprintf('{"$set":{"stationname":"%s", "stationID":"%s", "active":"%s", "exstation":"%s", "properties.exitDate":{"$date":"%s"}}}',
-    property, stationinfo$`_id`, "TRUE", "xxxxxx", paste0("1970-01-01","T","00:00:00.000","Z"))
+          RFIDS <- sprintf('{"stationname":"%s", "properties.Management":"%s"}', "xxxxxx", MTag[i])}
+
+
+
+    update_paddock(RFID = cows$RFID[i], MTag = cows$Management[i], property = "Dummy", paddock = paddock[i], date = date[i], username = username, password = password)
+
+    banger <- cattle$find(query= RFIDS, fields='{"pdkhist.dateIN":true, "_id":false}')
+    arrpos <- length(banger$pdkhist$dateIN[[1]])
+
+    temppad <- pads[which(pads$paddname == paddock[i]),]
+
+    RFIDIlast <- sprintf('{"$set":{"properties.PaddockdateIN":{"$date":"%s"},"properties.Paddock":"%s", "properties.PaddockID":"%s"}}',
+                         paste0(substr(date[i],1,10),"T","00:00:00","+1000"), paddock[i], temppad$`_id`)
+    RFIDI <- sprintf('{"$set":{"pdkhist.dateIN.%s":{"$date":"%s"}, "pdkhist.ID.%s":"%s", "pdkhist.name.%s":"%s"}}',
+                     arrpos, paste0(substr(date[i],1,10),"T","00:00:00","+1000"), arrpos, temppad$`_id`, arrpos, paddock[i])
 
     cattle$update(RFIDS, RFIDI)
+    cattle$update(RFIDS, RFIDIlast)
 
-    if (replacevalues == "TRUE"){
-
-    cattle$update(RFIDS, '{"$set":{"pdkhist.dateOUT":[]}}')
-
-    tempdates <- banger$pdkhist$dateOUT[[1]][1:length(banger$pdkhist$dateOUT[[1]])-1]
-
-    if (length(tempdates) != 0){
-
-    for (k in 1:length(tempdates)){
-
-    RFIDL <- sprintf('{"$set":{"pdkhist.dateOUT.%s":{"$date":"%s"}}}', k-1, paste0(tempdates[k],"T","00:00:00","+1000"))
-
-    cattle$update(RFIDS, RFIDL)
-    }}
-    }
-
-    update_paddock(cows$RFID[i], property = property, paddock = paddock[i], date = date[i], username = username, password = password)
-
-    if (replacevalues == "FALSE"){
-
-      banger <- cattle$find(query= RFIDS, fields='{"pdkhist.dateOUT":true, "_id":false}')
-      arrpos <- length(banger$pdkhist$dateOUT[[1]])
-
-      cattle$update(RFIDS, '{"$set":{"pdkhist.dateOUT":[]}}')
-
-      tempdates <- banger$pdkhist$dateOUT[[1]][1:length(banger$pdkhist$dateOUT[[1]])-1]
-
-      if (length(tempdates) != 0){
-
-        for (k in 1:length(tempdates)){
-
-          RFIDL <- sprintf('{"$set":{"pdkhist.dateOUT.%s":{"$date":"%s"}}}', k-1, paste0(tempdates[k],"T","00:00:00","+1000"))
-
-          cattle$update(RFIDS, RFIDL)
-        }}
-    }
+    add_paddockhistory(RFID = cows$RFID[i], cattle_id = cows$`_id`[i], MTag = cows$Management[i], property = property,
+                       Paddock = paddock[i], currentPaddock = "TRUE", dateIN = date[i], username = username, password = password)
 
     }}
 
