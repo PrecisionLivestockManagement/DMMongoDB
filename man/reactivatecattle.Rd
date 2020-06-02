@@ -6,6 +6,7 @@
 \usage{
 reactivatecattle(
   RFID,
+  MTag,
   property,
   paddock,
   date = NULL,
@@ -16,6 +17,8 @@ reactivatecattle(
 }
 \arguments{
 \item{RFID}{a list of cattle RFID number/s}
+
+\item{MTag}{a list of cattle MTag number/s}
 
 \item{property}{the name of the property to search for}
 
@@ -36,5 +39,5 @@ a message that indicates that the cattle has been successfully reactivated and t
 This function reactivates individual or groups of cattle that have previously been removed from a station on the DataMuster MongoDB database. If you need assistance please email \email{info@datamuster.net.au} to seek help or suggest improvements.
 }
 \author{
-Dave Swain \email{d.swain@cqu.edu.au} and Lauren O'Connor \email{l.r.oconnor@cqu.edu.au}
+Dave Swain \email{d.swain@cqu.edu.au}, Lauren O'Connor \email{l.r.oconnor@cqu.edu.au}, and Anita Chang   \email{a.chang@cqu.edu.au}
 }

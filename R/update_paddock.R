@@ -98,6 +98,7 @@ update_paddock <- function(RFID, property, paddock, MTag, date=NULL, username=NU
       cattle$update(RFIDS, RFIDI)
       cattle$update(RFIDS, RFIDIlast)
 
+      if(is.null(MTag)){MTag <- "xxxxxx"}
       # Update PaddockHistory collection
       padhist <- get_paddockhistory(RFID = RFID[i], MTag = MTag[i], property = property, currentPaddock = "TRUE", username = username, password = password)
       IDII <- sprintf('{"_id":{"$oid":"%s"}}', padhist$`_id`)

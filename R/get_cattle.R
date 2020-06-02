@@ -45,6 +45,9 @@ get_cattle <- function(RFID = NULL, MTag = NULL, property = NULL, sex = NULL, ca
   property <- paste(unlist(property), collapse = '", "' )
   property <- sprintf('"stationname":{"$in":["%s"]},', property)}
 
+  if("TRUE" %in% (RFID == "xxx xxxxxxxxxxxx"))
+  {RFID = NULL}
+
   if(is.null(RFID)){}else{
   rfid <- RFID
   RFID <- paste(unlist(RFID), collapse = '", "' )
