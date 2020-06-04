@@ -113,7 +113,13 @@ calc_weeklywts <- function(RFID=NULL, start=NULL, end=NULL, values=NULL, s.d=NUL
 
                     newdata <- rbind(newdata, data)
 
-                    rm(tup1, tup2, tup3)}
+                    rm(tup1, tup2, tup3)}else{
+
+                    data <- data.frame(Date = as.Date(end1), Weight = 0, sdweights = 0, numweights = 0, location = loc[p], stringsAsFactors = F)
+
+                    newdata <- rbind(newdata, data)
+
+                    }
                 }}}
 
       if(nrow(newdata) == 0){RFID[k] <- "xxxx"}else{
