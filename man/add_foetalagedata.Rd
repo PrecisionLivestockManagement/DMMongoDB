@@ -8,23 +8,20 @@ add_foetalagedata(
   RFID,
   foetalagedate,
   foetalage,
-  estcalvingdate,
   username = NULL,
   password = NULL
 )
 }
 \arguments{
+\item{RFID}{a list of cattle RFID number/s}
+
+\item{foetalagedate}{the date of scanning in date format}
+
+\item{foetalage}{the foetal age at scanning}
+
 \item{username}{if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring}
 
 \item{password}{if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access}
-
-\item{MTag}{a list of cattle management tag number/s}
-
-\item{property}{the name of the property}
-
-\item{calfMTag}{the calf's management tag number}
-
-\item{birthDate}{the cow's date of calving in date format}
 }
 \value{
 a message that indicates that the calving information has been successfully updated
@@ -33,5 +30,5 @@ a message that indicates that the calving information has been successfully upda
 This function updates individual or groups of cow calving information in the DataMuster MongoDB database. If you need assistance please email \email{info@datamuster.net.au} to seek help or suggest improvements.
 }
 \author{
-Dave Swain \email{d.swain@cqu.edu.au} and Lauren O'Connor \email{l.r.oconnor@cqu.edu.au}
+Dave Swain \email{d.swain@cqu.edu.au}, Lauren O'Connor \email{l.r.oconnor@cqu.edu.au}, and Anita Chang \email{a.chang@cqu.edu.au}
 }
