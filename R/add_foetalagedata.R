@@ -3,7 +3,7 @@
 #' This function updates individual or groups of cow calving information in the DataMuster MongoDB database. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
 #' @name add_foetalagedata
 #' @param RFID a list of cattle RFID number/s
-#' @param foetalagedate the date of scanning in date format
+#' @param date the date of scanning in date format
 #' @param foetalage the foetal age at scanning
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
 #' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
@@ -15,7 +15,7 @@
 #' @export
 
 
-add_foetalagedata <- function(RFID, foetalagedate, foetalage, username=NULL, password=NULL){
+add_foetalagedata <- function(RFID, date, foetalage, username=NULL, password=NULL){
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]
@@ -27,7 +27,7 @@ add_foetalagedata <- function(RFID, foetalagedate, foetalage, username=NULL, pas
     calvingdata <- mongo(collection = "CalvingData", db = "DataMuster", url = pass, verbose = T)
 
     estcalvingdate <- (40 - foetalage)
-    estcalvingdate <- foetalagedate + estcalvingdate*7
+    estcalvingdate <- date + estcalvingdate*7
 
 # Find cows in the database
 
@@ -52,7 +52,7 @@ add_foetalagedata <- function(RFID, foetalagedate, foetalage, username=NULL, pas
 
     #  Update CalvingData collection --------------------------
 
-    data <- data.frame(RFID, foetalagedate, foetalage, estcalvingdate, stringsAsFactors = F)
+    data <- data.frame(RFID, date, foetalage, estcalvingdate, stringsAsFactors = F)
     data <- left_join(data, cows, by = "RFID")
 
     template <- calvingdata$find(query = sprintf('{"RFID":"xxxxxx"}'), fields = '{"_id":false}')
@@ -64,7 +64,7 @@ add_foetalagedata <- function(RFID, foetalagedate, foetalage, username=NULL, pas
                        cow_id = data$`_id`,
                        Management = data$MTag,
                        stationname = data$property,
-                       foetalagedate = as.POSIXct(paste0(data$foetalagedate,"00:00:00")),
+                       date = as.POSIXct(paste0(data$date,"00:00:00")),
                        foetalage = data$foetalage,
                        estcalvingdate = as.POSIXct(paste0(data$estcalvingdate,"00:00:00")))
 
@@ -77,10 +77,8 @@ add_foetalagedata <- function(RFID, foetalagedate, foetalage, username=NULL, pas
 
         RFIDS <- sprintf('{"RFID":"%s"}', template$RFID[i])
 
-
-        RFIDI <- sprintf('{"$set":{"preghist.date.%s":{"$date":"%s"}, "preghist.foetalage.%s":%s, "preghist.estcalvingdate.%s":{"$date":"%s"}}}',
-                         paste0(substr(template$foetalagedate[i],1,10),"T","00:00:00","+1000"), template$foetalage[i], paste0(substr(template$estcalvingdate[i],1,10),"T","00:00:00","+1000"))
-
+        RFIDI <- sprintf('{"$set":{"properties.foetalagedate":{"$date":"%s"}, "properties.foetalage":%s, "properties.estcalvingdate":{"$date":"%s"}}}',
+                         paste0(substr(template$date[i],1,10),"T","00:00:00","+1000"), template$foetalage[i], paste0(substr(template$estcalvingdate[i],1,10),"T","00:00:00","+1000"))
         cattle$update(RFIDS, RFIDI)
 
 
