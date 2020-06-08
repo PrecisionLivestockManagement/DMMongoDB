@@ -2,6 +2,7 @@
 #'
 #' This function provides a search tool to retrieve historical Paddock information from the PaddockHistory collection in the DataMuster MongoDB database. It also allows the user to define what fields should be returned. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
 #' @name get_paddockhistory
+#' @param cattle_id a list of DataMuster cattle database identification number/s
 #' @param RFID a list of cattle RFID number/s
 #' @param property the name of the property to search for
 #' @param Paddock a list of paddock names to search for
@@ -20,7 +21,7 @@
 #' @export
 
 
-get_paddockhistory <- function(RFID = NULL, MTag = NULL, property = NULL, Paddock = NULL, currentPaddock = NULL, timezone = NULL, start = NULL, end = NULL, fields = NULL, username = NULL, password = NULL){
+get_paddockhistory <- function(cattle_id = NULL, RFID = NULL, MTag = NULL, property = NULL, Paddock = NULL, currentPaddock = NULL, timezone = NULL, start = NULL, end = NULL, fields = NULL, username = NULL, password = NULL){
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]
@@ -28,6 +29,9 @@ get_paddockhistory <- function(RFID = NULL, MTag = NULL, property = NULL, Paddoc
   }
 
   if(is.null(timezone)){timezone <- "Australia/Brisbane"} else {}
+
+  if(is.null(cattle_id)){}else{cattle_id <- paste(unlist(cattle_id), collapse = '", "' )
+  cattle_id <- sprintf('"cattle_id":{"$in":["%s"]},', cattle_id)}
 
   if(is.null(RFID)){}else{RFID <- paste(unlist(RFID), collapse = '", "' )
                           RFID <- sprintf('"RFID":{"$in":["%s"]},', RFID)}
@@ -62,22 +66,6 @@ get_paddockhistory <- function(RFID = NULL, MTag = NULL, property = NULL, Paddoc
           end <- sprintf('"dateOUT":{"$lt":{"$date":"%s"}},', strftime(as.POSIXct(paste0(end+1, "13:00:00")), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"))}}
   }
 
-  # if(is.null(start)){}else{
-  #   if(timezone == "Australia/Brisbane"){
-  #   start <- sprintf('"dataON":{"$lte":{"$date":"%s"}},', strftime(as.POSIXct(paste0(start, "00:00:00")), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"))}else{
-  #     if(timezone == "America/Argentina/Buenos_Aires"){
-  #       start <- sprintf('"dataON":{"$lte":{"$date":"%s"}},', strftime(as.POSIXct(paste0(start, "13:00:00")), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"))}}
-  #   }
-  #
-  # if(is.null(end)){}else{
-  #   if(timezone == "Australia/Brisbane"){
-  #   end <- sprintf('"dataOFF":{"$lt":{"$date":"%s"}},', strftime(as.POSIXct(paste0(end+1, "00:00:00")), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"))}else{
-  #     if(timezone == "America/Argentina/Buenos_Aires"){
-  #       end <- sprintf('"dataOFF":{"$lt":{"$date":"%s"}},', strftime(as.POSIXct(paste0(end+1, "13:00:00")), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"))}}
-  # }
-
-  # if(!is.null(end) && end == format(Sys.Date(), tz = timezone)){
-  #   today <- sprintf('"dateOFF":{"$exists":{"%s}},', "FALSE")}else{today <- NULL}
 
 pass <- sprintf("mongodb://%s:%s@datamuster-shard-00-00-8mplm.mongodb.net:27017,datamuster-shard-00-01-8mplm.mongodb.net:27017,datamuster-shard-00-02-8mplm.mongodb.net:27017/test?ssl=true&replicaSet=DataMuster-shard-0&authSource=admin", username, password)
 
@@ -85,7 +73,7 @@ paddockhistory <- mongo(collection = "PaddockHistory", db = "DataMuster", url = 
 
 # Set up find query
 
-search <-paste0("{", RFID, MTag, property, Paddock, currentPaddock, start, end,"}")
+search <-paste0("{", cattle_id, RFID, MTag, property, Paddock, currentPaddock, start, end,"}")
 
 if(nchar(search)==2){}else{
 search <- substr(search, 1 , nchar(search)-2)
