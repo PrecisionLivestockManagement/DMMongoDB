@@ -4,18 +4,12 @@
 \alias{add_foetalagedata}
 \title{Update cow calving information to DataMuster MongoDB database.}
 \usage{
-add_foetalagedata(
-  RFID,
-  foetalagedate,
-  foetalage,
-  username = NULL,
-  password = NULL
-)
+add_foetalagedata(RFID, date, foetalage, username = NULL, password = NULL)
 }
 \arguments{
 \item{RFID}{a list of cattle RFID number/s}
 
-\item{foetalagedate}{the date of scanning in date format}
+\item{date}{the date of scanning in date format}
 
 \item{foetalage}{the foetal age at scanning}
 
