@@ -10,7 +10,6 @@ reactivatecattle(
   property,
   paddock,
   date = NULL,
-  replacevalues = NULL,
   username = NULL,
   password = NULL
 )
@@ -25,8 +24,6 @@ reactivatecattle(
 \item{paddock}{the name of the paddock to search for}
 
 \item{date}{the date that the animal left the station in date format, default is today's date}
-
-\item{replacevalues}{the new RFID of the animal}
 
 \item{username}{if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring}
 
