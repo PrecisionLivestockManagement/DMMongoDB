@@ -36,30 +36,29 @@ reactivatecattle <- function(RFID, MTag, property, paddock, date=NULL, username=
   if("TRUE" %in% (nchar(as.character(RFID))!= 16)) {
     stop(paste0("One or more of the RFID numbers are not in the correct format. Please ensure all RFIDs are in the format 'xxx xxxxxxxxxxxx'"))}
 
-  cows <- get_cattle(RFID, MTag, property, username = username, password = password,
-                       fields = c("RFID", "properties.Management", "active",
-                                  "stationname", "properties.Paddock", "properties.ALMS",
-                                  "properties.category", "properties.breed", "properties.sex"))
 
   stationinfo <- get_stations(property, username = username, password = password)
 
 
-  for (i in 1:nrow(cows)){
+  for (i in 1:length(RFID)){
 
-    if (cows$active[i] == FALSE){
+    cow <- get_cattle(RFID, MTag, property = "xxxxxx", username = username, password = password,
+                       fields = c("RFID", "properties.Management", "active", "stationname"))
 
-      if (cows$RFID[i] != "xxx xxxxxxxxxxxx"){
+    if(nrow(cow) != 0){
 
-        RFIDS <- sprintf('{"RFID":"%s"}', cows$RFID[i])}else{
+      if (RFID[i] != "xxx xxxxxxxxxxxx"){
 
-          RFIDS <- sprintf('{"stationname":"%s", "properties.Management":"%s"}', cows$stationname, cows$Management[i])}
+        RFIDS <- sprintf('{"RFID":"%s"}', RFID[i])}else{
+
+          RFIDS <- sprintf('{"stationname":"%s", "properties.Management":"%s"}', "xxxxxx", Management[i])}
 
     RFIDI <- sprintf('{"$set":{"stationname":"%s", "stationID":"%s", "active":"%s", "exstation":"%s", "properties.exitDate":{"$date":"%s"}}}',
     property, stationinfo$`_id`, "TRUE", "xxxxxx", paste0("1970-01-01","T","00:00:00.000","Z"))
 
     cattle$update(RFIDS, RFIDI)
 
-    update_paddock(cows$RFID[i], MTag = cows$Management[i], property = property, paddock = paddock[i], date = date[i], username = username, password = password)
+    update_paddock(RFID = RFID[i], MTag = MTag[i], property = property, paddock = paddock[i], date = date[i], username = username, password = password)
 
     }}
 
