@@ -43,6 +43,7 @@ reactivatecattle <- function(RFID, MTag, property, paddock, date=NULL, username=
 
   stationinfo <- get_stations(property, username = username, password = password)
 
+
   for (i in 1:length(cows)){
 
     if (cows$active[i] == FALSE){
