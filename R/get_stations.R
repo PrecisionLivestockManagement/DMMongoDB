@@ -47,7 +47,7 @@ search <-paste0("{", stationname, report,"}")
 
 snif <- sprintf('"%s":true', fields)
 te <- paste0(snif, collapse = ", ")
-snappy <- sprintf('{%s, "_id":false}', te)
+snappy <- sprintf('{%s, "_id":true}', te)
 
 #Query database and format for website display
 
