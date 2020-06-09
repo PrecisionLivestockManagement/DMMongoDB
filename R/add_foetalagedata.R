@@ -26,8 +26,15 @@ add_foetalagedata <- function(RFID, date, foetalage, username=NULL, password=NUL
     cattle <- mongo(collection = "Cattle", db = "DataMuster", url = pass, verbose = T)
     calvingdata <- mongo(collection = "CalvingData", db = "DataMuster", url = pass, verbose = T)
 
-    estcalvingdate <- (40 - foetalage)
-    estcalvingdate <- date + estcalvingdate*7
+
+    if(foetalage != 0){
+      estcalvingdate <- (41 - foetalage)
+      estcalvingdate <- date + estcalvingdate*7
+    } else {
+      estcalvingdate <- as.Date("1970-01-01")
+    }
+
+
 
 # Find cows in the database
 
@@ -59,14 +66,26 @@ add_foetalagedata <- function(RFID, date, foetalage, username=NULL, password=NUL
 
     template <- template[rep(seq_len(nrow(data)), each = 1), ]
 
-    template <- template %>%
-                mutate(RFID = data$RFID,
-                       cow_id = data$`_id`,
-                       Management = data$MTag,
-                       stationname = data$property,
-                       date = as.POSIXct(paste0(data$date,"00:00:00")),
-                       foetalage = data$foetalage,
-                       estcalvingdate = as.POSIXct(paste0(data$estcalvingdate,"00:00:00")))
+    if (estcalvingdate == as.Date("1970-01-01")){
+      template <- template %>%
+        mutate(RFID = data$RFID,
+               cow_id = data$`_id`,
+               Management = data$MTag,
+               stationname = data$property,
+               date = as.POSIXct(paste0(data$date,"00:00:00")),
+               foetalage = data$foetalage,
+               estcalvingdate = as.POSIXct(paste0(data$estcalvingdate,"10:00:00")))
+    } else {
+      template <- template %>%
+        mutate(RFID = data$RFID,
+               cow_id = data$`_id`,
+               Management = data$MTag,
+               stationname = data$property,
+               date = as.POSIXct(paste0(data$date,"00:00:00")),
+               foetalage = data$foetalage,
+               estcalvingdate = as.POSIXct(paste0(data$estcalvingdate,"00:00:00")))
+    }
+
 
     calvingdata$insert(template)
 
@@ -77,11 +96,15 @@ add_foetalagedata <- function(RFID, date, foetalage, username=NULL, password=NUL
 
         RFIDS <- sprintf('{"RFID":"%s"}', template$RFID[i])
 
-        RFIDI <- sprintf('{"$set":{"properties.foetalagedate":{"$date":"%s"}, "properties.foetalage":%s, "properties.estcalvingdate":{"$date":"%s"}}}',
-                         paste0(substr(template$date[i],1,10),"T","00:00:00","+1000"), template$foetalage[i], paste0(substr(template$estcalvingdate[i],1,10),"T","00:00:00","+1000"))
-        cattle$update(RFIDS, RFIDI)
-
-
+        if(estcalvingdate == as.Date("1970-01-01")){
+          RFIDI <- sprintf('{"$set":{"properties.foetalagedate":{"$date":"%s"}, "properties.foetalage":%s, "properties.estcalvingdate":{"$date":"%s"}}}',
+                           paste0(substr(template$date[i],1,10),"T","00:00:00","+1000"), template$foetalage[i], paste0(substr(template$estcalvingdate[i],1,10),"T","00:00:00","+0000"))
+          cattle$update(RFIDS, RFIDI)
+        } else {
+          RFIDI <- sprintf('{"$set":{"properties.foetalagedate":{"$date":"%s"}, "properties.foetalage":%s, "properties.estcalvingdate":{"$date":"%s"}}}',
+                           paste0(substr(template$date[i],1,10),"T","00:00:00","+1000"), template$foetalage[i], paste0(substr(template$estcalvingdate[i],1,10),"T","00:00:00","+1000"))
+          cattle$update(RFIDS, RFIDI)
+        }
       }
 
     }
