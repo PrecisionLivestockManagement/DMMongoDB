@@ -94,13 +94,12 @@ removecattle <- function(RFID, MTag, property, date=NULL, username=NULL, passwor
     RFIDI <- sprintf('{"$set":{"properties.exitDate":{"$date":"%s"}}}', paste0(substr(date[i],1,10),"T","00:00:00","+1000"))
     cattle$update(RFIDS, RFIDI)
     }
-  }
 
   RFIDII <- sprintf('{"$set":{"stationname":"%s", "stationID":"%s", "active":"%s", "exstation":"%s", "geometry.coordinates.0":%s, "geometry.coordinates.1":%s, "properties.Paddock":"%s", "properties.PaddockID":"%s", "properties.exitDate":{"$date":"%s"}, "properties.ALMS":"%s", "properties.ALMSID":"%s", "properties.ALMSasset_id":"%s"}}',
                     "xxxxxx", "xxxxxx", "FALSE", cows$stationname[i], 0.0, 0.0, "xxxxxx", "xxxxxx", paste0(substr(date[i],1,10),"T","00:00:00","+1000"), "FALSE", "xxxxxx", "xxxxxx")
 
   cattle$update(RFIDS, RFIDII)
-
+}
   #update_cattlecoords(property = unique(cows$stationname), paddock = unique(cows$Paddock), username = username, password = password)
 
 }
