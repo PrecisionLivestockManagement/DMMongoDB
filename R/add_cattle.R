@@ -17,6 +17,7 @@
 #' @param desexed TRUE if the animal/s are castrated/spayed or FALSE if the animal/s are entire, default is FALSE
 #' @param DOB the animal's date of bith in date format
 #' @param birthWeight the animal's weight at birth
+#' @param registration the animal's society registration number
 #' @param damRFID the dam's RFID number
 #' @param damMTag the dam's management tag number
 #' @param sireRFID the sire's RFID number
@@ -32,7 +33,7 @@
 
 
 add_cattle <- function(RFID, MTag, category, property, paddock, weaned, date=NULL, breed=NULL, brand=NULL,
-                      horn=NULL, colour=NULL, sex=NULL, desexed=NULL,  DOB=NULL, birthWeight=NULL,
+                      horn=NULL, colour=NULL, sex=NULL, desexed=NULL,  DOB=NULL, birthWeight=NULL, registration=NULL,
                       damRFID=NULL, damMTag=NULL, sireRFID=NULL, sireMTag=NULL, animalID=NULL, username=NULL, password=NULL){
 
   if(is.null(username)||is.null(password)){
@@ -71,7 +72,7 @@ add_cattle <- function(RFID, MTag, category, property, paddock, weaned, date=NUL
 mandfields <- c("RFID","MTag","category","paddock","weaned","date") #excluding property
 
 optfields <- c("breed", "brand","horn","colour","sex","desexed","DOB","birthWeight","damRFID",
-                "damMTag","sireRFID","sireMTag","animalID")
+                "damMTag","sireRFID","sireMTag","animalID","registration")
 
 i<-1
 for (i in 1:length(mandfields)){
@@ -207,6 +208,7 @@ for (i in 1:length(optfields)){
       if (!(is.null(DOB))){template$properties$birthDate <- DOB[p]}
       if (!(is.null(birthWeight))){template$properties$birthWeight <- birthWeight[p]}
       if (!(is.null(animalID))){template$properties$animalID <- animalID[p]}
+      if (!(is.null(registration))){template$properties$rego <- registration[p]}
 
       if (!(is.null(damRFID))){
 
@@ -280,7 +282,7 @@ for (i in 1:length(optfields)){
 
     }}
 
-update_cattlecoords(property = property, paddock = unique(paddock), username = username, password = password)
+#update_cattlecoords(property = property, paddock = unique(paddock), username = username, password = password)
 
 cows <- get_cattle(RFID = RFID, MTag = MTag, property = property, fields = c("RFID", "properties.Management", "stationname", "properties.Paddock", "properties.PaddockdateIN",
                                                                              "properties.ALMS", "properties.ALMSasset_id"))

@@ -20,6 +20,7 @@ add_cattle(
   desexed = NULL,
   DOB = NULL,
   birthWeight = NULL,
+  registration = NULL,
   damRFID = NULL,
   damMTag = NULL,
   sireRFID = NULL,
@@ -59,6 +60,8 @@ add_cattle(
 \item{DOB}{the animal's date of bith in date format}
 
 \item{birthWeight}{the animal's weight at birth}
+
+\item{registration}{the animal's society registration number}
 
 \item{damRFID}{the dam's RFID number}
 
