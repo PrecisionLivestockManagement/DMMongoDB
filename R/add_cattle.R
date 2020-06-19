@@ -212,6 +212,8 @@ for (i in 1:length(optfields)){
 
       if (!(is.null(damRFID))){
 
+        if(!is.na(damRFID[p])){
+
         if (damRFID[p] != ""){
 
         template$properties$damRFID <- damRFID[p]
@@ -223,9 +225,11 @@ for (i in 1:length(optfields)){
             print(paste0('The dam RFID ', damRFID[p], ' is not registered in the database. The dam RFID has been noted but is not linked in the database'))}else{
 
            template$properties$damID <- dam$`_id`
-            template$properties$damMTag <- dam$properties$Management}}}
+            template$properties$damMTag <- dam$properties$Management}}}}
 
       if (!(is.null(sireRFID))){
+
+        if (!is.na(sireRFID[p]))
 
         if (sireRFID[p] != ""){
 
@@ -241,7 +245,9 @@ for (i in 1:length(optfields)){
             template$properties$sireMTag <- sire$properties$Management}}}
 
       if (!(is.null(damMTag))){
-        if (damMTag[p] != ""){
+        if (!is.na(damMTag[p])){
+
+        if (as.character(damMTag[p]) != ""){
 
         if (template$properties$damMTag == "xxxxxx"){
         template$properties$damMTag <- as.character(damMTag[p])
@@ -253,9 +259,11 @@ for (i in 1:length(optfields)){
           print(paste0('The dam MTag ', damMTag[p], ' is not registered in the database. The dam MTag has been noted but is not linked in the database'))}else{
 
           template$properties$damID <- dam$`_id`
-          template$properties$damRFID <- dam$RFID}}}}
+          template$properties$damRFID <- dam$RFID}}}}}
 
       if (!(is.null(sireMTag))){
+
+        if (!is.na(sireMTag[p])){
         if (sireMTag[p] != ""){
 
         if (template$properties$sireMTag == "xxxxxx"){
@@ -268,7 +276,7 @@ for (i in 1:length(optfields)){
             print(paste0('The sire MTag ', sireMTag[p], ' is not registered in the database. The sire MTag has been noted but is not linked in the database'))}else{
 
               template$properties$sireID <- sire$`_id`
-              template$properties$sireRFID <- sire$RFID}}}}
+              template$properties$sireRFID <- sire$RFID}}}}}
 
 
     #  Fill any missing fields with default values --------------------------
