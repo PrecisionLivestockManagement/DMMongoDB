@@ -77,24 +77,24 @@ update_pdkrating <- function(property, paddock, ALMSrating=NULL, condition=NULL,
       if(!(is.null(LTCC_A))){
         if(!(is.na(LTCC_A[i]))){
           if(LTCC_A[i] != ""){
-            RFIDI <- sprintf('{"$set":{"LTCC_A":"%s"}}', LTCC_A[i])
+            RFIDI <- sprintf('{"$set":{"LTCC_A":%s}}', LTCC_A[i])
             paddocks$update(pdk, RFIDI)}}}
       # LTCC_B
       if(!(is.null(LTCC_B))){
         if(!(is.na(LTCC_B[i]))){
           if(LTCC_B[i] != ""){
-            RFIDI <- sprintf('{"$set":{"LTCC_B":"%s"}}', LTCC_B[i])
+            RFIDI <- sprintf('{"$set":{"LTCC_B":%s}}', LTCC_B[i])
             paddocks$update(pdk, RFIDI)}}}
       # LTCC_C
       if(!(is.null(LTCC_C))){
         if(!(is.na(LTCC_C[i]))){
           if(LTCC_C[i] != ""){
-            RFIDI <- sprintf('{"$set":{"LTCC_C":"%s"}}', LTCC_C[i])
+            RFIDI <- sprintf('{"$set":{"LTCC_C":%s}}', LTCC_C[i])
             paddocks$update(pdk, RFIDI)}}}
       # LTCC_D
       if(!(is.null(LTCC_D))){
         if(!(is.na(LTCC_D[i]))){
           if(LTCC_D[i] != ""){
-            RFIDI <- sprintf('{"$set":{"LTCC_D":"%s"}}', LTCC_D[i])
+            RFIDI <- sprintf('{"$set":{"LTCC_D":%s}}', LTCC_D[i])
             paddocks$update(pdk, RFIDI)}}}
       }}}

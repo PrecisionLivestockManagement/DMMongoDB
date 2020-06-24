@@ -18,8 +18,6 @@
 
 update_foetalagedata <- function(RFID, date = NULL, multiples = NULL, algdev = NULL, username=NULL, password=NULL){
 
-  library(data.table)
-
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]
     password =  keyring::key_get("DMMongoDB", username)
@@ -72,7 +70,7 @@ update_foetalagedata <- function(RFID, date = NULL, multiples = NULL, algdev = N
     if(!is.null(RFID)){
       template <- calvingdata$find(query = RFIDS, fields = '{"RFID":true, "calvingdate":true, "multiples":true, "DoBalgdev":true, "foetalagedate":true}')
 
-      if(length(template)>1){template <- setDT(template)[,.SD[which.max(template$foetalagedate)]]}
+      if(length(template)>1){template <- template %>% group_by(RFID) %>% slice(n()) %>% ungroup()}
 
       if(is.null(multiples)){multiples = FALSE}
       if(is.null(algdev)){algdev = FALSE}
