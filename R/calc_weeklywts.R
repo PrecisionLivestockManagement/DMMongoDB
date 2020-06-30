@@ -45,16 +45,19 @@ calc_weeklywts <- function(RFID=NULL, start=NULL, end=NULL, values=NULL, s.d=NUL
   newstart <- Mondays[1]
   newend <- Sundays[length(Sundays)]
 
+  cows <- get_cattle(alms = "TRUE", fields = c("RFID", "stationname", "properties.ALMSasset_id"), username = username, password = password)
+
   # Retreive the daily weights from the dailywts collection using the new start and end dates
 
   tempwts <- get_dailywts(RFID = RFID, start = newstart, end = newend, minwt = minwt, location = location, timezone = "Australia/Brisbane",
                           fields = c("RFID", "Wt", "datetime", "Location"),
                           username = username, password = password)
 
-  if(is.null(RFID)){RFID <- unique(tempwts$RFID)}
+  if(is.null(RFID)){
+    RFID <- unique(c(unique(tempwts$RFID), cows$RFID[!(cows$RFID %in% tempwts$RFID)]))}
 
   units <- get_infrastructure(type = "Walk-over-Weighing Unit",
-                              fields = c("properties.filename", "properties.dual_unit"),
+                              fields = c("properties.filename", "properties.dual_unit", "stationname", "properties.asset_id"),
                               username = username, password = password)
 
   # Calculate the weekly weights from the daily weights
@@ -76,7 +79,14 @@ calc_weeklywts <- function(RFID=NULL, start=NULL, end=NULL, values=NULL, s.d=NUL
                  filter(RFID == rfid,
                  between(as.Date(Date, tz = "Australia/Brisbane"), start1, end1))
 
-          if(nrow(wts) == 0) {} else{
+          if(nrow(wts) == 0) {
+
+            unit <- ifelse(rfid %in% cows$RFID, cows$ALMSasset_id[cows$RFID == rfid], "")
+            unit1 <- ifelse(unit != "", units$filename[units$Asset_id == unit], "")
+
+          data <- data.frame(Date = as.Date(end1), Weight = 0, sdweights = 0, numweights = 0, location = unit1, stringsAsFactors = F)
+
+          } else{
 
             loc <- unique(wts$Location)
 
@@ -111,23 +121,28 @@ calc_weeklywts <- function(RFID=NULL, start=NULL, end=NULL, values=NULL, s.d=NUL
 
                     data <- data.frame(Date = as.Date(end1), Weight = round(tup2,1), sdweights = round(tup1,1), numweights = tup3, location = loc[p], stringsAsFactors = F)
 
-                    newdata <- rbind(newdata, data)
+                    #newdata <- rbind(newdata, data)
 
                     rm(tup1, tup2, tup3)}else{
 
-                    data <- data.frame(Date = as.Date(end1), Weight = 0, sdweights = 0, numweights = 0, location = loc[p], stringsAsFactors = F)
+                      unit <- ifelse(rfid %in% cows$RFID, cows$ALMSasset_id[cows$RFID == rfid], "")
+                      unit1 <- ifelse(unit != "", units$filename[units$Asset_id == unit], "")
 
+                      data <- data.frame(Date = as.Date(end1), Weight = 0, sdweights = 0, numweights = 0, location = loc[p], stringsAsFactors = F)
+
+                    #newdata <- rbind(newdata, data)
+
+                    }}
+            }
                     newdata <- rbind(newdata, data)
+          }
 
-                    }
-                }}}
 
-      if(nrow(newdata) == 0){RFID[k] <- "xxxx"}else{
+                   cattleinfo[[RFID[k]]] <- as.data.frame(newdata)
+                   }
 
-      cattleinfo[[RFID[k]]] <- as.data.frame(newdata)}
-      }
 
-  cattleinfo <- list(RFID=RFID[RFID != "xxxx"], WeeklyWeights=cattleinfo)
+  cattleinfo <- list(RFID=RFID, WeeklyWeights=cattleinfo)
 
   return(cattleinfo)
 
