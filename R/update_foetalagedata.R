@@ -28,6 +28,11 @@ update_foetalagedata <- function(RFID, season, date = NULL, multiples = NULL, al
   cattle <- mongo(collection = "Cattle", db = "DataMuster", url = pass, verbose = T)
   calvingdata <- mongo(collection = "CalvingData", db = "DataMuster", url = pass, verbose = T)
 
+  if(length(season) == 1){season <- rep(season, length = length(RFID))}
+  if(!(is.null(date)) & length(date) == 1){date <- rep(date, length = length(RFID))}
+  if(!(is.null(multiples)) & length(multiples) == 1){multiples <- rep(multiples, length = length(RFID))}
+  if(!(is.null(algdev)) & length(algdev) == 1){algdev <- rep(algdev, length = length(RFID))}
+
   # Find cows in the database
 
   cows <- get_cattle(RFID = RFID, username = username, password = password)
@@ -41,58 +46,35 @@ update_foetalagedata <- function(RFID, season, date = NULL, multiples = NULL, al
       stop(paste0("The following RFID numbers cannot be found in the database. Please check that the RFID numbers are correct and try again: "), problemcows)}
   }
 
-  #  Update animal information in Cattle collection --------------------------
+  #  Update animal information in Cattle and CalvingData collections --------------------------
 
     for (i in 1:length(RFID)){
 
-      IDS <- sprintf('{"RFID":"%s"}', RFID[i])
+      RFIDS <- sprintf('{"RFID":"%s"}', RFID[i])
+      IDS <- sprintf('{"RFID":"%s", "season":"%s"}', RFID[i], season[i])
 
-      #banger <- cattle$find(query= IDS, fields='{"properties.calvingdate":true}')
-      #arrpos <- length(banger$properties$calvingdate[[1]])
+      # calving date
 
-      #matchdate <- which(substr(banger$properties$calvingdate[[1]],1,7) == substr(date[i],1,7))
       if(is.null(date)){} else{
-        #if (length(matchdate) == 0){
         RFIDI <- sprintf('{"$set":{"properties.calvingdate":{"$date":"%s"}}}', paste0(substr(date[i],1,10),"T","00:00:00","+1000"))
-        cattle$update(IDS, RFIDI)}
+        IDI <- sprintf('{"$set":{"calvingdate":{"$date":"%s"}}}', paste0(substr(date[i],1,10),"T","00:00:00","+1000"))
+        cattle$update(RFIDS, RFIDI)
+        calvingdata$update(IDS, IDI)
       }
 
+      # multiples
 
-
-
-  # Update animal information in CalvingData collection
-
-
-  for (i in 1:length(RFID)){
-
-    #cow <- cows[cows$RFID == RFID[i],]
-
-    RFIDS <- sprintf('{"RFID":"%s", "season":"%s"}', RFID[i], season[i])
-
-    #if(!is.null(RFID)){
-
-      template <- calvingdata$find(query = RFIDS, fields = '{"RFID":true, "calvingdate":true, "multiples":true, "DoBalgdev":true, "foetalagedate":true,
-                                   "season":true}')
-
-      #if(length(template)>1){
-        # if(nrow(template)>1){
-        # template <- template %>% group_by(RFID) %>% slice(n()) %>% ungroup()
-        # # This is selecting the last record. I think we need a better identifier as to which record we want e.g. a calving season field
-        # }
-
-      if(is.null(multiples)){multiples = FALSE}
-      if(is.null(algdev)){algdev = FALSE}
-
-      if(is.null(date)){
-        arrpos <- length(template$calvingdate[[1]])
-        RFIDI <- sprintf('{$set":{"multiples":"%s", "DoBalgdev":"%s"}}', multiples[i], algdev[i])
-      }else{
-        arrpos <- length(template$calvingdate[[1]])
-        RFIDI <- sprintf('{"$set":{"calvingdate":{"$date":"%s"}, "multiples":"%s", "DoBalgdev":"%s"}}', paste0(substr(date,1,10),"T","00:00:00","+1000"),
-                         multiples[i], algdev[i])
-
+      if(is.null(multiples)){} else{
+        IDI <- sprintf('{"$set":{"multiples":"%s"}}', multiples[i])
+        calvingdata$update(IDS, IDI)
       }
-      calvingdata$update(RFIDS, RFIDI)
-      #}
+
+      # algdev
+
+      if(is.null(algdev)){} else{
+        IDI <- sprintf('{"$set":{"DoBalgdev":"%s"}}', algdev[i])
+        calvingdata$update(IDS, IDI)
+      }
+
   }
 }
