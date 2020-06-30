@@ -11,6 +11,7 @@ get_calvingdata(
   twins = NULL,
   start = NULL,
   end = NULL,
+  season = NULL,
   cow_id = NULL,
   fields = NULL,
   username = NULL,
@@ -29,6 +30,8 @@ get_calvingdata(
 \item{start}{a start date to be returned in date format, default is "2014-09-01"}
 
 \item{end}{an end date to be returned in date format, default is today's date}
+
+\item{season}{the calving season, e.g. "2019/20"}
 
 \item{cow_id}{a list of DataMuster database cow identification numbers}
 

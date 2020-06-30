@@ -58,6 +58,7 @@ add_foetalagedata <- function(RFID, date, foetalage, username=NULL, password=NUL
       temp$foetalagedate <- as.POSIXct(date[i])
       temp$foetalage <- foetalage[i]
       temp$estcalvingdate <- as.POSIXct(date[i] + (41 - foetalage[i]) * 7)
+      temp$season <- paste(strftime(temp$foetalagedate, format = "%Y"), "/", substr(as.numeric(strftime(temp$foetalagedate, format = "%Y"))+1, 3, 4), sep = "")
       temp$Management <- cow$Management
 
       calvingdata$insert(temp)

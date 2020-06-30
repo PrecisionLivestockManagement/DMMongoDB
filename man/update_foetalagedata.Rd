@@ -6,6 +6,7 @@
 \usage{
 update_foetalagedata(
   RFID,
+  season,
   date = NULL,
   multiples = NULL,
   algdev = NULL,
@@ -15,6 +16,8 @@ update_foetalagedata(
 }
 \arguments{
 \item{RFID}{a list of cattle RFID number/s}
+
+\item{season}{the calving season, e.g. 2018/19}
 
 \item{date}{the calving date of the cattle, in date format}
 

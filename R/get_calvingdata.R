@@ -8,6 +8,7 @@
 #' @param twins whether the cow had twins or not (TRUE/FALSE)
 #' @param start a start date to be returned in date format, default is "2014-09-01"
 #' @param end an end date to be returned in date format, default is today's date
+#' @param season the calving season, e.g. "2019/20"
 #' @param cow_id a list of DataMuster database cow identification numbers
 #' @param fields a list of headers from the CalvingData collection in the DataMuster MongoDB database to be returned. If not specified, the RFID, MTag, property, date of foetal aging, age at foetal aging, calving date, and twin status will be returned
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
@@ -20,7 +21,7 @@
 #' @export
 
 
-get_calvingdata <- function(RFID = NULL, MTag = NULL, property = NULL, twins = NULL, start = NULL, end = NULL, cow_id = NULL, fields = NULL, username = NULL, password = NULL){
+get_calvingdata <- function(RFID = NULL, MTag = NULL, property = NULL, twins = NULL, start = NULL, end = NULL, season = NULL, cow_id = NULL, fields = NULL, username = NULL, password = NULL){
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]
@@ -45,11 +46,14 @@ get_calvingdata <- function(RFID = NULL, MTag = NULL, property = NULL, twins = N
   if(is.null(end)){}else{
     end <- sprintf('"calvingdate":{"$lt":{"$date":"%s"}},', strftime(as.POSIXct(paste0(end+1, "00:00:00")), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"))}
 
+  if(is.null(season)){}else{
+    season <- sprintf('"season":{"$in":["%s"]},', season)}
+
   if(is.null(cow_id)){}else{cow_id <- paste(unlist(cow_id), collapse = '", "' )
   cow_id <- sprintf('"cow_id":{"$in":["%s"]},', cow_id)}
 
   if(is.null(fields)){
-    fields = c("RFID", "Management", "stationname", "foetalagedate", "foetalage", "calvingdate", "multiples")}
+    fields = c("RFID", "Management", "stationname", "foetalagedate", "foetalage", "calvingdate", "multiples", "season")}
 
   timezone <- "Australia/Brisbane"
 
@@ -59,7 +63,7 @@ calvingdata <- mongo(collection = "CalvingData", db = "DataMuster", url = pass, 
 
 # Set up find query
 
-search <-paste0("{", RFID, MTag, property, twins, start, end, cow_id,"}")
+search <-paste0("{", RFID, MTag, property, twins, start, end, season, cow_id,"}")
 
 if(nchar(search)==2){}else{
 search <- substr(search, 1 , nchar(search)-2)
