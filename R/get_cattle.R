@@ -45,6 +45,10 @@ get_cattle <- function(RFID = NULL, MTag = NULL, property = NULL, sex = NULL, ca
   property <- paste(unlist(property), collapse = '", "' )
   property <- sprintf('"stationname":{"$in":["%s"]},', property)}
 
+  if(is.null(paddock)){} else {
+    paddock <- paste(unlist(paddock), collapse = '", "' )
+    paddock <- sprintf('"properties.Paddock":{"$in":["%s"]},', paddock)}
+
   if("TRUE" %in% (RFID == "xxx xxxxxxxxxxxx"))
   {RFID = NULL}
 
@@ -58,7 +62,7 @@ get_cattle <- function(RFID = NULL, MTag = NULL, property = NULL, sex = NULL, ca
 
   if(is.null(sex)){} else {sex <- sprintf('"properties.sex":"%s",', sex)}
   if(is.null(category)){} else {category <- sprintf('"properties.category":"%s",', category)}
-  if(is.null(paddock)){}else{paddock <- sprintf('"properties.Paddock":"%s",', paddock)}
+  #if(is.null(paddock)){}else{paddock <- sprintf('"properties.Paddock":"%s",', paddock)}
   if(is.null(alms)){} else {alms <- sprintf('"properties.ALMS":"%s",', alms)}
   if(is.null(weaned)){} else {weaned <- sprintf('"properties.weaned":"%s",', weaned)}
   if(is.null(exstation)){} else {exstation <- sprintf('"exstation":"%s",', exstation)}

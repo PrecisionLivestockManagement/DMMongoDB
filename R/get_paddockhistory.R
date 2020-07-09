@@ -54,16 +54,19 @@ get_paddockhistory <- function(cattle_id = NULL, RFID = NULL, MTag = NULL, prope
 
   if(is.null(start)){}else{
     if(timezone == "Australia/Brisbane"){
-      start <- sprintf('"dateIN":{"$gte":{"$date":"%s"}},', strftime(as.POSIXct(paste0(start, "00:00:00")), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"))}else{
+      start <- sprintf('"dateIN":{"$lte":{"$date":"%s"}},', strftime(as.POSIXct(paste0(start, "00:00:00")), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"))}else{
         if(timezone == "America/Argentina/Buenos_Aires"){
-          start <- sprintf('"dateIN":{"$gte":{"$date":"%s"}},', strftime(as.POSIXct(paste0(start, "13:00:00")), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"))}}
+          start <- sprintf('"dateIN":{"$lte":{"$date":"%s"}},', strftime(as.POSIXct(paste0(start, "13:00:00")), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"))}}
   }
 
-  if(is.null(end)){}else{
+  if(is.null(end)){end1 <- NULL}else{
+
+    end1 <- sprintf('"dateOUT":{"$exists":false}}')
+
     if(timezone == "Australia/Brisbane"){
-      end <- sprintf('"dateOUT":{"$lt":{"$date":"%s"}},', strftime(as.POSIXct(paste0(end+1, "00:00:00")), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"))}else{
+    end <- sprintf('"dateOUT":{"$gte":{"$date":"%s"}},', strftime(as.POSIXct(paste0(end, "00:00:00")), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"))}else{
         if(timezone == "America/Argentina/Buenos_Aires"){
-          end <- sprintf('"dateOUT":{"$lt":{"$date":"%s"}},', strftime(as.POSIXct(paste0(end+1, "13:00:00")), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"))}}
+          end <- sprintf('"dateOUT":{"$gte":{"$date":"%s"}},', strftime(as.POSIXct(paste0(end, "13:00:00")), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"))}}
   }
 
 
@@ -88,6 +91,32 @@ snappy <- sprintf('{%s, "_id":true}', te)
 #Query database and format for website display
 
 data <- paddockhistory$find(query = search, fields = snappy)
+
+data <- data %>% mutate(dateOUT = ifelse("dateOUT" %in% names(.), dateOUT, NA))
+
+# Set up second find query
+
+search <-paste0("{", cattle_id, RFID, MTag, property, Paddock, currentPaddock, start, end1,"}")
+
+if(nchar(search)==2){}else{
+  search <- substr(search, 1 , nchar(search)-2)
+  search <- paste0(search, "}")}
+
+# Set up find fields
+
+snif <- sprintf('"%s":true', fields)
+te <- paste0(snif, collapse = ", ")
+snappy <- sprintf('{%s, "_id":true}', te)
+
+#Query database and format for website display
+
+data1 <- paddockhistory$find(query = search, fields = snappy)
+
+data1 <- data1 %>% mutate(dateOUT = ifelse("dateOUT" %in% names(.), dateOUT, NA))
+
+#Merge dataframes together
+
+data <- rbind(data, data1)
 
 # If no data is returned an empty dataframe is created
 
