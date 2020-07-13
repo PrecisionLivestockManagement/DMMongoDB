@@ -87,7 +87,7 @@ update_calvingdata <- function(RFID = NULL, MTag = NULL, season, property, calfM
 
 
   ##### Update Cattle collection ######
-  if(!(is.null(RFID)) & !(is.null(calfMTag))){
+  if(!(is.null(RFID)) & is.null(MTag) & !(is.null(calfMTag))){
     for (i in 1:length(RFID)){
       calfid <- calves$`_id`[calves$properties$Management == calfMTag[i]]
       IDS <- sprintf('{"stationname":"%s","RFID":"%s"}', property, RFID[i])
@@ -104,7 +104,7 @@ update_calvingdata <- function(RFID = NULL, MTag = NULL, season, property, calfM
     }
   }
 
-  if(!(is.null(MTag))& !(is.null(calfMTag))){
+  if((is.null(RFID)) & !is.null(MTag) & !(is.null(calfMTag))){
     for (i in 1:length(MTag)){
       calfid <- calves$`_id`[calves$properties$Management == calfMTag[i]]
       IDS <- sprintf('{"stationname":"%s","properties.Management":"%s"}', property, MTag[i])
@@ -121,30 +121,106 @@ update_calvingdata <- function(RFID = NULL, MTag = NULL, season, property, calfM
     }
   }
 
+  if((!is.null(RFID)) & !is.null(MTag) & !(is.null(calfMTag))){
+    for (i in 1:length(MTag)){
+      calfid <- calves$`_id`[calves$properties$Management == calfMTag[i]]
+      IDS <- sprintf('{"stationname":"%s","properties.Management":"%s"}', property, MTag[i])
+      banger <- cattle$find(query= IDS, fields='{"calfhist.date":true, "_id":false}')
+      arrpos <- length(banger$calfhist$date[[1]])
+      matchdate <- which(substr(banger$calfhist$date[[1]],1,7) == substr(date[i],1,7))
+
+      if (length(matchdate) == 0){
+        RFIDI <- sprintf('{"$set":{"calfhist.date.%s":{"$date":"%s"}, "calfhist.ID.%s":"%s"}}', arrpos, paste0(substr(date[i],1,10),"T","00:00:00","+1000"), arrpos, calfid)
+        RFIDIlast <- sprintf('{"$set":{"properties.calvingdate":{"$date":"%s"}}}', paste0(substr(date[i],1,10),"T","00:00:00","+1000"))
+        cattle$update(IDS, RFIDI)
+        cattle$update(IDS, RFIDIlast)
+      }
+    }
+  }
 
   ##### Update CalvingData collection #####
-  checkcows <- paste(unlist(MTag), collapse = '", "' )
-  filtercattle <- sprintf('{"properties.Management":{"$in":["%s"]}}', checkcows)
-  cows <- cattle$find(query = filtercattle, fields = '{"RFID":true, "properties.Management":true, "stationname":true, "_id":false}')
-  cows <- cows%>%filter(stationname == property)
+  if((!is.null(RFID)) & is.null(MTag) & !(is.null(calfMTag))){
+    checkcows <- paste(unlist(RFID), collapse = '", "' )
+    filtercattle <- sprintf('{"RFID":{"$in":["%s"]}}', checkcows)
+    cows <- cattle$find(query = filtercattle, fields = '{"RFID":true, "properties.Management":true, "stationname":true, "_id":false}')
+    cows <- cows%>%filter(stationname == property)
 
-  RFID <- cows$RFID
+    RFID <- cows$RFID
 
-  for (i in 1:length(RFID)){
+    for (i in 1:length(RFID)){
 
-  RFIDS <- sprintf('{"RFID":"%s"}', RFID[i])
-  IDS <- sprintf('{"RFID":"%s", "season":"%s"}', RFID[i], season[i])
+      RFIDS <- sprintf('{"RFID":"%s"}', RFID[i])
+      IDS <- sprintf('{"RFID":"%s", "season":"%s"}', RFID[i], season[i])
 
-  if(is.null(date)){} else {
-    RFIDI <- sprintf('{"$set":{"properties.calvingdate":{"$date":"%s"}}}', paste0(substr(date[i],1,10),"T","00:00:00","+1000"))
-    IDI <- sprintf('{"$set":{"calvingdate":{"$date":"%s"}}}', paste0(substr(date[i],1,10),"T","00:00:00","+1000"))
-    cattle$update(RFIDS, RFIDI)
-    calvingdata$update(IDS, IDI)}
-  if(is.null(multiples)){} else {
-    IDI <- sprintf('{"$set":{"multiples":"%s"}}', multiples[i])
-    calvingdata$update(IDS, IDI)}
-  if(is.null(algdev)){} else {
-    IDI <- sprintf('{"$set":{"DoBalgdev":"%s"}}', algdev[i])
-    calvingdata$update(IDS, IDI)}
+      if(is.null(date)){} else {
+        RFIDI <- sprintf('{"$set":{"properties.calvingdate":{"$date":"%s"}}}', paste0(substr(date[i],1,10),"T","00:00:00","+1000"))
+        IDI <- sprintf('{"$set":{"calvingdate":{"$date":"%s"}}}', paste0(substr(date[i],1,10),"T","00:00:00","+1000"))
+        cattle$update(RFIDS, RFIDI)
+        calvingdata$update(IDS, IDI)}
+      if(is.null(multiples)){} else {
+        IDI <- sprintf('{"$set":{"multiples":"%s"}}', multiples[i])
+        calvingdata$update(IDS, IDI)}
+      if(is.null(algdev)){} else {
+        IDI <- sprintf('{"$set":{"DoBalgdev":"%s"}}', algdev[i])
+        calvingdata$update(IDS, IDI)}
+    }
+  }
+
+
+
+  if((is.null(RFID)) & !is.null(MTag) & !(is.null(calfMTag))){
+    checkcows <- paste(unlist(MTag), collapse = '", "' )
+    filtercattle <- sprintf('{"properties.Management":{"$in":["%s"]}}', checkcows)
+    cows <- cattle$find(query = filtercattle, fields = '{"RFID":true, "properties.Management":true, "stationname":true, "_id":false}')
+    cows <- cows%>%filter(stationname == property)
+
+    RFID <- cows$RFID
+
+    for (i in 1:length(RFID)){
+
+      RFIDS <- sprintf('{"RFID":"%s"}', RFID[i])
+      IDS <- sprintf('{"RFID":"%s", "season":"%s"}', RFID[i], season[i])
+
+      if(is.null(date)){} else {
+        RFIDI <- sprintf('{"$set":{"properties.calvingdate":{"$date":"%s"}}}', paste0(substr(date[i],1,10),"T","00:00:00","+1000"))
+        IDI <- sprintf('{"$set":{"calvingdate":{"$date":"%s"}}}', paste0(substr(date[i],1,10),"T","00:00:00","+1000"))
+        cattle$update(RFIDS, RFIDI)
+        calvingdata$update(IDS, IDI)}
+      if(is.null(multiples)){} else {
+        IDI <- sprintf('{"$set":{"multiples":"%s"}}', multiples[i])
+        calvingdata$update(IDS, IDI)}
+      if(is.null(algdev)){} else {
+        IDI <- sprintf('{"$set":{"DoBalgdev":"%s"}}', algdev[i])
+        calvingdata$update(IDS, IDI)}
+    }
+  }
+
+
+
+  if((!is.null(RFID)) & !is.null(MTag) & !(is.null(calfMTag))){
+    checkcows <- paste(unlist(MTag), collapse = '", "' )
+    filtercattle <- sprintf('{"properties.Management":{"$in":["%s"]}}', checkcows)
+    cows <- cattle$find(query = filtercattle, fields = '{"RFID":true, "properties.Management":true, "stationname":true, "_id":false}')
+    cows <- cows%>%filter(stationname == property)
+
+    RFID <- cows$RFID
+
+    for (i in 1:length(RFID)){
+
+      RFIDS <- sprintf('{"RFID":"%s"}', RFID[i])
+      IDS <- sprintf('{"RFID":"%s", "season":"%s"}', RFID[i], season[i])
+
+      if(is.null(date)){} else {
+        RFIDI <- sprintf('{"$set":{"properties.calvingdate":{"$date":"%s"}}}', paste0(substr(date[i],1,10),"T","00:00:00","+1000"))
+        IDI <- sprintf('{"$set":{"calvingdate":{"$date":"%s"}}}', paste0(substr(date[i],1,10),"T","00:00:00","+1000"))
+        cattle$update(RFIDS, RFIDI)
+        calvingdata$update(IDS, IDI)}
+      if(is.null(multiples)){} else {
+        IDI <- sprintf('{"$set":{"multiples":"%s"}}', multiples[i])
+        calvingdata$update(IDS, IDI)}
+      if(is.null(algdev)){} else {
+        IDI <- sprintf('{"$set":{"DoBalgdev":"%s"}}', algdev[i])
+        calvingdata$update(IDS, IDI)}
+  }
   }
 }
