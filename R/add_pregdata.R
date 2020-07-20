@@ -30,163 +30,48 @@ add_pregdata <- function(RFID = NULL, MTag = NULL, property, date, foetalage = N
 
 
   ##### Finding cows #####
-  if (!(is.null(MTag))){
-    checkcows <- paste(unlist(MTag), collapse = '", "' )
-    filtercattle <- sprintf('{"properties.Management":{"$in":["%s"]}}', checkcows)
-    cows <- cattle$find(query = filtercattle, fields = '{"properties.Management":true, "stationname":true, "_id":false}')
-    cows <- cows%>%filter(stationname == property)
-
-    if (nrow(cows) < length(MTag)) {
-      problemcowtags <- as.character(MTag[!(MTag %in% cows$properties$Management)])
-      if (length(problemcowtags) != 0){ #Indicates they are not in the database
-        stop(paste0("The following MTag numbers cannot be found in the database. Please check that the MTag numbers are correct and try again: "), problemcowtags)}
-    }}
-
   if (!(is.null(RFID))){
     checkcows <- paste(unlist(RFID), collapse = '", "' )
     filtercattle <- sprintf('{"RFID":{"$in":["%s"]}}', checkcows)
-    cows <- cattle$find(query = filtercattle, fields = '{"RFID":true, "stationname":true, "_id":false}')
-    cows <- cows%>%filter(stationname == property)
+  } else {
+    checkcows <- paste(unlist(MTag), collapse = '", "' )
+    filtercattle <- sprintf('{"stationname":"%s", "properties.Management":{"$in":["%s"]}}', property, checkcows)}
 
-    if (nrow(cows) < length(RFID)) {
-      problemcowtags <- as.character(MTag[!(RFID %in% cows$RFID)])
-      if (length(problemcowtags) != 0){ #Indicates they are not in the database
-        stop(paste0("The following RFID numbers cannot be found in the database. Please check that the MTag numbers are correct and try again: "), problemcowtags)}
-    }}
+  cows <- cattle$find(query = filtercattle, fields = '{"RFID":true, "properties.Management":true, "stationname":true, "_id":true,
+                        "properties.foetalagedate":true, "properties.Paddock":true}')
+
+  if (nrow(cows) < length(calfMTag)) {
+    if (!(is.null(RFID))){
+      problemcowtags <- as.character(RFID[!(RFID %in% cows$RFID)])
+    } else {
+      problemcowtags <- as.character(MTag[!(MTag %in% cows$properties$Management)])}
+    if (length(problemcowtags) != 0){
+      stop(paste0("The following Tag numbers cannot be found in the database. Please check that the Tag numbers are correct and try again: "), problemcowtags)}
+  }}
+
 
 
 
   ##### Add data to CalvingData collection ######
-  if(!(is.null(MTag) & is.null(RFID))){
-    checkcows <- paste(unlist(MTag), collapse = '", "' )
-    filtercattle <- sprintf('{"properties.Management":{"$in":["%s"]}}', checkcows)
-    cows <- cattle$find(query = filtercattle, fields = '{"RFID":true, "properties.Management":true, "stationname":true, "_id":true, "properties.foetalagedate":true}')
-    cows <- cows%>%filter(stationname == property)
-
-    temp <- calvingdata$find(query = sprintf('{"RFID":"xxxxxx"}'), fields = '{"_id":false}')
-
-    for(i in 1:length(foetalage)){
-      if(foetalage[i] != 0){
-        temp$RFID <- cows$RFID[i]
-        temp$cow_id <- cows$`_id`[i]
-        temp$Management <- cows$properties$Management[i]
-        temp$stationname <- property[i]
-        temp$foetalagedate <- as.POSIXct(date[i])
-        temp$foetalage <- foetalage[i]
-        temp$estcalvingdate <- as.POSIXct(date[i] + (41 - foetalage[i]) * 7)
-        temp$multiples <- "FALSE"
-        temp$prevcalfcheckdate <- as.POSIXct(cows$properties$foetalagedate[i])
-        temp$DoBalgdev <- "FALSE"
-        temp$season <- paste(strftime(temp$foetalagedate[i], format = "%Y"), "/", substr(as.numeric(strftime(temp$foetalagedate[i], format = "%Y"))+1, 3, 4), sep = "")
-        calvingdata$insert(temp)
+temp <- calvingdata$find(query = sprintf('{"RFID":"xxxxxx"}'), fields = '{"_id":false}')
+for(i in 1:length(foetalage)){
+  if(foetalage[i] != 0){
+    temp$RFID <- cows$RFID[i]
+    temp$cow_id <- cows$`_id`[i]
+    temp$Management <- cows$properties$Management[i]
+    temp$stationname <- property[i]
+    temp$foetalagedate <- as.POSIXct(date[i])
+    temp$foetalage <- foetalage[i]
+    temp$estcalvingdate <- as.POSIXct(date[i] + (41 - foetalage[i]) * 7)
+    temp$multiples <- "FALSE"
+    temp$prevcalfcheckdate <- as.POSIXct(cows$properties$foetalagedate[i])
+    temp$DoBalgdev <- "FALSE"
+    temp$season <- paste(strftime(temp$foetalagedate[i], format = "%Y"), "/", substr(as.numeric(strftime(temp$foetalagedate[i], format = "%Y"))+1, 3, 4), sep = "")
+    calvingdata$insert(temp)
     }
-  }
-  }
-
-
-  if(!(is.null(RFID) & is.null(MTag))){
-    checkcows <- paste(unlist(RFID), collapse = '", "' )
-    filtercattle <- sprintf('{"RFID":{"$in":["%s"]}}', checkcows)
-    cows <- cattle$find(query = filtercattle, fields = '{"RFID":true, "properties.Management":true, "stationname":true, "_id":true, "properties.foetalagedate":true}')
-    cows <- cows%>%filter(stationname == property)
-
-    temp <- calvingdata$find(query = sprintf('{"RFID":"xxxxxx"}'), fields = '{"_id":false}')
-
-    for(i in 1:length(foetalage)){
-      if(foetalage[i] != 0){
-        temp$RFID <- cows$RFID[i]
-        temp$cow_id <- cows$`_id`[i]
-        temp$Management <- cows$properties$Management[i]
-        temp$stationname <- property[i]
-        temp$foetalagedate <- as.POSIXct(date[i])
-        temp$foetalage <- foetalage[i]
-        temp$estcalvingdate <- as.POSIXct(date[i] + (41 - foetalage[i]) * 7)
-        temp$multiples <- "FALSE"
-        temp$prevcalfcheckdate <- as.POSIXct(cows$properties$foetalagedate[i])
-        temp$DoBalgdev <- "FALSE"
-        temp$season <- paste(strftime(temp$foetalagedate[i], format = "%Y"), "/", substr(as.numeric(strftime(temp$foetalagedate[i], format = "%Y"))+1, 3, 4), sep = "")
-        calvingdata$insert(temp)
-      }
-    }
-  }
-
-
-  if(!(is.null(RFID) & !is.null(MTag))){
-    checkcows <- paste(unlist(RFID), collapse = '", "' )
-    filtercattle <- sprintf('{"RFID":{"$in":["%s"]}}', checkcows)
-    cows <- cattle$find(query = filtercattle, fields = '{"RFID":true, "properties.Management":true, "stationname":true, "_id":true, "properties.foetalagedate":true}')
-    cows <- cows%>%filter(stationname == property)
-
-    temp <- calvingdata$find(query = sprintf('{"RFID":"xxxxxx"}'), fields = '{"_id":false}')
-
-    for(i in 1:length(foetalage)){
-      if(foetalage[i] != 0){
-        temp$RFID <- cows$RFID[i]
-        temp$cow_id <- cows$`_id`[i]
-        temp$Management <- cows$properties$Management[i]
-        temp$stationname <- property[i]
-        temp$foetalagedate <- as.POSIXct(date[i])
-        temp$foetalage <- foetalage[i]
-        temp$estcalvingdate <- as.POSIXct(date[i] + (41 - foetalage[i]) * 7)
-        temp$multiples <- "FALSE"
-        temp$prevcalfcheckdate <- as.POSIXct(cows$properties$foetalagedate[i])
-        temp$DoBalgdev <- "FALSE"
-        temp$season <- paste(strftime(temp$foetalagedate[i], format = "%Y"), "/", substr(as.numeric(strftime(temp$foetalagedate[i], format = "%Y"))+1, 3, 4), sep = "")
-        calvingdata$insert(temp)
-      }
-    }
-  }
 
 
   ##### Add data to Cattle collection ######
-    if(!(is.null(MTag) & is.null(RFID))){
-      IDS <- sprintf('{"stationname":"%s","properties.Management":"%s"}', property, MTag[i])
-      banger <- cattle$find(query= IDS, fields='{"preghist.date":true, "_id":false}')
-      arrpos <- length(banger$preghist$date[[1]])
-
-      matchdate <- which(substr(banger$preghist$date[[1]],1,7) == substr(date[i],1,7))
-
-      temp <- data.frame(MTag = MTag, stringsAsFactors = FALSE)
-      temp$stationname <- property
-      temp$foetalagedate <- as.POSIXct(date)
-      temp$foetalage <- foetalage
-      temp$estcalvingdate <- as.POSIXct(date + (41 - foetalage) * 7)
-      temp$season <- paste(strftime(temp$foetalagedate, format = "%Y"), "/", substr(as.numeric(strftime(temp$foetalagedate, format = "%Y"))+1, 3, 4), sep = "")
-
-      for (i in 1:length(MTag)){
-      if(foetalage[i] != 0 & length(matchdate) == 0){
-        RFIDI <- sprintf('{"$set":{"preghist.date.%s":{"$date":"%s"}, "preghist.foetalage.%s":"%s", "preghist.estcalvingdate.%s":{"$date":"%s"}}}',
-                         arrpos, paste0(substr(date[i],1,10),"T","00:00:00","+1000"), arrpos, foetalage[i], arrpos,
-                         paste0(substr(temp$estcalvingdate[i],1,10),"T","00:00:00","+1000"))
-        cattle$update(IDS, RFIDI)}
-  }
-  }
-
-
-    if(!(is.null(RFID) & is.null(MTag))){
-      IDS <- sprintf('{"RFID":"%s"}', RFID[i])
-      banger <- cattle$find(query= IDS, fields='{"preghist.date":true, "_id":false}')
-      arrpos <- length(banger$preghist$date[[1]])
-
-      matchdate <- which(substr(banger$preghist$date[[1]],1,7) == substr(date[i],1,7))
-
-      temp <- data.frame(RFID = RFID, stringsAsFactors = FALSE)
-      temp$stationname <- property
-      temp$foetalagedate <- as.POSIXct(date)
-      temp$foetalage <- foetalage
-      temp$estcalvingdate <- as.POSIXct(date + (41 - foetalage) * 7)
-      temp$season <- paste(strftime(temp$foetalagedate, format = "%Y"), "/", substr(as.numeric(strftime(temp$foetalagedate, format = "%Y"))+1, 3, 4), sep = "")
-
-      for (i in 1:length(RFID)){
-      if(foetalage[i] != 0 & length(matchdate) == 0){
-        RFIDI <- sprintf('{"$set":{"preghist.date.%s":{"$date":"%s"}, "preghist.foetalage.%s":"%s", "preghist.estcalvingdate.%s":{"$date":"%s"}}}',
-                         arrpos, paste0(substr(date[i],1,10),"T","00:00:00","+1000"), arrpos, foetalage[i], arrpos,
-                         paste0(substr(temp$estcalvingdate[i],1,10),"T","00:00:00","+1000"))
-        cattle$update(IDS, RFIDI)}
-  }
-    }
-
-
   if(!(is.null(RFID) & !is.null(MTag))){
     IDS <- sprintf('{"RFID":"%s"}', RFID[i])
     banger <- cattle$find(query= IDS, fields='{"preghist.date":true, "_id":false}')
@@ -208,5 +93,26 @@ add_pregdata <- function(RFID = NULL, MTag = NULL, property, date, foetalage = N
                          paste0(substr(temp$estcalvingdate[i],1,10),"T","00:00:00","+1000"))
         cattle$update(IDS, RFIDI)}
     }
-  }
+  } else {
+    IDS <- sprintf('{"stationname":"%s","properties.Management":"%s"}', property, MTag[i])
+    banger <- cattle$find(query= IDS, fields='{"preghist.date":true, "_id":false}')
+    arrpos <- length(banger$preghist$date[[1]])
+
+    matchdate <- which(substr(banger$preghist$date[[1]],1,7) == substr(date[i],1,7))
+
+    temp <- data.frame(MTag = MTag, stringsAsFactors = FALSE)
+    temp$stationname <- property
+    temp$foetalagedate <- as.POSIXct(date)
+    temp$foetalage <- foetalage
+    temp$estcalvingdate <- as.POSIXct(date + (41 - foetalage) * 7)
+    temp$season <- paste(strftime(temp$foetalagedate, format = "%Y"), "/", substr(as.numeric(strftime(temp$foetalagedate, format = "%Y"))+1, 3, 4), sep = "")
+
+    for (i in 1:length(MTag)){
+      if(foetalage[i] != 0 & length(matchdate) == 0){
+        RFIDI <- sprintf('{"$set":{"preghist.date.%s":{"$date":"%s"}, "preghist.foetalage.%s":"%s", "preghist.estcalvingdate.%s":{"$date":"%s"}}}',
+                         arrpos, paste0(substr(date[i],1,10),"T","00:00:00","+1000"), arrpos, foetalage[i], arrpos,
+                         paste0(substr(temp$estcalvingdate[i],1,10),"T","00:00:00","+1000"))
+        cattle$update(IDS, RFIDI)}
+      }
     }
+  }
