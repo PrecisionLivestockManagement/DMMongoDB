@@ -65,7 +65,7 @@ update_calvingdata <- function(RFID = NULL, MTag = NULL, season, property, calfM
       problemcowtags <- as.character(MTag[!(MTag %in% cows$properties$Management)])}
     if (length(problemcowtags) != 0){
       stop(paste0("The following Tag numbers cannot be found in the database. Please check that the Tag numbers are correct and try again: "), problemcowtags)}
-  }}
+  }
 
 
 
@@ -133,5 +133,6 @@ for (i in 1:length(RFID)){
       if(is.null(algdev)){} else {
         IDI <- sprintf('{"$set":{"DoBalgdev":"%s"}}', algdev[i])
         calvingdata$update(IDS, IDI)}
+}
 }
 

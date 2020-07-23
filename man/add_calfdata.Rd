@@ -7,10 +7,13 @@
 add_calfdata(
   RFID = NULL,
   MTag = NULL,
+  calfRFID = NULL,
   calfMTag,
   property,
   date,
+  weight = NULL,
   multiples = NULL,
+  sex = NULL,
   username = NULL,
   password = NULL
 )
@@ -20,13 +23,19 @@ add_calfdata(
 
 \item{MTag}{a list of cattle management tag number/s}
 
+\item{calfRFID}{the calf's RFID tag number}
+
 \item{calfMTag}{the calf's management tag number}
 
 \item{property}{the name of the property}
 
 \item{date}{the calving date in date format}
 
+\item{weight}{the calf's birthweight}
+
 \item{multiples}{if the calf is a twin or single, TRUE or FALSE. Default is FALSE}
+
+\item{sex}{the calf's sex}
 
 \item{username}{if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring}
 
