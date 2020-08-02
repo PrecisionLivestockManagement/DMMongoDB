@@ -32,6 +32,11 @@ add_calfdata <- function(RFID = NULL, MTag = NULL, calfRFID = NULL, calfMTag, pr
   cattle <- mongo(collection = "Cattle", db = "DataMuster", url = pass, verbose = T)
   calvingdata <- mongo(collection = "CalvingData", db = "DataMuster", url = pass, verbose = T)
 
+  calfRFID <- ifelse(is.null(calfRFID), rep("xxx xxxxxxxxxxxx", length(calfMTag)), calfRFID)
+  if (length(date) == 1){date <- rep(date, length = length(calfMTag))}
+  weight <- ifelse(is.null(weight), rep(0, length(calfMTag)), weight)
+  multiples <- ifelse(is.null(multiples), rep("FALSE", length(calfMTag)), multiples)
+  sex <- ifelse(is.null(sex), rep("xxxxxx", length(calfMTag)), sex)
 
   ##### Finding cows #####
   if (!(is.null(RFID))){
@@ -61,31 +66,9 @@ for (i in 1:length(calfMTag)){
     cow <- cows[cows$RFID == RFID[i],]
     } else {
       cow <- cows[cows$properties$Management == MTag[i],]}
-
-  if (!is.null(calfRFID) & !is.null(weight) & !is.null(sex)){
-    add_cattle(RFID = calfRFID[i], MTag = calfMTag[i], category = "growing", property = property, paddock = cow$properties$Paddock,
-               sex = sex[i], birthWeight = weight[i],
-               weaned = "FALSE", date = date[i], DOB = date[i], damRFID = cow$RFID, damMTag = cow$properties$Management, username = username, password = password)
-    } else if(!is.null(calfRFID) & !is.null(weight) & is.null(sex)){
-      add_cattle(RFID = calfRFID[i], MTag = calfMTag[i], category = "growing", property = property, paddock = cow$properties$Paddock, birthWeight = weight[i],
-                 weaned = "FALSE", date = date[i], DOB = date[i], damRFID = cow$RFID, damMTag = cow$properties$Management, username = username, password = password)
-    } else if (!is.null(calfRFID) & is.null(weight) & !is.null(sex)){
-      add_cattle(RFID = calfRFID[i], MTag = calfMTag[i], category = "growing", property = property, paddock = cow$properties$Paddock, sex = sex[i],
-                 weaned = "FALSE", date = date[i], DOB = date[i], damRFID = cow$RFID, damMTag = cow$properties$Management, username = username, password = password)
-    } else if (is.null(calfRFID) & !is.null(weight) & !is.null(sex)) {
-      add_cattle(RFID = "xxx xxxxxxxxxxxx", MTag = calfMTag[i], category = "growing", property = property, paddock = cow$properties$Paddock, birthWeight = weight[i],
-                 sex = sex[i],
-                 weaned = "FALSE", date = date[i], DOB = date[i], damRFID = cow$RFID, damMTag = cow$properties$Management, username = username, password = password)
-    } else if (is.null(calfRFID) & !is.null(weight) & is.null(sex)){
-      add_cattle(RFID = "xxx xxxxxxxxxxxx", MTag = calfMTag[i], category = "growing", property = property, paddock = cow$properties$Paddock, birthWeight = weight[i],
-                 weaned = "FALSE", date = date[i], DOB = date[i], damRFID = cow$RFID, damMTag = cow$properties$Management, username = username, password = password)
-    } else if (is.null(calfRFID) & is.null(weight) & !is.null(sex)){
-      add_cattle(RFID = "xxx xxxxxxxxxxxx", MTag = calfMTag[i], category = "growing", property = property, paddock = cow$properties$Paddock, sex = sex[i],
-                 weaned = "FALSE", date = date[i], DOB = date[i], damRFID = cow$RFID, damMTag = cow$properties$Management, username = username, password = password)
-    } else {
-    add_cattle(RFID = "xxx xxxxxxxxxxxx", MTag = calfMTag[i], category = "growing", property = property, paddock = cow$properties$Paddock,
-               weaned = "FALSE", date = date[i], DOB = date[i], damRFID = cow$RFID, damMTag = cow$properties$Management, username = username, password = password)
-  }
+  add_cattle(RFID = calfRFID[i], MTag = calfMTag[i], category = "growing", property = property, paddock = cow$properties$Paddock,
+             sex = sex[i], birthWeight = weight[i], weaned = "FALSE", date = date[i], DOB = date[i], damRFID = cow$RFID,
+             damMTag = cow$properties$Management, username = username, password = password)
 }
 
 
