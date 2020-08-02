@@ -6,11 +6,11 @@
 #' @param MTag a list of cattle management tag number/s
 #' @param calfRFID the calf's RFID tag number
 #' @param calfMTag the calf's management tag number
+#' @param calfweight the calf's birthweight
+#' @param calfsex the calf's sex
 #' @param property the name of the property
 #' @param date the calving date in date format
-#' @param weight the calf's birthweight
 #' @param multiples if the calf is a twin or single, TRUE or FALSE. Default is FALSE
-#' @param sex the calf's sex
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
 #' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
 #' @return a message that indicates that the calving information has been successfully updated
