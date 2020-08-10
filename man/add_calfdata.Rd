@@ -31,15 +31,15 @@ add_calfdata(
 
 \item{date}{the calving date in date format}
 
-\item{weight}{the calf's birthweight}
-
 \item{multiples}{if the calf is a twin or single, TRUE or FALSE. Default is FALSE}
-
-\item{sex}{the calf's sex}
 
 \item{username}{if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring}
 
 \item{password}{if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access}
+
+\item{calfweight}{the calf's birthweight}
+
+\item{calfsex}{the calf's sex}
 }
 \value{
 a message that indicates that the calving information has been successfully updated

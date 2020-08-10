@@ -4,7 +4,18 @@
 \alias{add_gps}
 \title{Add GPS data to the DataMuster MongoDB database}
 \usage{
-add_gps(RFID, DateTime, lat, long, voltage, username, password)
+add_gps(
+  RFID,
+  mtag,
+  DateTime,
+  roundedtime,
+  lat,
+  long,
+  proximity,
+  neighbour,
+  username,
+  password
+)
 }
 \arguments{
 \item{RFID}{a list of cattle RFID number/s}
@@ -14,8 +25,6 @@ add_gps(RFID, DateTime, lat, long, voltage, username, password)
 \item{lat}{the latitude of a coordinate point}
 
 \item{long}{the longitude of a coordinate point}
-
-\item{voltage}{the voltage of the device as a number or percentage}
 
 \item{username}{if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring}
 
