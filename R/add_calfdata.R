@@ -56,12 +56,12 @@ add_calfdata <- function(RFID = NULL, MTag = NULL, calfRFID = NULL, calfMTag, pr
     if (!(is.null(RFID))){
       cow <- cows[cows$RFID == RFID[i],]
     } else {
-      cow <- cows[cows$properties$Management == MTag[i],]}
+      cow <- cows[cows$Management == MTag[i],]}
 
     ##### Add calf to Cattle collection #####
-    add_cattle(RFID = calfRFID[i], MTag = calfMTag[i], category = "growing", property = property, paddock = cow$properties$Paddock,
+    add_cattle(RFID = calfRFID[i], MTag = calfMTag[i], category = "growing", property = property, paddock = cow$Paddock,
                sex = sex[i], birthWeight = weight[i], weaned = "FALSE", date = date[i], DOB = date[i], damRFID = cow$RFID,
-               damMTag = cow$properties$Management, username = username, password = password)
+               damMTag = cow$Management, username = username, password = password)
 
 
     ##### Add cow calving data to Cattle collection #####
