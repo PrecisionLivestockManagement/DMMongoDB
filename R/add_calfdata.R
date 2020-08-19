@@ -32,11 +32,11 @@ add_calfdata <- function(RFID = NULL, MTag = NULL, calfRFID = NULL, calfMTag, pr
   cattle <- mongo(collection = "Cattle", db = "DataMuster", url = pass, verbose = T)
   calvingdata <- mongo(collection = "CalvingData", db = "DataMuster", url = pass, verbose = T)
 
-  calfRFID <- ifelse(is.null(calfRFID), rep("xxx xxxxxxxxxxxx", length(calfMTag)), calfRFID)
+  if(!is.null(calfRFID)){}else{calfRFID <- rep("xxx xxxxxxxxxxxx", length(calfMTag))}
   if (length(date) == 1){date <- rep(date, length = length(calfMTag))}
-  weight <- ifelse(is.null(weight), rep(0, length(calfMTag)), weight)
-  multiples <- ifelse(is.null(multiples), rep("FALSE", length(calfMTag)), multiples)
-  sex <- ifelse(is.null(sex), rep("xxxxxx", length(calfMTag)), sex)
+  if(!is.null(weight)){}else{weight <- rep(0, length(calfMTag))}
+  if(!is.null(multiples)){}else{multiples <- rep("FALSE", length(calfMTag))}
+  if(!is.null(sex)){}else{multiples <- rep("xxxxxx", length(calfMTag))}
 
   ##### Finding cows #####
   cows <- get_cattle(RFID = RFID, MTag = MTag, property = property,
