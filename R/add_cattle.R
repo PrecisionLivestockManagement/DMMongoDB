@@ -141,9 +141,9 @@ for (i in 1:length(optfields)){
 
     # Check for WoW infrastructure in assigned paddocks
 
-    filterinfs <- sprintf('{"stationname":"%s", "properties.Paddock":{"$in":["%s"]}, "properties.type":"%s"}', property, checkpads, "Walk-over-Weighing Unit")
+    filterinfs <- sprintf('{"stationname":"%s", "paddock":{"$in":["%s"]}, "properties.type":"%s"}', property, checkpads, "Walk-over-Weighing Unit")
 
-    inf <- infs$find(query = filterinfs, fields = '{"_id":true, "properties.Paddock":true, "properties.asset_id":true}')
+    inf <- infs$find(query = filterinfs, fields = '{"_id":true, "paddock":true, "properties.asset_id":true}')
 
 
   #  Insert animal information and upload to the database --------------------------
@@ -188,13 +188,13 @@ for (i in 1:length(optfields)){
       template$pdkhist$dateIN <- list(as.POSIXct(date[p]))
 
       #ALMS information
-      if (temppad$paddname %in% inf$properties$Paddock){
-        tempinf <- inf[which(inf$properties$Paddock == temppad$paddname),]
+      if (temppad$paddname %in% unlist(inf$paddock)){
+        #tempinf <- inf[which(inf$properties$Paddock == temppad$paddname),]
         template$properties$ALMS <- "TRUE"
-        template$properties$ALMSID<- tempinf$`_id`
-        template$properties$ALMSasset_id<- tempinf$properties$asset_id
-        template$almshist$ID <- list(tempinf$`_id`)
-        template$almshist$asset_id <- list(tempinf$properties$asset_id)
+        template$properties$ALMSID<- inf$`_id`
+        template$properties$ALMSasset_id<- inf$properties$asset_id
+        template$almshist$ID <- list(inf$`_id`)
+        template$almshist$asset_id <- list(inf$properties$asset_id)
         template$almshist$dateON <- list(as.POSIXct(date[p]))}
 
     # Optional information
