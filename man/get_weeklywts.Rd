@@ -8,6 +8,7 @@ get_weeklywts(
   RFID = NULL,
   start = NULL,
   end = NULL,
+  minwt = NULL,
   timezone = NULL,
   fields = NULL,
   username = NULL,
@@ -20,6 +21,8 @@ get_weeklywts(
 \item{start}{a start date and time to be returned in datetime format, default is “2014-09-01 00:00:00”}
 
 \item{end}{an end date and time to be returned in datetime format, default is today’s date and time}
+
+\item{minwt}{the minimum weight to be returned}
 
 \item{timezone}{the local timezone of the property, see https://en.wikipedia.org/wiki/List_of_tz_database_time_zones for the list of accepted timezones, default is Australia/Brisbane}
 

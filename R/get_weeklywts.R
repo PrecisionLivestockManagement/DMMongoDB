@@ -5,6 +5,7 @@
 #' @param RFID a list of cattle RFID number/s
 #' @param start a start date and time to be returned in datetime format, default is “2014-09-01 00:00:00”
 #' @param end an end date and time to be returned in datetime format, default is today’s date and time
+#' @param minwt the minimum weight to be returned
 #' @param timezone the local timezone of the property, see https://en.wikipedia.org/wiki/List_of_tz_database_time_zones for the list of accepted timezones, default is Australia/Brisbane
 #' @param fields a list of headers from the WeeklyWts collection in the DataMuster MongoDB database to be returned. If not specified, the RFID, date, weekly weight, sd of the weights, number of weights, and property name will be returned
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
@@ -17,7 +18,7 @@
 #' @export
 
 
-get_weeklywts <- function(RFID = NULL, start = NULL, end = NULL, timezone = NULL, fields = NULL, username = NULL, password = NULL){
+get_weeklywts <- function(RFID = NULL, start = NULL, end = NULL, minwt = NULL, timezone = NULL, fields = NULL, username = NULL, password = NULL){
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]
@@ -33,6 +34,8 @@ get_weeklywts <- function(RFID = NULL, start = NULL, end = NULL, timezone = NULL
   if(is.null(end)){}else{
     end <- sprintf('"Date":{"$lt":{"$date":"%s"}},', strftime(as.POSIXct(paste0(end+1, "00:00:00")), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"))}
 
+  if(is.null(minwt)){}else{minwt <- sprintf('"avweight":{"$gte":%s},', minwt)}
+
   if(is.null(fields)){
     fields = c("RFID", "Date", "avweight", "sdweights", "numweights", "Location")}
 
@@ -42,7 +45,7 @@ weeklywts <- mongo(collection = "WeeklyWts", db = "DataMuster", url = pass, verb
 
 # Set up find query
 
-search <-paste0("{", RFID, start, end,"}")
+search <-paste0("{", RFID, start, end, minwt,"}")
 
 if(nchar(search)==2){}else{
 search <- substr(search, 1 , nchar(search)-2)
