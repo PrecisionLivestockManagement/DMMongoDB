@@ -118,6 +118,8 @@ data1 <- data1 %>% mutate(dateOUT = ifelse("dateOUT" %in% names(.), dateOUT, NA)
 
 data <- rbind(data, data1)
 
+data <- data %>% distinct()
+
 # If no data is returned an empty dataframe is created
 
 if(nrow(data) == 0){
