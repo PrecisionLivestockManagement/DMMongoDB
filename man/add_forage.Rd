@@ -2,7 +2,7 @@
 % Please edit documentation in R/add_forage.R
 \name{add_forage}
 \alias{add_forage}
-\title{Update cow calving information to DataMuster MongoDB database.}
+\title{Add forage sample information to DataMuster MongoDB database.}
 \usage{
 add_forage(
   property,
@@ -48,7 +48,7 @@ add_forage(
 a message that indicates that the calving information has been successfully updated
 }
 \description{
-This function adds individual or groups of cow calving information in the DataMuster MongoDB database. If you need assistance please email \email{info@datamuster.net.au} to seek help or suggest improvements.
+This function adds forage sample information to the DataMuster MongoDB database. If you need assistance please email \email{info@datamuster.net.au} to seek help or suggest improvements.
 }
 \author{
 Dave Swain \email{d.swain@cqu.edu.au}, Lauren O'Connor \email{l.r.oconnor@cqu.edu.au}, and Anita Chang \email{a.chang@cqu.edu.au}

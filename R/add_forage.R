@@ -1,6 +1,6 @@
-#' Update cow calving information to DataMuster MongoDB database.
+#' Add forage sample information to DataMuster MongoDB database.
 #'
-#' This function adds individual or groups of cow calving information in the DataMuster MongoDB database. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
+#' This function adds forage sample information to the DataMuster MongoDB database. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
 #' @name add_forage
 #' @param property the name of the property
 #' @param paddock the name of the paddock
