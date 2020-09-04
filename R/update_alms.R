@@ -73,7 +73,7 @@ update_alms <- function(RFID, property, alms, date=NULL, username=NULL, password
           cattle$update(RFIDS, IDIlast)
 
           #Update ALMSHistory collection
-          cows <- get_cattle(RFID = RFID, MTag = MTag, property = property, fields = c("RFID", "properties.Management", "stationname"))
+          cows <- get_cattle(RFID = RFID[i], property = property, fields = c("RFID", "properties.Management", "stationname"))
 
           add_almshistory(RFID = cows$RFID, cattle_id = cows$`_id`, MTag = cows$Management, property = cows$stationname, ALMS = alms[i],
                             currentALMS = "TRUE", dateON = substr(date[i],1,10), dateOFF = NULL, username = username, password = password)
