@@ -12,9 +12,11 @@ get_cattle(
   category = NULL,
   paddock = NULL,
   alms = NULL,
+  autodraft = NULL,
   weaned = NULL,
   id = NULL,
   almsasset_id = NULL,
+  autodraftasset_id = NULL,
   exstation = NULL,
   exitdate = NULL,
   entrydate = NULL,
@@ -42,11 +44,15 @@ get_cattle(
 
 \item{alms}{TRUE or FALSE, if true filters the data for cattle currently allocated to an alms unit}
 
+\item{autodraft}{TRUE or FALSE, if true filters the data for cattle currently allocated to an auto drafting unit}
+
 \item{weaned}{TRUE if the animal/s are weaned or FALSE if animal/s are not weaned}
 
 \item{id}{ID of the animal}
 
 \item{almsasset_id}{ID of the ALMS unit}
+
+\item{autodraftasset_id}{ID of the auto drafting unit}
 
 \item{exstation}{the former property of the animal}
 
