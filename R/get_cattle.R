@@ -9,9 +9,11 @@
 #' @param category the class of cattle either (breeding or growing)
 #' @param paddock the name of the paddock to search for
 #' @param alms TRUE or FALSE, if true filters the data for cattle currently allocated to an alms unit
+#' @param autodraft TRUE or FALSE, if true filters the data for cattle currently allocated to an auto drafting unit
 #' @param weaned TRUE if the animal/s are weaned or FALSE if animal/s are not weaned
 #' @param id ID of the animal
 #' @param almsasset_id ID of the ALMS unit
+#' @param autodraftasset_id ID of the auto drafting unit
 #' @param exstation the former property of the animal
 #' @param exitdate the date that the animal left the property in date format
 #' @param entrydate the date that the animal entered the property in date format
@@ -30,9 +32,7 @@
 #' @export
 
 
-get_cattle <- function(RFID = NULL, MTag = NULL, property = NULL, sex = NULL, category = NULL, paddock = NULL, alms = NULL, weaned = NULL, id = NULL, almsasset_id = NULL, exstation = NULL, exitdate = NULL, entrydate = NULL, deathdate = NULL, timezone = NULL, prevpaddock = NULL, active = NULL, fields = NULL, username = NULL, password = NULL){
-
-
+get_cattle <- function(RFID = NULL, MTag = NULL, property = NULL, sex = NULL, category = NULL, paddock = NULL, alms = NULL, autodraft = NULL, weaned = NULL, id = NULL, almsasset_id = NULL, autodraftasset_id = NULL, exstation = NULL, exitdate = NULL, entrydate = NULL, deathdate = NULL, timezone = NULL, prevpaddock = NULL, active = NULL, fields = NULL, username = NULL, password = NULL){
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]
@@ -64,6 +64,7 @@ get_cattle <- function(RFID = NULL, MTag = NULL, property = NULL, sex = NULL, ca
   if(is.null(category)){} else {category <- sprintf('"properties.category":"%s",', category)}
   #if(is.null(paddock)){}else{paddock <- sprintf('"properties.Paddock":"%s",', paddock)}
   if(is.null(alms)){} else {alms <- sprintf('"properties.ALMS":"%s",', alms)}
+  if(is.null(autodraft)){} else {autodraft <- sprintf('"properties.AUTODRAFT":"%s",', autodraft)}
   if(is.null(weaned)){} else {weaned <- sprintf('"properties.weaned":"%s",', weaned)}
   if(is.null(exstation)){} else {exstation <- sprintf('"exstation":"%s",', exstation)}
   if(is.null(prevpaddock)){} else {prevpaddock <- sprintf('"properties.PrevPaddock":"%s",', prevpaddock)}
@@ -79,6 +80,10 @@ get_cattle <- function(RFID = NULL, MTag = NULL, property = NULL, sex = NULL, ca
   if(is.null(almsasset_id)){} else {
     almsasset_id <- paste(unlist(almsasset_id), collapse = '", "' )
     almsasset_id <- sprintf('"properties.ALMSasset_id":{"$in":["%s"]},', almsasset_id)}
+
+  if(is.null(autodraftasset_id)){} else {
+    autodraftasset_id <- paste(unlist(autodraftasset_id), collapse = '", "' )
+    autodraftasset_id <- sprintf('"properties.AUTODRAFTasset_id":{"$in":["%s"]},', autodraftasset_id)}
 
   # if(is.null(MTag)){} else {
   #   mtag <- MTag
@@ -99,7 +104,7 @@ cattle <- mongo(collection = "Cattle", db = "DataMuster", url = pass, verbose = 
 
 # Set up find query
 
-search <- paste0("{", property, sex, paddock, category, alms, weaned, id, almsasset_id, exstation, exitdate, entrydate, deathdate, RFID, prevpaddock, active, MTag, "}")
+search <- paste0("{", property, sex, paddock, category, alms, autodraft, weaned, id, almsasset_id, autodraftasset_id, exstation, exitdate, entrydate, deathdate, RFID, prevpaddock, active, MTag, "}")
 
 if(nchar(search)==2){}else{
 search <- substr(search, 1 , nchar(search)-2)
