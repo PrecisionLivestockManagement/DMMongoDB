@@ -20,7 +20,7 @@
 #' @export
 
 
-add_infrastructure <- function(property, paddock, infstype, assetID, fileout=NULL, active=NULL,
+add_infrastructure <- function(property, paddock, infstype, assetID, filename, active=NULL,
                                training=NULL, telemetry=NULL, date=NULL, username=NULL, password=NULL){
 
   if(is.null(username)||is.null(password)){
@@ -46,8 +46,8 @@ add_infrastructure <- function(property, paddock, infstype, assetID, fileout=NUL
 
     template$properties$asset_id <- assetID
     template$properties$type <- infstype
+    template$properties$filename <- filename
     template$properties$datarecording <- ifelse(is.null(active), "TRUE", active)
-    template$properties$fileout <- ifelse(is.null(fileout), "FALSE", fileout)
     template$properties$training <- ifelse(is.null(training), "FALSE", training)
     template$properties$telemetry_out <- ifelse(is.null(telemetry), "FALSE", telemetry)
     template$properties$Paddock <- paddock
