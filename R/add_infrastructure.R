@@ -6,7 +6,7 @@
 #' @param paddock the name of the paddock to add the infrastructure
 #' @param infstype the infrastructure type (e.g. Walk-over-Weighing Unit, EID Reader, Water sensor)
 #' @param assetID the asset identification number
-#' @param fileout TRUE if the data is written to file or FALSE if the data is sent direct to the DataMuster MongoDB database, default is FALSE
+#' @param filename the name allocated to the ALMS unit
 #' @param active TRUE if the infrastructure is actively recording data or FALSE if the infrastructure is not yet recording data, default is TRUE
 #' @param training only applicable for Walk-over-Weighing Units, TRUE if the herd is currently under training or FALSE if the herd is already trained, default is FALSE
 #' @param telemetry only applicable for Walk-over-Weighing Units, TRUE if the Unit emits an hourly telemetry signal or FALSE if the Unit does not emit an hourly telemetry signal, default is FALSE

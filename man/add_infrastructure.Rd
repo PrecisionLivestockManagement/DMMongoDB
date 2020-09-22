@@ -9,7 +9,7 @@ add_infrastructure(
   paddock,
   infstype,
   assetID,
-  fileout = NULL,
+  filename,
   active = NULL,
   training = NULL,
   telemetry = NULL,
@@ -27,7 +27,7 @@ add_infrastructure(
 
 \item{assetID}{the asset identification number}
 
-\item{fileout}{TRUE if the data is written to file or FALSE if the data is sent direct to the DataMuster MongoDB database, default is FALSE}
+\item{filename}{the name allocated to the ALMS unit}
 
 \item{active}{TRUE if the infrastructure is actively recording data or FALSE if the infrastructure is not yet recording data, default is TRUE}
 
