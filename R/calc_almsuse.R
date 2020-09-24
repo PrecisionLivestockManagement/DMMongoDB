@@ -65,7 +65,7 @@ calc_almsuse <- function(property, timezone, start=NULL, end=NULL, username = NU
 
     cattlehistory <- cattlehistory %>%
                       filter(RFID != "xxx xxxxxxxxxxxx") %>%
-                      mutate(dateON = as.Date(dateON, tz = timezone),
+                      mutate(dateON = as.Date(dateON, tz = "Australia/Brisbane"),
                              dateOFF = as.character(dateOFF),
                              dateOFF = ifelse(is.na(dateOFF), as.character(end), dateOFF)) %>%
                       filter(dateON >= start) %>%
