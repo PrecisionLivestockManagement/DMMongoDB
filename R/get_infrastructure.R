@@ -7,6 +7,7 @@
 #' @param type type of infrastructure
 #' @param active TRUE or FALSE, if TRUE, filters the data for infrastructure that is currently active
 #' @param training TRUE or FALSE
+#' @param filename the location name given to the unit
 #' @param fields a list of headers from the Infrastructure collection in the DataMuster MongoDB database to be returned. If not specified, the property, infrastructure type, use date, file name, cattle number, and assigned paddock will be returned
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
 #' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
@@ -18,7 +19,7 @@
 #' @export
 
 
-get_infrastructure <- function(property = NULL, paddock = NULL, type = NULL, active = NULL, training = NULL, fields = NULL, username = NULL, password = NULL){
+get_infrastructure <- function(property = NULL, paddock = NULL, type = NULL, active = NULL, training = NULL, filename = NULL, fields = NULL, username = NULL, password = NULL){
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]
@@ -34,6 +35,9 @@ get_infrastructure <- function(property = NULL, paddock = NULL, type = NULL, act
   if(is.null(type)){}else{type <- paste(unlist(type), collapse = '", "' )
   type <- sprintf('"properties.type":{"$in":["%s"]},', type)}
 
+  if(is.null(filename)){}else{filename <- paste(unlist(filename), collapse = '", "' )
+  filename <- sprintf('"properties.filename":{"$in":["%s"]},', filename)}
+
   if(is.null(active)){}else{active <- sprintf('"properties.datarecording":"%s",', active)}
   if(is.null(training)){}else{training <- sprintf('"properties.training":"%s",', training)}
 
@@ -47,7 +51,7 @@ infrastructure <- mongo(collection = "Infrastructure", db = "DataMuster", url = 
 
 # Set up find query
 
-search <-paste0("{", property, paddock, type, active, training,"}")
+search <-paste0("{", property, paddock, type, active, training, filename, "}")
 
 if(nchar(search)==2){}else{
 search <- substr(search, 1 , nchar(search)-2)

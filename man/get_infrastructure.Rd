@@ -10,6 +10,7 @@ get_infrastructure(
   type = NULL,
   active = NULL,
   training = NULL,
+  filename = NULL,
   fields = NULL,
   username = NULL,
   password = NULL
@@ -25,6 +26,8 @@ get_infrastructure(
 \item{active}{TRUE or FALSE, if TRUE, filters the data for infrastructure that is currently active}
 
 \item{training}{TRUE or FALSE}
+
+\item{filename}{the location name given to the unit}
 
 \item{fields}{a list of headers from the Infrastructure collection in the DataMuster MongoDB database to be returned. If not specified, the property, infrastructure type, use date, file name, cattle number, and assigned paddock will be returned}
 
