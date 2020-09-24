@@ -35,17 +35,27 @@ get_dailywts <- function(RFID = NULL, property = NULL, location = NULL, start = 
   location <- sprintf('"Location":{"$in":["%s"]},', location)}
 
   if(is.null(start)){}else{
+
     if(timezone == "Australia/Brisbane"){
-    start <- sprintf('"datetime":{"$gte":{"$date":"%s"}},', strftime(as.POSIXct(paste0(start, "00:00:00")), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"))}else{
+    start <- sprintf('"datetime":{"$gte":{"$date":"%s"}},', strftime(as.POSIXct(paste0(start, "00:00:00")), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"))}
+
       if(timezone == "America/Argentina/Buenos_Aires"){
-        start <- sprintf('"datetime":{"$gte":{"$date":"%s"}},', strftime(as.POSIXct(paste0(start, "13:00:00")), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"))}}
+        start <- sprintf('"datetime":{"$gte":{"$date":"%s"}},', strftime(as.POSIXct(paste0(start, "13:00:00")), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"))}
+
+          if(timezone == "Australia/Darwin"){
+            start <- sprintf('"datetime":{"$gte":{"$date":"%s"}},', strftime(as.POSIXct(paste0(start-1, "23:30:00")), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"))}
     }
 
   if(is.null(end)){}else{
+
     if(timezone == "Australia/Brisbane"){
-    end <- sprintf('"datetime":{"$lt":{"$date":"%s"}},', strftime(as.POSIXct(paste0(end+1, "00:00:00")), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"))}else{
+    end <- sprintf('"datetime":{"$lt":{"$date":"%s"}},', strftime(as.POSIXct(paste0(end+1, "00:00:00")), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"))}
+
       if(timezone == "America/Argentina/Buenos_Aires"){
-        end <- sprintf('"datetime":{"$lt":{"$date":"%s"}},', strftime(as.POSIXct(paste0(end+1, "13:00:00")), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"))}}
+        end <- sprintf('"datetime":{"$lt":{"$date":"%s"}},', strftime(as.POSIXct(paste0(end+1, "13:00:00")), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"))}
+
+          if(timezone == "Australia/Darwin"){
+            end <- sprintf('"datetime":{"$lt":{"$date":"%s"}},', strftime(as.POSIXct(paste0(end, "23:30:00")), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"))}
     }
 
   if(is.null(minwt)){}else{minwt <- sprintf('"Wt":{"$gte":%s},', minwt)}
