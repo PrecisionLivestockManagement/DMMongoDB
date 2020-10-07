@@ -40,7 +40,7 @@ add_pregdata <- function(RFID = NULL, MTag = NULL, property, date, foetalage = N
   cows <- cattle$find(query = filtercattle, fields = '{"RFID":true, "properties.Management":true, "stationname":true, "_id":true,
                         "properties.foetalagedate":true, "properties.Paddock":true}')
 
-  if (nrow(cows) < length(calfMTag)) {
+  if (nrow(cows) < length(RFID)) {
     if (!(is.null(RFID))){
       problemcowtags <- as.character(RFID[!(RFID %in% cows$RFID)])
     } else {
