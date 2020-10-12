@@ -141,7 +141,8 @@ for (i in 1:length(optfields)){
 
     # Check for WoW infrastructure in assigned paddocks
 
-    filterinfs <- sprintf('{"stationname":"%s", "paddock":{"$in":["%s"]}, "properties.type":"%s"}', property, checkpads, "Walk-over-Weighing Unit")
+    filterinfs <- sprintf('{"stationname":"%s", "paddock":{"$in":["%s"]}, "properties.type":"%s", "properties.datarecording":"%s"}',
+                          property, checkpads, "Walk-over-Weighing Unit", "TRUE")
 
     inf <- infs$find(query = filterinfs, fields = '{"_id":true, "paddock":true, "properties.asset_id":true}')
 
