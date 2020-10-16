@@ -31,14 +31,13 @@ get_dailywts <- function(RFID = NULL, property = NULL, location = NULL, start = 
   if(is.null(RFID)){}else{RFID <- paste(unlist(RFID), collapse = '", "' )
                           RFID <- sprintf('"RFID":{"$in":["%s"]},', RFID)}
 
-  if(is.null(location)){
-  } else if (is.null(location) & !is.null(property)) {
+  if (is.null(location) & !is.null(property)) {
     location <- get_infrastructure(property = property, type = "Walk-over-Weighing Unit")
   location <- location %>%
     select(filename)
   location <- paste(unlist(location), collapse = '", "' )
   location <- sprintf('"Location":{"$in":["%s"]},', location)
-  } else {
+  } else if (is.null(location) & is.null(property)){} else if (!is.null(location)) {
     location <- paste(unlist(location), collapse = '", "' )
     location <- sprintf('"Location":{"$in":["%s"]},', location)
   }
