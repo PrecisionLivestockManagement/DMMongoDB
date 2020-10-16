@@ -95,8 +95,8 @@ data <- dailywts$find(query = search, fields = snappy)
 # If no data is returned an empty dataframe is created
 
 if(nrow(data) == 0){
-  dataf <- setNames(data.frame(matrix(ncol = length(fields), nrow = 0)), gsub(".*\\.","", fields))%>%
-    mutate_all(funs(as.character(.)))}else{
+  data <- setNames(data.frame(matrix(ncol = length(fields), nrow = 0)), gsub(".*\\.","", fields))%>%
+    mutate_all(funs(as.character(.)))}
 
 collist <- colnames(data)
 
@@ -104,12 +104,10 @@ collist <- colnames(data)
    if("POSIXt" %in% class(data[,i])){
      attributes(data[,i])$tzone <- timezone}}
 
-
  dataf <- data%>%
           rename_all(recode, datetime = "Date", Wt = "Weight")
-    }
 
-dataf
+return(dataf)
 
 }
 
