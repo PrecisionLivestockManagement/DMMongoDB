@@ -31,8 +31,17 @@ get_dailywts <- function(RFID = NULL, property = NULL, location = NULL, start = 
   if(is.null(RFID)){}else{RFID <- paste(unlist(RFID), collapse = '", "' )
                           RFID <- sprintf('"RFID":{"$in":["%s"]},', RFID)}
 
-  if(is.null(location)){}else{location <- paste(unlist(location), collapse = '", "' )
-  location <- sprintf('"Location":{"$in":["%s"]},', location)}
+  if(is.null(location)){
+  } else if (is.null(location) & !is.null(property)) {
+    location <- get_infrastructure(property = property, type = "Walk-over-Weighing Unit")
+  location <- location %>%
+    select(filename)
+  location <- paste(unlist(location), collapse = '", "' )
+  location <- sprintf('"Location":{"$in":["%s"]},', location)
+  } else {
+    location <- paste(unlist(location), collapse = '", "' )
+    location <- sprintf('"Location":{"$in":["%s"]},', location)
+  }
 
   if(is.null(start)){}else{
 
@@ -66,8 +75,6 @@ get_dailywts <- function(RFID = NULL, property = NULL, location = NULL, start = 
 pass <- sprintf("mongodb://%s:%s@datamuster-shard-00-00-8mplm.mongodb.net:27017,datamuster-shard-00-01-8mplm.mongodb.net:27017,datamuster-shard-00-02-8mplm.mongodb.net:27017/test?ssl=true&replicaSet=DataMuster-shard-0&authSource=admin", username, password)
 
 dailywts <- mongo(collection = "DailyWts", db = "DataMuster", url = pass, verbose = T)
-
-# Set up find query
 
 search <-paste0("{", RFID, location, start, end, minwt,"}")
 
