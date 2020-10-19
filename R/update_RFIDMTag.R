@@ -26,6 +26,8 @@ update_RFIDMTag <- function(MTag, RFID, property, date, username=NULL, password=
     pass <- sprintf("mongodb://%s:%s@datamuster-shard-00-00-8mplm.mongodb.net:27017,datamuster-shard-00-01-8mplm.mongodb.net:27017,datamuster-shard-00-02-8mplm.mongodb.net:27017/test?ssl=true&replicaSet=DataMuster-shard-0&authSource=admin", username, password)
     cattle <- mongo(collection = "Cattle", db = "DataMuster", url = pass, verbose = T)
     stations <- mongo(collection = "Stations", db = "DataMuster", url = pass, verbose = T)
+    paddockhistory <- mongo(collection = "PaddockHistory", db = "DataMuster", url = pass, verbose = T)
+    almshistory <- mongo(collection = "ALMSHistory", db = "DataMuster", url = pass, verbose = T)
 
 # Check that the property is registered in the database ---------------------------------------------------------------------
 
@@ -72,5 +74,30 @@ update_RFIDMTag <- function(MTag, RFID, property, date, username=NULL, password=
         cattle$update(IDS, RFIDI) # Has to update RFIDI first otherwise won't update RFIDhist
         cattle$update(IDS, RFIDIlast)
 
+        #Update RFID in the PaddockHistory collection
+
+        RFIDSI <- sprintf('{"stationname":"%s", "Management":"%s"}', property, MTag[i])
+
+        padhist <- paddockhistory$find(query = RFIDSI, fields='{"_id":true}')
+
+        for(p in 1:nrow(padhist)){
+
+          IDS <- sprintf('{"_id":{"$oid":"%s"}}', padhist$`_id`[p])
+          IDI <- sprintf('{"$set":{"RFID":"%s"}}', newRFID[i])
+          paddockhistory$update(IDS, IDI)
+        }
+
+        #Update RFID in the ALMSHistory collection
+
+        almshist <- almshistory$find(query = RFIDSI, fields='{"_id":true}')
+
+        if(nrow(almshist) != 0){
+
+          for(j in 1:nrow(almshist)){
+
+            IDS <- sprintf('{"_id":{"$oid":"%s"}}', almshist$`_id`[j])
+            IDI <- sprintf('{"$set":{"RFID":"%s"}}', newRFID[i])
+            almshistory$update(IDS, IDI)
+          }}
       }
 }
