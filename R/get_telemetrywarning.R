@@ -15,7 +15,7 @@
 #' @export
 
 
-get_telemetrywarning <- function(property, assetid, lastsignal, resolved = NULL, username = NULL, password = NULL){
+get_telemetrywarning <- function(property = NULL, assetid = NULL, lastsignal = NULL, resolved = NULL, username = NULL, password = NULL){
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]
@@ -25,14 +25,20 @@ get_telemetrywarning <- function(property, assetid, lastsignal, resolved = NULL,
   pass <- sprintf("mongodb://%s:%s@datamuster-shard-00-00-8mplm.mongodb.net:27017,datamuster-shard-00-01-8mplm.mongodb.net:27017,datamuster-shard-00-02-8mplm.mongodb.net:27017/test?ssl=true&replicaSet=DataMuster-shard-0&authSource=admin", username, password)
   tel <- mongo(collection = "TelemetryWarnings", db = "DataMuster", url = pass, verbose = T)
 
-  property <- paste(unlist(property), collapse = '", "')
-  property <- sprintf('"property":{"$in":["%s"]},', property)
+  if(is.null(property)){} else {
+    property <- paste(unlist(property), collapse = '", "')
+    property <- sprintf('"property":{"$in":["%s"]},', property)
+  }
 
-  assetid <- paste(unlist(assetid), collapse = '", "')
-  assetid <- sprintf('"assetid":{"$in":["%s"]},', assetid)
+  if(is.null(assetid)){} else {
+    assetid <- paste(unlist(assetid), collapse = '", "')
+    assetid <- sprintf('"assetid":{"$in":["%s"]},', assetid)
+  }
 
-  lastsignal <- paste(unlist(lastsignal), collapse = '", "')
-  lastsignal <- sprintf('"lastsignal":{"$gte":{"$date":"%s"}},', strftime(as.POSIXct(paste0(lastsignal, "00:00:00")), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"))
+  if(is.null(lastsignal)){} else {
+    lastsignal <- paste(unlist(lastsignal), collapse = '", "')
+    lastsignal <- sprintf('"lastsignal":{"$in":["%s"]},', lastsignal)
+  }
 
   if(is.null(resolved)){} else {
     resolved <- paste(unlist(resolved), collapse = '", "')
