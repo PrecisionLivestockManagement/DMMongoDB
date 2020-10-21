@@ -15,7 +15,7 @@
 #' @export
 
 
-get_telemetrywarning <- function(property, assetid, lastsignal, resolved, username = NULL, password = NULL){
+get_telemetrywarning <- function(property, assetid, lastsignal, username = NULL, password = NULL){
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]
@@ -34,10 +34,7 @@ get_telemetrywarning <- function(property, assetid, lastsignal, resolved, userna
   lastsignal <- paste(unlist(lastsignal), collapse = '", "')
   lastsignal <- sprintf('"lastsignal":{"$gte":{"$date":"%s"}},', strftime(as.POSIXct(paste0(lastsignal, "00:00:00")), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"))
 
-  resolved <- paste(unlist(resolved), collapse = '", "')
-  resolved <- sprintf('"resolved":{"$in":["%s"]},', resolved)
-
-  search <- paste0("{", property, assetid, lastsignal, resolved, "}")
+  search <- paste0("{", property, assetid, lastsignal, "}")
   if(nchar(search)==2){}else{
     search <- substr(search, 1 , nchar(search)-2)
     search <- paste0(search, "}")}
