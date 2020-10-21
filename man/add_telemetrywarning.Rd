@@ -10,7 +10,6 @@ add_telemetrywarning(
   filename,
   paddock,
   lastsignal,
-  emailtime,
   username = NULL,
   password = NULL
 )
@@ -25,8 +24,6 @@ add_telemetrywarning(
 \item{paddock}{the paddock of the WOW with no telemetry signal}
 
 \item{lastsignal}{the last signal of the WOW with no telemetry signal}
-
-\item{emailtime}{the time that the initial alert email is sent}
 
 \item{username}{if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring}
 

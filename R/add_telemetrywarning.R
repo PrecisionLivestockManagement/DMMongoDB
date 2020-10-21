@@ -7,7 +7,6 @@
 #' @param filename the filename of the WOW with no telemetry signal
 #' @param paddock the paddock of the WOW with no telemetry signal
 #' @param lastsignal the last signal of the WOW with no telemetry signal
-#' @param emailtime the time that the initial alert email is sent
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
 #' @param password if you include a username you will also need to add a password contact Lauren O'Connor if you don't have access
 #' @return a message that indicates that the calving information has been successfully updated
@@ -17,7 +16,7 @@
 #' @export
 
 
-add_telemetrywarning <- function(property, assetid, filename, paddock, lastsignal, emailtime, username=NULL, password=NULL){
+add_telemetrywarning <- function(property, assetid, filename, paddock, lastsignal, username=NULL, password=NULL){
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]
