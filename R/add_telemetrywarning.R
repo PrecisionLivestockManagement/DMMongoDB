@@ -27,11 +27,12 @@ add_telemetrywarning <- function(property, assetid, filename, paddock, lastsigna
   tel <- mongo(collection = "TelemetryWarnings", db = "DataMuster", url = pass, verbose = T)
 
   emailtime <- Sys.time()
+  resolved <- "FALSE"
   notes <- ""
 
-  data <- sprintf('{"property":"%s", "assetid":"%s", "filename":"%s", "paddock":"%s", "lastsignal":{"$date":"%s"}, "emailtime":{"$date":"%s"}, "notes":"%s"}',
+  data <- sprintf('{"property":"%s", "assetid":"%s", "filename":"%s", "paddock":"%s", "lastsignal":{"$date":"%s"}, "emailtime":{"$date":"%s"}, "resolved":"%s", "notes":"%s"}',
                     property, assetid, filename, paddock, strftime(as.POSIXct(paste0(lastsignal, "00:00:00")), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"),
-                    strftime(as.POSIXct(paste0(emailtime, "00:00:00")), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"), notes)
+                    strftime(as.POSIXct(paste0(emailtime, "00:00:00")), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"), resolved, notes)
 
   tel$insert(data)
 
