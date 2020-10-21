@@ -8,6 +8,7 @@ get_telemetrywarning(
   property,
   assetid,
   lastsignal,
+  resolved,
   username = NULL,
   password = NULL
 )
