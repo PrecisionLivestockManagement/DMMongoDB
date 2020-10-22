@@ -6,6 +6,7 @@
 \usage{
 get_dailywts(
   RFID = NULL,
+  cattle_id = NULL,
   property = NULL,
   location = NULL,
   start = NULL,
@@ -19,6 +20,8 @@ get_dailywts(
 }
 \arguments{
 \item{RFID}{a list of cattle RFID number/s}
+
+\item{cattle_id}{a list of cattle database identification numbers}
 
 \item{property}{the name of the property to search for}
 

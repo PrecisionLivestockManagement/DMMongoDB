@@ -3,6 +3,7 @@
 #' This function provides a search tool to retrieve daily weight information from the DailyWts collection in the DataMuster MongoDB database. It also allows the user to define what fields should be returned. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
 #' @name get_dailywts
 #' @param RFID a list of cattle RFID number/s
+#' @param cattle_id a list of cattle database identification numbers
 #' @param property the name of the property to search for
 #' @param start a start date to be returned in date format, default is "2014-09-01"
 #' @param end an end date to be returned in date format, default is today's date
@@ -19,7 +20,7 @@
 #' @export
 
 
-get_dailywts <- function(RFID = NULL, property = NULL, location = NULL, start = NULL, end = NULL, minwt = NULL, timezone = NULL, fields = NULL, username = NULL, password = NULL){
+get_dailywts <- function(RFID = NULL, cattle_id=NULL, property = NULL, location = NULL, start = NULL, end = NULL, minwt = NULL, timezone = NULL, fields = NULL, username = NULL, password = NULL){
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]
@@ -30,6 +31,9 @@ get_dailywts <- function(RFID = NULL, property = NULL, location = NULL, start = 
 
   if(is.null(RFID)){}else{RFID <- paste(unlist(RFID), collapse = '", "' )
                           RFID <- sprintf('"RFID":{"$in":["%s"]},', RFID)}
+
+  if(is.null(cattle_id)){}else{cattle_id <- paste(unlist(cattle_id), collapse = '", "' )
+  cattle_id <- sprintf('"cattle_id":{"$in":["%s"]},', cattle_id)}
 
   if (is.null(location) & !is.null(property)) {
     location <- get_infrastructure(property = property, type = "Walk-over-Weighing Unit")
@@ -75,7 +79,7 @@ pass <- sprintf("mongodb://%s:%s@datamuster-shard-00-00-8mplm.mongodb.net:27017,
 
 dailywts <- mongo(collection = "DailyWts", db = "DataMuster", url = pass, verbose = T)
 
-search <-paste0("{", RFID, location, start, end, minwt,"}")
+search <-paste0("{", RFID, cattle_id, location, start, end, minwt,"}")
 
 if(nchar(search)==2){}else{
 search <- substr(search, 1 , nchar(search)-2)
