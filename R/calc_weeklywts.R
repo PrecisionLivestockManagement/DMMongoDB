@@ -74,10 +74,15 @@ calc_weeklywts <- function(RFID=NULL, start=NULL, end=NULL, values=NULL, s.d=NUL
   #
   # cows <- cattle$find(query = search, fields = snappy)
 
+
+  units <- get_infrastructure(type = "Walk-over-Weighing Unit", filename = location,
+                              fields = c("properties.filename", "properties.dual_unit", "stationname", "properties.asset_id"),
+                              username = username, password = password)
+
   cows <- get_almshistory(RFID = RFID, currentALMS = currentALMS,
                           fields = c("RFID", "cattle_id", "ALMS", "dateON", "dateOFF"), username = username, password = password)
 
-  cows <- cows %>% filter(RFID != "xxx xxxxxxxxxxxx")
+  cows <- cows %>% filter(RFID != "xxx xxxxxxxxxxxx", ALMS %in% units$Asset_id)
 
   cows1 <- data.frame()
 
@@ -105,9 +110,6 @@ calc_weeklywts <- function(RFID=NULL, start=NULL, end=NULL, values=NULL, s.d=NUL
   #if(is.null(RFID)){
   #  RFID <- unique(c(unique(tempwts$RFID), cows$RFID[!(cows$RFID %in% tempwts$RFID)]))}
 
-  units <- get_infrastructure(type = "Walk-over-Weighing Unit",
-                              fields = c("properties.filename", "properties.dual_unit", "stationname", "properties.asset_id"),
-                              username = username, password = password)
 
   # Calculate the weekly weights from the daily weights
 
