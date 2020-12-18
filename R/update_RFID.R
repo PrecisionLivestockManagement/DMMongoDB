@@ -77,7 +77,7 @@ update_RFID <- function(RFID, newRFID, date=NULL, username=NULL, password=NULL){
 
       #Update RFID in the PaddockHistory collection
 
-      RFIDSI <- sprintf('{"RFID":"%s"}', RFID[i])
+      RFIDSI <- sprintf('{"cattle_id":"%s"}', banger$`_id`)
 
       padhist <- paddockhistory$find(query = RFIDSI, fields='{"_id":true}')
 

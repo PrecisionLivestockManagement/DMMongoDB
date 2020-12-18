@@ -46,7 +46,7 @@ get_calvingdata <- function(RFID = NULL, MTag = NULL, property = NULL, twins = N
   if(is.null(end)){}else{
     end <- sprintf('"calvingdate":{"$lt":{"$date":"%s"}},', strftime(as.POSIXct(paste0(end+1, "00:00:00")), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"))}
 
-  if(is.null(season)){}else{
+  if(is.null(season)){}else{season <- paste(unlist(season), collapse = '", "' )
     season <- sprintf('"season":{"$in":["%s"]},', season)}
 
   if(is.null(cow_id)){}else{cow_id <- paste(unlist(cow_id), collapse = '", "' )

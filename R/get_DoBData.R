@@ -47,7 +47,7 @@ get_DoBData <- function(RFID = NULL, MTag = NULL, property = NULL, multiples = N
   cow_id <- sprintf('"_id":{"$in":["%s"]},', cow_id)}
 
   if(is.null(fields)){
-    fields = c("RFID", "Management", "stationname", "calvingdate", "multiples", "season")}
+    fields = c("RFID", "Management", "stationname", "calvingdate", "multiples", "season", "cattle_id")}
 
 pass <- sprintf("mongodb://%s:%s@datamuster-shard-00-00-8mplm.mongodb.net:27017,datamuster-shard-00-01-8mplm.mongodb.net:27017,datamuster-shard-00-02-8mplm.mongodb.net:27017/test?ssl=true&replicaSet=DataMuster-shard-0&authSource=admin", username, password)
 

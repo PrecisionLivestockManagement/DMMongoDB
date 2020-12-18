@@ -12,6 +12,7 @@ calc_weeklywts(
   s.d = NULL,
   minwt = NULL,
   location = NULL,
+  currentALMS = NULL,
   username = NULL,
   password = NULL
 )
@@ -30,6 +31,8 @@ calc_weeklywts(
 \item{minwt}{the minimum daily weight (kg) required to be included to calculate an average weekly weight, default is 10}
 
 \item{location}{the filename of the ALMS unit to search for}
+
+\item{currentALMS}{whether or not cattle are currently allocated to an ALMS unit or not}
 
 \item{username}{if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring}
 

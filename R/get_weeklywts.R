@@ -3,6 +3,7 @@
 #' This function provides a search tool to retrieve weekly weight information from the WeeklyWts collection in the DataMuster MongoDB database. It also allows the user to define what fields should be returned. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
 #' @name get_weeklywts
 #' @param RFID a list of cattle RFID number/s
+#' @param cattle_id a list of cattle database identification number/s
 #' @param start a start date and time to be returned in datetime format, default is “2014-09-01 00:00:00”
 #' @param end an end date and time to be returned in datetime format, default is today’s date and time
 #' @param minwt the minimum weight to be returned
@@ -18,7 +19,7 @@
 #' @export
 
 
-get_weeklywts <- function(RFID = NULL, start = NULL, end = NULL, minwt = NULL, timezone = NULL, fields = NULL, username = NULL, password = NULL){
+get_weeklywts <- function(RFID = NULL, cattle_id = NULL, start = NULL, end = NULL, minwt = NULL, timezone = NULL, fields = NULL, username = NULL, password = NULL){
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]
@@ -27,6 +28,9 @@ get_weeklywts <- function(RFID = NULL, start = NULL, end = NULL, minwt = NULL, t
 
   if(is.null(RFID)){}else{RFID <- paste(unlist(RFID), collapse = '", "' )
                           RFID <- sprintf('"RFID":{"$in":["%s"]},', RFID)}
+
+  if(is.null(cattle_id)){}else{cattle_id <- paste(unlist(cattle_id), collapse = '", "' )
+  cattle_id <- sprintf('"cattle_id":{"$in":["%s"]},', cattle_id)}
 
   if(is.null(start)){}else{
     start <- sprintf('"Date":{"$gte":{"$date":"%s"}},', strftime(as.POSIXct(paste0(start, "00:00:00")), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"))}
@@ -37,7 +41,7 @@ get_weeklywts <- function(RFID = NULL, start = NULL, end = NULL, minwt = NULL, t
   if(is.null(minwt)){}else{minwt <- sprintf('"avweight":{"$gte":%s},', minwt)}
 
   if(is.null(fields)){
-    fields = c("RFID", "Date", "avweight", "sdweights", "numweights", "Location")}
+    fields = c("cattle_id", "RFID", "Date", "avweight", "sdweights", "numweights", "Location")}
 
 pass <- sprintf("mongodb://%s:%s@datamuster-shard-00-00-8mplm.mongodb.net:27017,datamuster-shard-00-01-8mplm.mongodb.net:27017,datamuster-shard-00-02-8mplm.mongodb.net:27017/test?ssl=true&replicaSet=DataMuster-shard-0&authSource=admin", username, password)
 
@@ -45,7 +49,7 @@ weeklywts <- mongo(collection = "WeeklyWts", db = "DataMuster", url = pass, verb
 
 # Set up find query
 
-search <-paste0("{", RFID, start, end, minwt,"}")
+search <-paste0("{", RFID, cattle_id, start, end, minwt,"}")
 
 if(nchar(search)==2){}else{
 search <- substr(search, 1 , nchar(search)-2)

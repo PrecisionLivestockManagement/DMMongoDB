@@ -6,6 +6,7 @@
 \usage{
 get_weeklywts(
   RFID = NULL,
+  cattle_id = NULL,
   start = NULL,
   end = NULL,
   minwt = NULL,
@@ -17,6 +18,8 @@ get_weeklywts(
 }
 \arguments{
 \item{RFID}{a list of cattle RFID number/s}
+
+\item{cattle_id}{a list of cattle database identification number/s}
 
 \item{start}{a start date and time to be returned in datetime format, default is “2014-09-01 00:00:00”}
 
