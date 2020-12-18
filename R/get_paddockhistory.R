@@ -92,7 +92,7 @@ snappy <- sprintf('{%s, "_id":true}', te)
 
 data <- paddockhistory$find(query = search, fields = snappy)
 
-data <- data %>% mutate(dateOUT = ifelse("dateOUT" %in% names(.), dateOUT, NA))
+# data <- data %>% mutate(dateOUT = ifelse("dateOUT" %in% names(.), dateOUT, NA))
 
 # Set up second find query
 
@@ -112,7 +112,7 @@ snappy <- sprintf('{%s, "_id":true}', te)
 
 data1 <- paddockhistory$find(query = search, fields = snappy)
 
-data1 <- data1 %>% mutate(dateOUT = ifelse("dateOUT" %in% names(.), dateOUT, NA))
+# data1 <- data1 %>% mutate(dateOUT = ifelse("dateOUT" %in% names(.), dateOUT, NA))
 
 #Merge dataframes together
 

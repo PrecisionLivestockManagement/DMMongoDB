@@ -5,9 +5,9 @@
 \title{Retrieve telemetry warnings from the DataMuster MongoDB database.}
 \usage{
 get_telemetrywarning(
-  property,
-  assetid,
-  lastsignal,
+  property = NULL,
+  assetid = NULL,
+  lastsignal = NULL,
   resolved = NULL,
   username = NULL,
   password = NULL
