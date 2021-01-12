@@ -67,7 +67,7 @@ update_RFID <- function(RFID, newRFID, date=NULL, username=NULL, password=NULL){
 
    RFIDS <- sprintf('{"RFID":"%s"}', RFID[i])
 
-          banger <- cattle$find(query = RFIDS, fields='{"RFIDhist.date":true, "_id":false}')
+          banger <- cattle$find(query = RFIDS, fields='{"RFIDhist.date":true, "_id":true}')
           arrpos <- length(banger$RFIDhist$date[[1]])
           RFIDIlast <- sprintf('{"$set":{"RFID":"%s"}}', newRFID[i])
           RFIDI <- sprintf('{"$set":{"RFIDhist.date.%s":{"$date":"%s"}, "RFIDhist.ID.%s":"%s"}}', arrpos, paste0(substr(date[i],1,10),"T","00:00:00","+1000"), arrpos, newRFID[i])
