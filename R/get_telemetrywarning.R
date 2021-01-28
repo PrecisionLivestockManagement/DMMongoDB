@@ -60,4 +60,6 @@ get_telemetrywarning <- function(property = NULL, assetid = NULL, lastsignal = N
   data <- tel$find(query = search)
   data <- data %>%
     filter(lastsignal %in% lastsignal)
+
+  return(data)
 }
