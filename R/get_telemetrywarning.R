@@ -36,8 +36,7 @@ get_telemetrywarning <- function(property = NULL, assetid = NULL, lastsignal = N
   }
 
   if(is.null(lastsignal)){} else {
-    lastsignal <- paste(unlist(lastsignal), collapse = '", "')
-    lastsignal <- sprintf('"lastsignal":{"$in":["%s"]},', lastsignal)
+    lastsignal <- paste0(strftime(lastsignal, format = "%Y-%m-%d %H:%M"), ":00")
   }
 
   if(is.null(resolved)){} else {
@@ -45,11 +44,20 @@ get_telemetrywarning <- function(property = NULL, assetid = NULL, lastsignal = N
     resolved <- sprintf('"resolved":{"$in":["%s"]},', resolved)
   }
 
-  search <- paste0("{", property, assetid, lastsignal, resolved, "}")
+  # Set up find query
+  search <- paste0("{", property, assetid, resolved, "}")
   if(nchar(search)==2){}else{
     search <- substr(search, 1 , nchar(search)-2)
     search <- paste0(search, "}")}
 
-  data <- tel$find(query = search)
+  # Set up find fields
+  # fields = c("property", "assetid", "resolved")
+  # snif <- sprintf('"%s":true', fields)
+  # te <- paste0(snif, collapse = ", ")
+  # snappy <- sprintf('{%s, "_id":false}', te)
 
+  # Query database
+  data <- tel$find(query = search)
+  data <- data %>%
+    filter(lastsignal %in% lastsignal)
 }
