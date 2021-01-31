@@ -2,6 +2,7 @@
 
 export(RFIDsearch)
 export(add_almshistory)
+export(add_autodraft)
 export(add_calfdata)
 export(add_calvingdata)
 export(add_cattle)
