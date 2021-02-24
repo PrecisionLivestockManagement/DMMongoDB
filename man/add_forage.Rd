@@ -30,9 +30,9 @@ add_forage(
 
 \item{samplesize}{the sample size of the estimation, either 'quadrant' or 'hectares'}
 
-\item{wetwt}{the weight of the pasture as is, prior to drying (grams)}
+\item{wetwt}{the weight of the pasture as is, prior to drying (kg)}
 
-\item{drywt}{the weight of the pasture after drying (grams)}
+\item{drywt}{the weight of the pasture after drying (kg)}
 
 \item{photo}{whether or not a photograph of the assessment site was taken, TRUE or FALSE}
 
