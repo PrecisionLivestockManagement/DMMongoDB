@@ -46,6 +46,7 @@ add_stations <- function(stationname, lat, long, area=NULL, timezone=NULL, PIC=N
     template$PIC <- PIC
     template$hectares <- area
     template$timezone <- timezone
+    template$shortname <- substr(stationname, 1, 3)
 
     rownames(template)<-c()
     rownames(template$geometry)<-c()
