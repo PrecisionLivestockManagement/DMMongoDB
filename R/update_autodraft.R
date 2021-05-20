@@ -63,7 +63,9 @@ update_autodraft <- function(RFID, alms = NULL, direction, username=NULL, passwo
     }
 
   ##### Update AutoDraftHistory collection #####
-    template <- data.frame(autofinder[,-c(5,6)], asset_id = alms[i], direction = direction[i], date = Sys.time())
+    template <- data.frame(RFID = autofinder$RFID, mtag = autofinder$mtag, property = autofinder$property,
+                           paddock = autofinder$paddock, asset_id = autofinder$asset_id,
+                           direction = direction[i], date = Sys.time())
     adhist$insert(template)
   }
 
