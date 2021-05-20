@@ -26,6 +26,7 @@ add_autodraft <- function(RFID, mtag, property, paddock, alms, direction, userna
     inf <- mongo(collection = "Infrastructure", db = "DataMuster", url = pass, verbose = T)
     cattle <- mongo(collection = "Cattle", db = "DataMuster", url = pass, verbose = T)
     autodraft <- mongo(collection = "AutoDraft", db = "DataMuster", url = pass, verbose = T)
+    adhist <- mongo(collection = "AutoDraftHistory", db = "DataMuster", url = pass, verbose = T)
 
     # Check that the RFID numbers are in the correct format and exist in the database
     if("TRUE" %in% (nchar(as.character(RFID))!= 16)) {
@@ -53,8 +54,27 @@ add_autodraft <- function(RFID, mtag, property, paddock, alms, direction, userna
 
     ##### Add to the AutoDraft collection #####
     for(i in 1:length(RFID)){
-      template <- data.frame(RFID = RFID[i], mtag = mtag[i], property = property, paddock = paddock[i],
-                             asset_id = alms[i], direction = direction[i])
-      autodraft$insert(template)
+      # Check if there is a pre-existing document for the animal
+      RFIDS <- sprintf('{"RFID":"%s"}', RFID[i])
+      check <- autodraft$find(query = RFIDS)
+
+      if(nrow(check) == 0){
+        template <- data.frame(RFID = RFID[i], mtag = mtag[i], property = property, paddock = paddock[i],
+                               asset_id = alms[i], direction = direction[i])
+        autodraft$insert(template)
+      }
+    }
+
+    ##### Add to the AutoDraftHistory collection #####
+    for(i in 1:length(RFID)){
+      # Check if there is a pre-existing document for the animal
+      RFIDS <- sprintf('{"RFID":"%s"}', RFID[i])
+      check <- adhist$find(query = RFIDS)
+
+      if(nrow(check) == 0){
+        template <- data.frame(RFID = RFID[i], mtag = mtag[i], property = property, paddock = paddock[i],
+                               asset_id = alms[i], direction = direction[i], date = Sys.time())
+        adhist$insert(template)
+      }
     }
 }
