@@ -2,21 +2,18 @@
 % Please edit documentation in R/update_autodraft.R
 \name{update_autodraft}
 \alias{update_autodraft}
-\title{Update autodrafter details or remove animals from the autodrafter in the DataMuster MongoDB database.}
+\title{Update autodrafter details in the DataMuster MongoDB database.}
 \usage{
 update_autodraft(
   RFID,
-  active = NULL,
   alms = NULL,
-  direction = NULL,
+  direction,
   username = NULL,
   password = NULL
 )
 }
 \arguments{
 \item{RFID}{a list of the previous cattle RFID number/s}
-
-\item{active}{whether the autodrafter is still active}
 
 \item{alms}{the new ALMS ID}
 
@@ -30,7 +27,7 @@ update_autodraft(
 a message that indicates the RFID tag number has been successfully updated
 }
 \description{
-This function updates the autodrafter details or removes individual or groups of cattle in the DataMuster MongoDB database. If you need assistance please email \email{info@datamuster.net.au} to seek help or suggest improvements.
+This function updates the autodrafter details for individual or groups of cattle in the DataMuster MongoDB database. If you need assistance please email \email{info@datamuster.net.au} to seek help or suggest improvements.
 }
 \author{
 Anita Chang \email{a.chang@cqu.edu.au}
