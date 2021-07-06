@@ -1,6 +1,6 @@
 #' Update RFID using MTag in the DataMuster MongoDB database.
 #'
-#' This function updates individual or groups of RFID numbers using MTag in the DataMuster MongoDB database. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
+#' This function updates individual or groups of RFID numbers using MTag in the DataMuster MongoDB database (for use when RFID is "xxx xxxxxxxxxxxx"). If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
 #' @name update_RFIDMTag
 #' @param MTag a list of cattle management tag number/s
 #' @param newRFID a list of new cattle RFID number/s
