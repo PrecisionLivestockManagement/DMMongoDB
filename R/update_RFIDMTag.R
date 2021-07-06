@@ -3,7 +3,7 @@
 #' This function updates individual or groups of RFID numbers using MTag in the DataMuster MongoDB database. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
 #' @name update_RFIDMTag
 #' @param MTag a list of cattle management tag number/s
-#' @param RFID a list of cattle RFID number/s
+#' @param newRFID a list of new cattle RFID number/s
 #' @param property the name of the property to search for
 #' @param date the date that the new RFID tag was applied, in date format. Default is today's date
 #' @param username if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring
@@ -16,7 +16,7 @@
 #' @export
 
 
-update_RFIDMTag <- function(MTag, RFID, property, date, username=NULL, password=NULL){
+update_RFIDMTag <- function(MTag, newRFID, property, date, username=NULL, password=NULL){
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]
