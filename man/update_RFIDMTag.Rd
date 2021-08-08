@@ -4,12 +4,19 @@
 \alias{update_RFIDMTag}
 \title{Update RFID using MTag in the DataMuster MongoDB database.}
 \usage{
-update_RFIDMTag(MTag, RFID, property, date, username = NULL, password = NULL)
+update_RFIDMTag(
+  MTag,
+  newRFID,
+  property,
+  date,
+  username = NULL,
+  password = NULL
+)
 }
 \arguments{
 \item{MTag}{a list of cattle management tag number/s}
 
-\item{RFID}{a list of cattle RFID number/s}
+\item{newRFID}{a list of new cattle RFID number/s}
 
 \item{property}{the name of the property to search for}
 
@@ -23,7 +30,7 @@ update_RFIDMTag(MTag, RFID, property, date, username = NULL, password = NULL)
 a message that indicates that the RFID tags have been successfully updated
 }
 \description{
-This function updates individual or groups of RFID numbers using MTag in the DataMuster MongoDB database. If you need assistance please email \email{info@datamuster.net.au} to seek help or suggest improvements.
+This function updates individual or groups of RFID numbers using MTag in the DataMuster MongoDB database (for use when RFID is "xxx xxxxxxxxxxxx"). If you need assistance please email \email{info@datamuster.net.au} to seek help or suggest improvements.
 }
 \author{
 Anita Chang \email{a.chang@cqu.edu.au}
