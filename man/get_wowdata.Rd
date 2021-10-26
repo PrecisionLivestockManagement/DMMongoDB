@@ -10,6 +10,8 @@ get_wowdata(
   minwt = NULL,
   start = NULL,
   end = NULL,
+  timezone = NULL,
+  coord = NULL,
   username = NULL,
   password = NULL
 )
@@ -23,6 +25,10 @@ get_wowdata(
 
 \item{end}{an end date and time to be returned in datetime format, default is today’s date and time}
 
+\item{timezone}{the timezone, default is "Australia/Brisbane"}
+
+\item{coord}{whether ALMS coordinates are returned. TRUE or FALSE, default is FALSE}
+
 \item{username}{required for access. Please email \email{info@datamuster.net.au} to acquire a username.}
 
 \item{password}{required for access. Please email \email{info@datamuster.net.au} to acquire a password.}
@@ -34,5 +40,5 @@ a dataframe of cattle RFID numbers and associated WoW information
 This function provides a search tool to retrieve WoW information from the WoWData collection in the DataMuster MongoDB database. If you need assistance please email \email{info@datamuster.net.au} to seek help or suggest improvements.
 }
 \author{
-Dave Swain \email{d.swain@cqu.edu.au} and Lauren O'Connor \email{l.r.oconnor@cqu.edu.au}
+Dave Swain \email{d.swain@cqu.edu.au}, Lauren O'Connor \email{l.r.oconnor@cqu.edu.au}, and Anita Chang \email{a.chang@cqu.edu.au}
 }

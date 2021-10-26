@@ -54,19 +54,23 @@ get_paddockhistory <- function(cattle_id = NULL, RFID = NULL, MTag = NULL, prope
 
   if(is.null(start)){}else{
     if(timezone == "Australia/Brisbane"){
-      start <- sprintf('"dateIN":{"$lte":{"$date":"%s"}},', strftime(as.POSIXct(paste0(start, "00:00:00")), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"))}else{
+      starter <- start
+      start <- sprintf('"dateIN":{"$gte":{"$date":"%s"}},', strftime(as.POSIXct(paste0(start, "00:00:00")), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"))}else{
         if(timezone == "America/Argentina/Buenos_Aires"){
-          start <- sprintf('"dateIN":{"$lte":{"$date":"%s"}},', strftime(as.POSIXct(paste0(start, "13:00:00")), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"))}}
+          starter <- strftime(as.POSIXct(paste0(start, "13:00:00")), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT")
+          start <- sprintf('"dateIN":{"$gte":{"$date":"%s"}},', strftime(as.POSIXct(paste0(start, "13:00:00")), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"))}}
   }
 
   if(is.null(end)){end1 <- NULL}else{
 
-    end1 <- sprintf('"dateOUT":{"$exists":false}}')
+    end1 <- sprintf('"dateOUT":{"$exists":true}}')
 
     if(timezone == "Australia/Brisbane"){
-    end <- sprintf('"dateOUT":{"$gte":{"$date":"%s"}},', strftime(as.POSIXct(paste0(end, "00:00:00")), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"))}else{
+      ender <- end
+    end <- sprintf('"dateOUT":{"$lte":{"$date":"%s"}},', strftime(as.POSIXct(paste0(end, "00:00:00")), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"))}else{
         if(timezone == "America/Argentina/Buenos_Aires"){
-          end <- sprintf('"dateOUT":{"$gte":{"$date":"%s"}},', strftime(as.POSIXct(paste0(end, "13:00:00")), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"))}}
+          ender <- end
+          end <- sprintf('"dateOUT":{"$lte":{"$date":"%s"}},', strftime(as.POSIXct(paste0(end, "13:00:00")), format="%Y-%m-%dT%H:%M:%OSZ", tz = "GMT"))}}
   }
 
 
@@ -75,22 +79,20 @@ pass <- sprintf("mongodb://%s:%s@datamuster-shard-00-00-8mplm.mongodb.net:27017,
 paddockhistory <- mongo(collection = "PaddockHistory", db = "DataMuster", url = pass, verbose = T)
 
 # Set up find query
-
-search <-paste0("{", cattle_id, RFID, MTag, property, Paddock, currentPaddock, start, end,"}")
+search <- paste0("{", cattle_id, RFID, MTag, property, Paddock, currentPaddock, start, end,"}")
 
 if(nchar(search)==2){}else{
 search <- substr(search, 1 , nchar(search)-2)
 search <- paste0(search, "}")}
 
 # Set up find fields
-
 snif <- sprintf('"%s":true', fields)
 te <- paste0(snif, collapse = ", ")
 snappy <- sprintf('{%s, "_id":true}', te)
 
 #Query database and format for website display
-
-data <- paddockhistory$find(query = search, fields = snappy)
+data <- paddockhistory$find(query = search, fields = snappy) %>%
+  filter(stationname != "Dummy")
 
 # data <- data %>% mutate(dateOUT = ifelse("dateOUT" %in% names(.), dateOUT, NA))
 
@@ -110,7 +112,8 @@ snappy <- sprintf('{%s, "_id":true}', te)
 
 #Query database and format for website display
 
-data1 <- paddockhistory$find(query = search, fields = snappy)
+data1 <- paddockhistory$find(query = search, fields = snappy) %>%
+  filter(stationname != "Dummy")
 
 # data1 <- data1 %>% mutate(dateOUT = ifelse("dateOUT" %in% names(.), dateOUT, NA))
 
@@ -135,6 +138,10 @@ collist <- colnames(data)
 
  # dataf <- data%>%
  #          rename_all(recode, datetime = "Date", Wt = "Weight")
+
+data2 <- data %>%
+  mutate(dateIN = as.Date(strftime(dateIN, format = "%Y-%m-%d")),
+         dateOUT = as.Date(strftime(dateOUT, format = "%Y-%m-%d")))
 
 dataf <- data
     }
