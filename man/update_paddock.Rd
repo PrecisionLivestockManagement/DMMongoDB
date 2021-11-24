@@ -36,5 +36,5 @@ a message that indicates that the paddocks have been successfully updated
 This function allocates individual or groups of cattle to paddocks in the DataMuster MongoDB database. If you need assistance please email \email{info@datamuster.net.au} to seek help or suggest improvements.
 }
 \author{
-Dave Swain \email{d.swain@cqu.edu.au} and Lauren O'Connor \email{l.r.oconnor@cqu.edu.au}
+Dave Swain \email{d.swain@cqu.edu.au}, Lauren O'Connor \email{l.r.oconnor@cqu.edu.au}, Anita Chang \email{a.chang@cqu.edu.au}
 }

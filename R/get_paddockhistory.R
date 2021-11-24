@@ -139,12 +139,17 @@ collist <- colnames(data)
  # dataf <- data%>%
  #          rename_all(recode, datetime = "Date", Wt = "Weight")
 
-data2 <- data %>%
-  mutate(dateIN = as.Date(strftime(dateIN, format = "%Y-%m-%d")),
-         dateOUT = as.Date(strftime(dateOUT, format = "%Y-%m-%d")))
-
-dataf <- data
-    }
+if("dateOUT" %in% colnames(data)){
+  data2 <- data %>%
+    mutate(dateIN = as.Date(strftime(dateIN, format = "%Y-%m-%d")),
+           dateOUT = as.Date(strftime(dateOUT, format = "%Y-%m-%d")))
+  dataf <- data
+} else {
+  data2 <- data %>%
+    mutate(dateIN = as.Date(strftime(dateIN, format = "%Y-%m-%d")))
+  dataf <- data
+}
+}
 
 dataf
 
