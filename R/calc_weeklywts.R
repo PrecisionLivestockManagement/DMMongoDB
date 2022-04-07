@@ -173,7 +173,7 @@ calc_weeklywts <- function(RFID=NULL, start=NULL, end=NULL, values=NULL, s.d=NUL
 
                     data <- data.frame(Date = as.Date(end1), Weight = round(tup2,1), sdweights = round(tup1,1), numweights = tup3, location = loc[p], stringsAsFactors = F)
 
-                    #newdata <- rbind(newdata, data)
+                    newdata <- rbind(newdata, data)
 
                     rm(tup1, tup2, tup3)}else{
 
@@ -182,11 +182,11 @@ calc_weeklywts <- function(RFID=NULL, start=NULL, end=NULL, values=NULL, s.d=NUL
 
                       data <- data.frame(Date = as.Date(end1), Weight = 0, sdweights = 0, numweights = 0, location = loc[p], stringsAsFactors = F)
 
-                    #newdata <- rbind(newdata, data)
+                    newdata <- rbind(newdata, data)
 
                     }}
             }
-                    newdata <- rbind(newdata, data)
+                    #newdata <- rbind(newdata, data)
           }
 
 
