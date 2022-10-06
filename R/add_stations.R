@@ -89,6 +89,7 @@ add_stations <- function(stationname, lat, long, area=NULL, timezone=NULL, PIC=N
     template$properties$hectares <- area
     template$paddname <- stationname
     template$paddnum <- 1
+    template$cattle <- 0
 
     rownames(template)<-c()
     rownames(template$geometry)<-c()
