@@ -40,6 +40,8 @@ get_weeklywts <- function(RFID = NULL, cattle_id = NULL, start = NULL, end = NUL
 
   if(is.null(minwt)){}else{minwt <- sprintf('"avweight":{"$gte":%s},', minwt)}
 
+  if(is.null(timezone)){timezone <- "Australia/Brisbane"}else{}
+
   if(is.null(fields)){
     fields = c("cattle_id", "RFID", "Date", "avweight", "sdweights", "numweights", "Location")}
 
@@ -81,7 +83,7 @@ if(nrow(dataf) != 0){
 if(nrow(dataf) != 0){
  dataf <- dataf%>%
 #                 rename_all(recode, datetime = "Date", Wt = "Weight")
-                 mutate_at(vars(ends_with("Date")), as.Date, tz = "Australia/Brisbane")#%>%
+                 mutate_at(vars(ends_with("Date")), as.Date, tz = timezone)#%>%
 #                mutate_at(vars(ends_with("Date")), funs(ifelse(. == "Jan 01 1970" | . == "Dec 31 1969", "", .)))%>%
 #                mutate_at(vars(starts_with("Weight")), funs(round(as.numeric(.), 0)))%>%
 #                mutate_at(vars(starts_with("Weight")), funs(ifelse(. == 0, as.character(""), as.character(.))))%>%
