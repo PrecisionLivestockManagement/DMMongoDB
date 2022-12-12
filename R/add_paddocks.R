@@ -15,7 +15,7 @@
 #' @import mongolite
 #' @import keyring
 #' @import rgdal
-#' @import leafletR
+#' @import leaflet
 #' @export
 
 add_paddocks <- function(property, paddockname=NULL, filedir=NULL, filename=NULL, filetype, coords=NULL, username=NULL, password=NULL){
