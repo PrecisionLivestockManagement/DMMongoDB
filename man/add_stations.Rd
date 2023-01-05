@@ -10,7 +10,6 @@ add_stations(
   long,
   area = NULL,
   timezone = NULL,
-  PIC = NULL,
   username = NULL,
   password = NULL
 )
@@ -25,8 +24,6 @@ add_stations(
 \item{area}{the area of the staion in hectares, default is 100 ha}
 
 \item{timezone}{the local timezone of the property, see https://en.wikipedia.org/wiki/List_of_tz_database_time_zones for the list of accepted timezones, default is Australia/Brisbane}
-
-\item{PIC}{the Property Identification Code}
 
 \item{username}{if you don't have a username set up using the dmaccess function you can pass a username, if no value added then the function looks for a value from dmaccess via keyring}
 
