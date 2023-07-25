@@ -6,12 +6,11 @@
 \usage{
 get_wowdata(
   RFID = NULL,
-  property = NULL,
+  location = NULL,
   minwt = NULL,
   start = NULL,
   end = NULL,
   timezone = NULL,
-  coord = NULL,
   username = NULL,
   password = NULL
 )
@@ -19,15 +18,13 @@ get_wowdata(
 \arguments{
 \item{RFID}{a list of cattle RFID number/s}
 
-\item{property}{the name of the property to search for}
+\item{location}{the filename of the ALMS to search for}
 
 \item{start}{a start date and time to be returned in datetime format, default is “2014-09-01 00:00:00”}
 
 \item{end}{an end date and time to be returned in datetime format, default is today’s date and time}
 
 \item{timezone}{the timezone, default is "Australia/Brisbane"}
-
-\item{coord}{whether ALMS coordinates are returned. TRUE or FALSE, default is FALSE}
 
 \item{username}{required for access. Please email \email{info@datamuster.net.au} to acquire a username.}
 
