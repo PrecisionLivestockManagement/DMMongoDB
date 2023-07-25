@@ -15,6 +15,9 @@
 #' @import keyring
 #' @export
 
+# Updated 25/07/23 by Lauren O'Connor to perform data checks before changing data in the database. All stop commands will be executed before any data is updated
+# in the database. Code could be tightened up.
+
 
 update_paddock <- function(RFID, property, paddock, MTag, date=NULL, username=NULL, password=NULL){
 
@@ -56,8 +59,11 @@ update_paddock <- function(RFID, property, paddock, MTag, date=NULL, username=NU
 
 
   # ---------------------------------------------------------------------------------------------------------------------------------------
-  # RFID and paddock checks
+  # RFID and data checks
   # ---------------------------------------------------------------------------------------------------------------------------------------
+
+  # RFIDs
+
   problemRFIDs <- data.frame(RFID) %>%
     filter(nchar(RFID) != 16)
   if(nrow(problemRFIDs) > 0){
@@ -73,6 +79,8 @@ update_paddock <- function(RFID, property, paddock, MTag, date=NULL, username=NU
     stop(paste("The following RFID numbers are not in the database:", notindbRFIDs$RFID))
   }
 
+  #Paddock
+
   search <- paste(unlist(paddock), collapse = '", "')
   search <- sprintf('{"stationname":"%s", "paddname":{"$in":["%s"]}}', property, search)
   search <- paddocks$find(query = search, fields = '{"_id":false, "paddname":true}')
@@ -82,6 +90,58 @@ update_paddock <- function(RFID, property, paddock, MTag, date=NULL, username=NU
     stop(paste("The following paddocks are not in the database:", notindbpaddocks$paddock))
   }
 
+  #Paddock IN date - cattle collection
+
+  for(i in 1:length(RFID)){
+
+    if(RFID[i] != "xxx xxxxxxxxxxxx"){
+      RFIDS <- sprintf('{"RFID":"%s"}', RFID[i])
+    } else {
+      RFIDS <- sprintf('{"stationname":"%s", "properties.Management":"%s"}', property, MTag[i])
+    }
+
+    cattledf <- cattle$find(query = RFIDS, fields = '{"_id":true, "RFID":true, "properties.Management":true, "properties.Paddock":true, "properties.PaddockID":true, "properties.PaddockdateIN":true, "properties.PrevPaddock":true, "properties.ALMS":true, "properties.ALMSasset_id":true}')
+
+    if(cattledf$properties$Paddock != paddock[i]){
+      if(as.Date(strftime(cattledf$properties$PaddockdateIN, format = "%Y-%m-%d")) > as.Date(date)[i]){
+        stop(paste("The date allocated to", RFID[i], "is before the previous dateIN in the Cattle database."))}
+    }
+
+  #Paddock IN date - PaddockHistory collection
+
+  if(RFID[i] != "xxx xxxxxxxxxxxx"){
+    RFIDS <- sprintf('{"RFID":"%s", "dateOUT":{"$exists":false}}', RFID[i])
+  } else {
+    RFIDS <- sprintf('{"stationname":"%s", "Management":"%s", "dateOUT":{"$exists":false}}', property, MTag[i])
+  }
+  pdkhistdf <- paddockhistory$find(query = RFIDS, fields = '{"_id":false, "RFID":true, "Management":true, "Paddock":true, "dateIN":true, "dateOUT":true, "currentPaddock":true}')
+
+  if(nrow(pdkhistdf) != 0){
+    if(pdkhistdf$Paddock != paddock[i]){
+      if(as.Date(strftime(pdkhistdf$dateIN, format = "%Y-%m-%d")) > as.Date(date)[i]){
+        stop(paste("The date allocated to", RFID[i], "is before the previous dateIN in the PaddockHistory database."))
+      }}}
+
+  #ALMS Date ON - ALMSHistory collection
+
+  # -----------------------------------
+  #search <- sprintf('{"stationname":"%s", "properties.datarecording":"%s", "properties.type":"%s", "properties.Paddock":"%s"}',
+  #                  property, "TRUE", "Walk-over-Weighing Unit", paddock[1])
+  #infsdf <- infs$find(query = search, fields = '{"_id":false, "properties.datarecording":true, "properties.asset_id":true, "properties.central":true}')
+
+      if(RFID[i] != "xxx xxxxxxxxxxxx"){
+        search <- sprintf('{"RFID":"%s", "currentALMS":"%s"}', RFID[i], TRUE)
+      } else {
+        search <- sprintf('{"stationname":"%s", "Management":"%s", "currentALMS":"%s"}', property, MTag[i], TRUE)
+      }
+      almshistdf <- almshistory$find(query = search)
+
+  if(nrow(almshistdf) > 0){
+      if(as.Date(strftime(almshistdf$dateON, format = "%Y-%m-%d")) > as.Date(date)[i]){
+        stop(paste("The date allocated to", RFID[i], "is before the previous dateON in the ALMSHistory database."))
+      }}
+
+  }
 
   # ---------------------------------------------------------------------------------------------------------------------------------------
   # Update data
@@ -123,6 +183,7 @@ update_paddock <- function(RFID, property, paddock, MTag, date=NULL, username=NU
     }
     pdkhistdf <- paddockhistory$find(query = RFIDS, fields = '{"_id":false, "RFID":true, "Management":true, "Paddock":true, "dateIN":true, "dateOUT":true, "currentPaddock":true}')
 
+    if(nrow(pdkhistdf) != 0){
     if(pdkhistdf$Paddock != paddock[i]){
       if(as.Date(strftime(pdkhistdf$dateIN, format = "%Y-%m-%d")) > as.Date(date)[i]){
         stop(paste("The date allocated to", RFID[i], "is before the previous paddock date in the database."))
@@ -132,27 +193,34 @@ update_paddock <- function(RFID, property, paddock, MTag, date=NULL, username=NU
 
         update <- sprintf('{"RFID":"%s", "cattle_id":"%s", "Management":"%s", "stationname":"%s", "Paddock":"%s", "currentPaddock":"%s", "dateIN":{"$date":"%s"}}',
                           RFID[i], cattledf$`_id`, MTag[i], property, paddock[i], TRUE, paste0(substr(date[i],1,10),"T00:00:00+1000"))
-        paddockhistory$insert(update)
-        paste0("The PaddockHistory collection has been updated for ", RFID[i], ".")
+       paddockhistory$insert(update)
+       paste0("The PaddockHistory collection has been updated for ", RFID[i], ".")
       }
     } else {
       paste(RFID[i], "is already allocated to", paddock[i], "in the PaddockHistory collection.")
+    }}
+
+    if(nrow(pdkhistdf) == 0){
+      update <- sprintf('{"RFID":"%s", "cattle_id":"%s", "Management":"%s", "stationname":"%s", "Paddock":"%s", "currentPaddock":"%s", "dateIN":{"$date":"%s"}}',
+                        RFID[i], cattledf$`_id`, MTag[i], property, paddock[i], TRUE, paste0(substr(date[i],1,10),"T00:00:00+1000"))
+      paddockhistory$insert(update)
     }
 
     # -----------------------------------
     # ALMS
     # -----------------------------------
-    search <- sprintf('{"stationname":"%s", "properties.datarecording":"%s", "properties.type":"%s"}',
-                      property, TRUE, "Walk-over-Weighing Unit")
+    search <- sprintf('{"stationname":"%s", "properties.datarecording":"%s", "properties.type":"%s", "properties.Paddock":"%s"}',
+                      property, TRUE, "Walk-over-Weighing Unit", paddock[1])
     infsdf <- infs$find(query = search, fields = '{"_id":false, "properties.datarecording":true, "properties.asset_id":true, "properties.central":true}')
 
+    if(nrow(infsdf) > 0){
     if(infsdf$properties$central == "FALSE"){ # CENTRAL ALMS = FALSE
       if(RFID[i] != "xxx xxxxxxxxxxxx"){
         search <- sprintf('{"RFID":"%s", "currentALMS":"%s"}', RFID[i], TRUE)
       } else {
         search <- sprintf('{"stationname":"%s", "Management":"%s", "currentALMS":"%s"}', property, MTag[i], TRUE)
       }
-      almshistdf <- almshistory$find(query = search)
+      almshistdf <- almshistory$find(query = search)}}else{almshistdf <- data.frame()}
 
       if(nrow(almshistdf) > 0){ # current paddock ALMS = TRUE
         update <- sprintf('{"$set":{"dateOFF":{"$date":"%s"}, "currentALMS":"%s"}}', paste0(substr(date[i],1,10),"T00:00:00+1000"), FALSE)
@@ -168,7 +236,7 @@ update_paddock <- function(RFID, property, paddock, MTag, date=NULL, username=NU
                           RFID[i], cattledf$`_id`, MTag[i], property, infsdf$properties$asset_id, TRUE, paste0(substr(date[i],1,10),"T00:00:00+1000"))
         almshistory$insert(update)
         paste0("ALMSHistory has been updated for ", RFID[i], ".")
-      } else {} # future paddock ALMS = FALSE
-    } else {} # CENTRAL ALMS = TRUE
+      } #else {} # future paddock ALMS = FALSE
+    #} else {} # CENTRAL ALMS = TRUE
   }
-}
+  }
