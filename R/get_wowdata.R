@@ -3,11 +3,10 @@
 #' This function provides a search tool to retrieve WoW information from the WoWData collection in the DataMuster MongoDB database. If you need assistance please email \email{info@@datamuster.net.au} to seek help or suggest improvements.
 #' @name get_wowdata
 #' @param RFID a list of cattle RFID number/s
-#' @param property the name of the property to search for
+#' @param location the filename of the ALMS to search for
 #' @param start a start date and time to be returned in datetime format, default is “2014-09-01 00:00:00”
 #' @param end an end date and time to be returned in datetime format, default is today’s date and time
 #' @param timezone the timezone, default is "Australia/Brisbane"
-#' @param coord whether ALMS coordinates are returned. TRUE or FALSE, default is FALSE
 #' @param username required for access. Please email \email{info@@datamuster.net.au} to acquire a username.
 #' @param password required for access. Please email \email{info@@datamuster.net.au} to acquire a password.
 #' @return a dataframe of cattle RFID numbers and associated WoW information
@@ -18,7 +17,7 @@
 #' @export
 
 
-get_wowdata <- function(RFID = NULL, property = NULL, minwt = NULL, start=NULL, end=NULL, timezone = NULL, coord = NULL, username=NULL, password=NULL){
+get_wowdata <- function(RFID = NULL, location = NULL, minwt = NULL, start=NULL, end=NULL, timezone = NULL, username=NULL, password=NULL){
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]
@@ -37,8 +36,8 @@ get_wowdata <- function(RFID = NULL, property = NULL, minwt = NULL, start=NULL, 
   if(is.null(RFID)){}else{RFID <- paste(unlist(RFID), collapse = '", "' )
   RFID <- sprintf('"RFID":{"$in":["%s"]},', RFID)}
 
-  if(is.null(property)){}else{property <- paste(unlist(property), collapse = '", "' )
-  property <- sprintf('"Location":{"$in":["%s"]},', property)}
+  if(is.null(location)){}else{location <- paste(unlist(location), collapse = '", "' )
+  location <- sprintf('"Location":{"$in":["%s"]},', location)}
 
   if(is.null(timezone)){timezone = "Australia/Brisbane"}
 
@@ -60,24 +59,22 @@ get_wowdata <- function(RFID = NULL, property = NULL, minwt = NULL, start=NULL, 
     }
   }
 
-  if(is.null(coord)){coord <- FALSE}
-
   # Set up find query
-  search <-paste0("{", RFID, property, start, end,"}")
+  search <-paste0("{", RFID, location, start, end,"}")
 
   if(nchar(search)==2){}else{
     search <- substr(search, 1 , nchar(search)-2)
     search <- paste0(search, "}")}
 
-  # Query database and format for website display
+  # Query database
 
   data <- wowdata$find(query = search)
 
-  if(coord == TRUE){} else {
-    data <- data %>%
-      filter(!grepl("\\D", RFID) == TRUE,
-             nchar(RFID) == 15)
-  }
+  # if(coord == TRUE){} else {
+  #   data <- data %>%
+  #     filter(!grepl("\\D", RFID) == TRUE,
+  #            nchar(RFID) == 15)
+  # }
 
   # data <- data%>%
   #   mutate(datetime = as.POSIXct(strptime(datetime, format = "%Y-%m-%d %H:%M:%S", tz = "America/Argentina/Buenos_Aires")))%>%
