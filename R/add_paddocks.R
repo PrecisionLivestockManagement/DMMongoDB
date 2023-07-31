@@ -14,8 +14,8 @@
 #' @author Dave Swain \email{d.swain@@cqu.edu.au} and Lauren O'Connor \email{l.r.oconnor@@cqu.edu.au}
 #' @import mongolite
 #' @import keyring
-#' @import rgdal
-#' @import leaflet
+#' @import sf
+#' @import geojsonio
 #' @export
 
 add_paddocks <- function(property, paddockname=NULL, filedir=NULL, filename=NULL, filetype, coords=NULL, username=NULL, password=NULL){
@@ -28,7 +28,7 @@ add_paddocks <- function(property, paddockname=NULL, filedir=NULL, filename=NULL
     pass <- sprintf("mongodb://%s:%s@datamuster-shard-00-00-8mplm.mongodb.net:27017,datamuster-shard-00-01-8mplm.mongodb.net:27017,datamuster-shard-00-02-8mplm.mongodb.net:27017/test?ssl=true&replicaSet=DataMuster-shard-0&authSource=admin", username, password)
     paddocks <- mongo(collection = "Paddocks", db = "DataMuster", url = pass, verbose = T)
 
-    propertyinfo <- get_stations(property, fields = c("_id", "longitude", "latitude", "reports", "PIC", "timezone", "stationname"))
+    propertyinfo <- get_stations(property)
     propertyid <- propertyinfo$`_id`
 
     #Remove existing stationpolygon if exists --------
@@ -54,34 +54,53 @@ add_paddocks <- function(property, paddockname=NULL, filedir=NULL, filename=NULL
 
     #Read in spatial file/s
 
-    #KMZ files; need to unzip the folder then read the doc.kml file
+    #KMZ/KML files
 
     if(filetype == "kmz"){
 
-      if(is.null(filename)){filename <- list.files(path = filedir, pattern = ".kmz")}
+      if(is.null(filename)){filename <- list.files(path = filedir, pattern = ".kmz")}}
+
+    if(filetype == "kml"){
+
+      if(is.null(filename)){filename <- list.files(path = filedir, pattern = ".kml")}}
 
       if(!is.null(paddockname)){
 
         if(paddockname == "filename"){paddockname <- sub("\\..*","",filename)}}
 
+
       for (i in 1:length(filename)){
 
         file <- filename[i]
         filepath <- paste0(filedir, "/", file)
-        temppath <- file.path(tempdir(), "doc.kml")
 
+        # KMZ file need to unzip the folder then read the doc.kml file
+        if(filetype == "kmz"){
         unzip(zipfile = filepath, exdir=tempdir())
-        lyr <- ogrListLayers(temppath)
-        foo = suppressWarnings(readOGR(temppath, lyr[1]))
-        pads = toGeoJSON(data=foo, name = "data", dest=tempdir())
+        filepath <- file.path(tempdir(), "doc.kml")}
 
-        #getClass("Polygon")
+        #lyr <- ogrListLayers(temppath)
+        #foo = suppressWarnings(readOGR(temppath, lyr[1]))
+
+        lyrs <- st_layers(filepath)
+        lyr <- lyrs$name
+        foo <-  st_read(filepath, lyr[1])
+        foo <- st_zm(foo, what = "ZM")
+        foo <- as_Spatial(foo)
+
+        # pads = toGeoJSON(data=foo, name = "data", dest=tempdir())
+        # jack <- readLines(pads)
+        # jack <- jack[13]
+        # jack <- substr(jack, 27, nchar(jack)-4)
+
+        pads <- file_to_geojson(filepath, method = "local",  output = paste0(tempdir(), "\\data"))
+        jack <- readLines(pads)
+        jack <- jack[6]
+        jack <- substr(jack, 130, nchar(jack)-8)
+        jack <- gsub(', 0.0','', jack)
+
         area<-sapply(slot(foo, "polygons"), function(x) sapply(slot(x, "Polygons"), slot, "area"))
         area <- area*1000000 #Convert to ha
-
-        jack <- readLines(pads)
-        jack <- jack[13]
-        jack <- substr(jack, 27, nchar(jack)-4)
 
         #Add paddname and paddnum to the template dataframe and insert into the database
         count <- paddocks$count(query = sprintf('{"stationname":"%s"}', property))
@@ -95,51 +114,6 @@ add_paddocks <- function(property, paddockname=NULL, filedir=NULL, filename=NULL
         IDI <- sprintf('{"$set":{"geometry.coordinates":[[%s]]}}', jack)
         paddocks$update(IDS, IDI)
    }
-    }
-
-    #KML files
-
-    if(filetype == "kml"){
-
-      if(is.null(filename)){filename <- list.files(path = filedir, pattern = ".kml")}
-
-      if(!is.null(paddockname)){
-
-      if(paddockname == "filename"){paddockname <- sub("\\..*","",filename)}}
-
-      for (i in 1:length(filename)){
-
-        file <- filename[i]
-        filepath <- paste0(filedir, "/", file)
-        #temppath <- file.path(tempdir(), "doc.kml")
-
-        #unzip(zipfile = filepath, exdir=tempdir())
-        lyr <- ogrListLayers(filepath)
-        foo = suppressWarnings(readOGR(filepath, lyr[1]))
-        pads = toGeoJSON(data=foo, name = "data", dest=tempdir())
-
-        #getClass("Polygon")
-        area<-sapply(slot(foo, "polygons"), function(x) sapply(slot(x, "Polygons"), slot, "area"))
-        area <- area*1000000 #Convert to ha
-
-        jack <- readLines(pads)
-        jack <- jack[13]
-        jack <- substr(jack, 27, nchar(jack)-4)
-
-        #Add paddname and paddnum to the template dataframe and insert into the database
-        count <- paddocks$count(query = sprintf('{"stationname":"%s"}', property))
-        template$paddname <- ifelse(is.null(paddockname), as.character(count+1), paddockname[i])
-        template$paddnum <- as.integer(count+1)
-        template$properties$hectares <- area
-        paddocks$insert(template)
-
-        #Update paddock with the coordinates
-        IDS <- sprintf('{"stationname":"%s", "paddnum":%s}', property, template$paddnum)
-        IDI <- sprintf('{"$set":{"geometry.coordinates":[[%s]]}}', jack)
-        paddocks$update(IDS, IDI)
-      }
-    }
-
 
     #Coordinates
 
