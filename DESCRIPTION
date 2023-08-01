@@ -14,8 +14,8 @@ Imports:
   dplyr,
   mongolite,
   keyring,
-  rgdal,
   geojsonio,
   sp,
   sf,
-  splancs
+  splancs,
+  outliers
