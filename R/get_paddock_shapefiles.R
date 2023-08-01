@@ -11,7 +11,7 @@
 #' @import mongolite
 #' @import keyring
 #' @import dplyr
-#' @import rgdal
+#' @import sf
 #' @export
 
 get_paddock_shapefiles <- function(property, filedir, username=NULL, password=NULL){
@@ -24,7 +24,7 @@ get_paddock_shapefiles <- function(property, filedir, username=NULL, password=NU
     pass <- sprintf("mongodb://%s:%s@datamuster-shard-00-00-8mplm.mongodb.net:27017,datamuster-shard-00-01-8mplm.mongodb.net:27017,datamuster-shard-00-02-8mplm.mongodb.net:27017/test?ssl=true&replicaSet=DataMuster-shard-0&authSource=admin", username, password)
     paddocks <- mongo(collection = "Paddocks", db = "DataMuster", url = pass, verbose = T)
 
-    padfiles <- DMApp::apppaddocks(property = property, username = username, password = password)
+    padfiles <- DMApp::appgetpaddocks(property = property, username = username, password = password)
 
     padnames <- get_paddocks(property = property, fields = c("paddname", "poly_paddname"), username = username, password = password)
 
@@ -32,6 +32,10 @@ get_paddock_shapefiles <- function(property, filedir, username=NULL, password=NU
 
     padfiles <- padfiles %>% rename("poly_paddname" = paddname)
 
-    writeOGR(obj = padfiles, dsn = filedir, layer = "padfiles", driver = "ESRI Shapefile")
+    test <- st_as_sf(padfiles)
+
+    #writeOGR(obj = padfiles, dsn = filedir, layer = "padfiles", driver = "ESRI Shapefile")
+
+    st_write(obj = test, dsn = filedir, layer = "padfiles", driver = "ESRI Shapefile")
 
 }
