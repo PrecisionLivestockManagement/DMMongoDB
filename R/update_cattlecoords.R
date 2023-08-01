@@ -11,17 +11,12 @@
 #' @import mongolite
 #' @import keyring
 #' @import dplyr
-#' @import rgdal
 #' @import splancs
-#' @import spdplyr
 #' @import sp
 #' @export
 
 
-update_cattlecoords <- function(property,
-                                paddock=NULL,
-                                username=NULL,
-                                password=NULL){
+update_cattlecoords <- function(property, paddock=NULL, username=NULL, password=NULL){
 
   if(is.null(username)||is.null(password)){
     username = keyring::key_list("DMMongoDB")[1,2]
@@ -29,9 +24,7 @@ update_cattlecoords <- function(property,
   }
 
   pass <- sprintf("mongodb://%s:%s@datamuster-shard-00-00-8mplm.mongodb.net:27017,datamuster-shard-00-01-8mplm.mongodb.net:27017,datamuster-shard-00-02-8mplm.mongodb.net:27017/test?ssl=true&replicaSet=DataMuster-shard-0&authSource=admin", username, password)
-  cattle <- mongo(collection = "Cattle", db = "DataMuster",
-    url = pass,
-    verbose = T)
+  cattle <- mongo(collection = "Cattle", db = "DataMuster", url = pass, verbose = T)
 
   property <- paste(unlist(property), collapse = '", "' )
 
@@ -43,7 +36,6 @@ update_cattlecoords <- function(property,
 
   lookfor <- sprintf('{"stationname":true, "RFID":true, "properties.Management":true, "geometry":true, "properties.Paddock":true, "_id":true}')
   cattleinfo <- cattle$find(query = filterstation, fields=lookfor)
-
 
   cattleinfospatial <- SpatialPointsDataFrame(data.frame(matrix(unlist(cattleinfo$geometry$coordinates), nrow=length(cattleinfo$geometry$coordinates), byrow=T)), cattleinfo$properties)
 
