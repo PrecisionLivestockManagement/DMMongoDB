@@ -24,7 +24,39 @@ get_paddock_shapefiles <- function(property, filedir, username=NULL, password=NU
     pass <- sprintf("mongodb://%s:%s@datamuster-shard-00-00-8mplm.mongodb.net:27017,datamuster-shard-00-01-8mplm.mongodb.net:27017,datamuster-shard-00-02-8mplm.mongodb.net:27017/test?ssl=true&replicaSet=DataMuster-shard-0&authSource=admin", username, password)
     paddocks <- mongo(collection = "Paddocks", db = "DataMuster", url = pass, verbose = T)
 
-    padfiles <- DMApp::appgetpaddocks(property = property, username = username, password = password)
+    #Retrieve paddock files from database
+
+    propertyf <- sprintf('"stationname":"%s",', property)
+
+    # Set up query to search for cattle
+
+    filter <- paste0("{", propertyf, "}")
+    filter <- substr(filter, 1 , nchar(filter)-2)
+    filter <- paste0(filter, "}")
+
+    lookfor <- sprintf('{"stationname":true, "geometry.coordinates":true, "properties.hectares":true, "paddname":true, "cattle":true, "_id":false}')
+
+    padds <- paddocks$find(query = filter, fields = lookfor)
+
+    padds <- padds %>%
+      mutate(hectares = properties$hectares,
+             geom = geometry$coordinates)%>%
+      select("stationname", "paddname", "hectares", "cattle", "geom")
+
+    paddinfo <- subset(padds, select = -geom)
+
+    cattle = SpatialPolygons(lapply(1:nrow(padds), function(x) Polygons(list(Polygon(matrix(padds$geom[[x]], ncol = 2))), paste0("ID",x))),
+                             proj4string = CRS("+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"))
+
+    PropPadds <- SpatialPolygonsDataFrame(cattle, paddinfo, match.ID=FALSE)
+
+    for(i in 1:nrow(PropPadds@data)){
+
+      PropPadds$long[i] <- PropPadds@polygons[[i]]@labpt[1]
+      PropPadds$lat[i] <- PropPadds@polygons[[i]]@labpt[2]
+    }
+
+    padfiles <- PropPadds
 
     padnames <- get_paddocks(property = property, fields = c("paddname", "poly_paddname"), username = username, password = password)
 
